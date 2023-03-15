@@ -25,6 +25,8 @@ import { RelojesMarcasComponent } from './relojes/relojes-marcas.component';
 import { RelojesModelosComponent } from './relojes/relojes-modelos.component';
 import { VehiculosModelosComponent } from './vehiculos/vehiculos-modelos.component';
 import { VehiculosSegurosComponent } from './vehiculos/vehiculos-seguros.component';
+import { LicenciasComponent } from './licencias/licencias.component';
+import { LicenciasDetallesComponent } from './licencias/licencias-detalles.component';
 
 
 @NgModule({
@@ -47,6 +49,8 @@ import { VehiculosSegurosComponent } from './vehiculos/vehiculos-seguros.compone
     RelojesModelosComponent,
     VehiculosModelosComponent,
     VehiculosSegurosComponent,
+    LicenciasComponent,
+    LicenciasDetallesComponent,
   ],
   imports: [
     CommonModule,

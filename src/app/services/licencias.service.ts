@@ -26,7 +26,7 @@ export class LicenciasService {
   };
 
   // Licencia por ID
-  getLicencia(id: string): Observable<any> {
+  getLicencia(id: number): Observable<any> {
     return this.http.get(`${base_url}/licencias/${id}`, {
       headers: this.getToken
     });
@@ -44,8 +44,8 @@ export class LicenciasService {
   }
 
   // Actualizar licencias
-  actualizarLicencias(id: string, data: any): Observable<any> {
-    return this.http.put(`${base_url}/licencias/${id}`, data, {
+  actualizarLicencias(id: number, data: any): Observable<any> {
+    return this.http.patch(`${base_url}/licencias/${id}`, data, {
       headers: this.getToken
     });
   }

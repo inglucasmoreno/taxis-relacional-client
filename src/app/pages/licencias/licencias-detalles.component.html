@@ -1,0 +1,764 @@
+<!-- Modal: Detalles -->
+<app-modal [showModal]="showModalDetalles">
+    <div class="flex items-center justify-between bg-primary-800 rounded-t p-2">
+        <h1 *ngIf="flagEtapaDetalles === 'permisionario'" class=" text-white py-1 rounded-t text-lg"> Detalles de permisionario </h1>
+        <h1 *ngIf="flagEtapaDetalles === 'vehiculo'" class=" text-white py-1 rounded-t text-lg"> Detalles de vehículo </h1>
+        <h1 *ngIf="flagEtapaDetalles === 'chofer'" class=" text-white py-1 rounded-t text-lg"> Detalles de chofer </h1>
+        <svg (click)="showModalDetalles = false" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="cursor-pointer feather feather-x text-white mr-2"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>    
+    </div>
+    <div class="p-2">
+
+    </div> 
+</app-modal>
+
+<!-- Modal: Bajas -->
+<app-modal [showModal]="showModalBajas">
+    
+    <div class="flex items-center justify-between bg-primary-800 rounded-t p-2">
+        <h1 *ngIf="flagEtapaBaja === 'permisionario'" class=" text-white py-1 rounded-t text-lg"> Baja de permisionario </h1>
+        <h1 *ngIf="flagEtapaBaja === 'vehiculo'" class=" text-white py-1 rounded-t text-lg"> Baja de vehículo </h1>
+        <h1 *ngIf="flagEtapaBaja === 'chofer'" class=" text-white py-1 rounded-t text-lg"> Baja de chofer </h1>
+        <svg (click)="showModalBajas = false" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="cursor-pointer feather feather-x text-white mr-2"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>    
+    </div>
+
+    <div *ngIf="flagEtapaBaja === 'permisionario'" class="text-center py-4 flex items-center justify-center text-xl">
+        <div class="flex items-center">
+            <img class="w-20" src="/assets/img/permisionario.svg" alt="">
+            <div class="ml-2 text-sm">
+                <p class="font-semibold"> {{ this.permisionarioLicenciaSeleccionada?.persona.apellido_nombre }}  </p>
+                <p> DNI {{ this.permisionarioLicenciaSeleccionada?.persona.dni }}  </p>
+                <p class="text-sm text-gray-500"> Desde el {{ this.permisionarioLicenciaSeleccionada?.createdAt | fecha }} </p>       
+            </div> 
+        </div> 
+    </div>
+
+    <div *ngIf="flagEtapaBaja === 'vehiculo'" class="text-center py-4 flex items-center justify-center text-xl">
+        <div class="flex items-center">
+            <img class="w-28" src="/assets/img/vehiculo.svg" alt="">
+            <div class="ml-4 text-sm">
+                <p class="font-semibold"> {{ this.vehiculoLicenciaSeleccionada?.vehiculo.marca.descripcion }} {{ this.vehiculoLicenciaSeleccionada?.vehiculo.modelo.descripcion }} </p>
+                <p> DNI {{ this.permisionarioLicenciaSeleccionada?.vehiculo.patente }}  </p>
+                <p class="text-sm text-gray-500"> Desde el {{ this.vehiculoLicenciaSeleccionada?.createdAt | fecha }} </p>       
+            </div> 
+        </div> 
+    </div>
+
+    <div *ngIf="flagEtapaBaja === 'chofer'" class="text-center py-4 text-xl">
+        <div class="flex items-center justify-between">
+            <div class="flex items-center w-1/2">
+                <img class="w-20" src="/assets/img/chofer.svg" alt="">
+                <div class="ml-4 text-sm">
+                    <p class="font-semibold"> {{ this.choferLicenciaSeleccionada?.persona.apellido_nombre }} </p>
+                    <p> DNI {{ this.choferLicenciaSeleccionada?.persona.dni }}  </p>
+                    <p class="text-sm text-gray-500"> Desde el {{ this.choferLicenciaSeleccionada?.createdAt | fecha }} </p>       
+                </div> 
+            </div> 
+            <div class="text-sm w-1/2 px-2">
+                <p class="font-semibold"> Motivo de baja </p>
+                <input [(ngModel)]="motivo_baja_chofer" type="text" class="p-2 w-full focus:outline-none mr-2 mt-2 border border-gray-400 rounded" placeholder="Ej. Falta de documentación">  
+            </div>
+        </div> 
+    </div>
+    
+    <div class="flex items-center p-2 text-sm">
+        <button (click)="generarBaja()" class="p-2 border focus:outline-none border-green-600 bg-green-600 shadow text-white rounded w-1/2"> Aceptar </button>
+        <button (click)="showModalBajas = false" class="p-2 border focus:outline-none border-red-600 ml-2 bg-red-600 shadow text-white rounded w-1/2"> Cancelar </button>
+    </div>
+
+</app-modal>
+
+<!-- Modal: Asignar vehículo -->
+<app-modal [showModal]="showModalAsignarVehiculo">
+    <div class="flex items-center justify-between bg-primary-800 rounded-t p-2">
+        <h1 class=" text-white py-1 rounded-t text-lg"> Alta de vehículo </h1>
+        <svg (click)="cerrarModalNuevo('vehiculo')" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="cursor-pointer feather feather-x text-white mr-2"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
+    </div>
+    <div>
+        <div *ngIf="!vehiculoSeleccionado && !flagNuevoVehiculo" class="text-sm">
+            <h2 class="font-semibold px-2 pt-2 pb-1"> Buscador de vehículos </h2>
+            <div class="p-2 flex items-center">
+                <input [(ngModel)]="patente" type="text" (keyup.enter)="buscarVehiculo()" placeholder="Ingresar patente" class="p-2 w-1/2 border border-gray-400 focus:outline-none rounded">
+                <button (click)="buscarVehiculo()" class="w-1/2 bg-gray-100 border font-semibold focus:outline-none border-gray-400 ml-2 rounded p-2 hover:text-secondaryColor">
+                    Buscar vehículo
+                </button>
+            </div>
+        </div>       
+    </div>
+    <div *ngIf="flagNuevoVehiculo" class="px-4 py-2 text-sm">
+        <div class="px-4 text-sm">
+            <h1 class="font-semibold text-xl"> Creando nuevo vehículo </h1>
+            <p class="text-xs text-gray-500"> *El vehículo no se encuentra en sistema, a continuación podrá crearlo </p>
+            <div class="md:flex md:items-center mt-4">
+                <div class="md:w-1/2">
+                    <p class="font-semibold"> <span class="text-red-500"> * </span> Patente </p>
+                    <input [(ngModel)]="nuevoVehiculoData.patente" class="py-2 mt-1 border-b-2 border-gray-300 tranform duration-500 focus:border-secondaryColor appearance-none outline-none w-full text-gray-800" placeholder="Ej. BX157" type="text">
+                </div>
+                <div class="md:w-1/2 md:ml-4 mt-4 md:mt-0">
+                    <p class="font-semibold"> <span class="text-red-500"> * </span> Color </p>
+                    <select [(ngModel)]="nuevoVehiculoData.color" class="py-2 mt-1 border-b-2 border-gray-300 tranform duration-500 focus:border-secondaryColor outline-none w-full text-gray-800">
+                        <option value=""> Seleccionar un color </option>
+                        <option [value]="color.id" *ngFor="let color of colores"> {{ color.descripcion }} </option>
+                    </select>
+                </div>
+            </div>
+            <div class="md:flex md:items-center mt-4">
+                <div class="md:w-1/2">
+                    <p class="font-semibold"> <span class="text-red-500"> * </span> Marca </p>
+                    <select (change)="buscarModelos()" [(ngModel)]="nuevoVehiculoData.marca" class="py-2 mt-1 border-b-2 border-gray-300 tranform duration-500 focus:border-secondaryColor outline-none w-full text-gray-800">
+                        <option value=""> Seleccionar una marca </option>
+                        <option [value]="marca.id" *ngFor="let marca of marcas"> {{ marca.descripcion }} </option>
+                    </select>
+                </div>
+                <div class="md:w-1/2 md:ml-4 mt-4 md:mt-0">
+                    <p class="font-semibold"> <span class="text-red-500"> * </span> Modelo </p>
+                    <select [disabled]="nuevoVehiculoData.marca.trim() === ''" [(ngModel)]="nuevoVehiculoData.modelo" class="py-2 mt-1 border-b-2 border-gray-300 tranform duration-500 focus:border-secondaryColor outline-none w-full text-gray-800">
+                        <option value=""> Seleccionar un modelo </option>
+                        <option [value]="modelo.id" *ngFor="let modelo of modelos"> {{ modelo.descripcion }} </option>
+                    </select>
+                </div>
+            </div>
+            <div class="md:flex md:items-center mt-4">
+                <div class="md:w-1/2">
+                    <p class="font-semibold"> Motor </p>
+                    <input [(ngModel)]="nuevoVehiculoData.motor" class="py-2 mt-1 border-b-2 border-gray-300 tranform duration-500 focus:border-secondaryColor appearance-none outline-none w-full text-gray-800" placeholder="Nro de motor" type="text">
+                </div>
+                <div class="md:w-1/2 md:ml-4 mt-4 md:mt-0">
+                    <p class="font-semibold"> Chasis </p>
+                    <input [(ngModel)]="nuevoVehiculoData.chasis" class="py-2 mt-1 border-b-2 border-gray-300 tranform duration-500 focus:border-secondaryColor appearance-none outline-none w-full text-gray-800" placeholder="Nro de chasis" type="text">
+                </div>
+            </div>
+            <div *ngIf="vehiculoSeleccionado && estadoFormulario === 'editar'" class="xl:flex items-center mt-4">
+            <div class="xl:w-1/2">
+                <p class="font-semibold text-sm"> Fecha de alta </p>
+                <div class="border text-sm mt-2 border-gray-300 rounded p-2 bg-gray-100">
+                    {{ vehiculoSeleccionado.createdAt | fecha }}
+                </div>
+            </div>
+            <div class="xl:ml-4 xl:w-1/2 mt-4 xl:mt-0">
+                <p class="font-semibold text-sm"> Usuario creador </p>
+                <div class="border text-sm capitalize mt-2 border-gray-300 rounded p-2 bg-gray-100">
+                    {{ vehiculoSeleccionado.creatorUser.apellido.toLowerCase() }} {{ vehiculoSeleccionado.creatorUser.nombre.toLowerCase() }}
+                </div>
+            </div>
+        </div> 
+        <div *ngIf="vehiculoSeleccionado && estadoFormulario === 'editar'" class="xl:flex items-center mt-4">
+            <div class="xl:w-1/2">
+                <p class="font-semibold text-sm"> Ultima actualización </p>
+                <div class="border text-sm mt-2 border-gray-300 rounded p-2 bg-gray-100">
+                    {{ vehiculoSeleccionado.updatedAt | fecha }}
+                </div>
+            </div>
+            <div class="xl:ml-4 xl:w-1/2 mt-4 xl:mt-0">
+                <p class="font-semibold text-sm"> Usuario ultima actualización </p>
+                <div class="border text-sm capitalize mt-2 border-gray-300 rounded p-2 bg-gray-100">
+                    {{ vehiculoSeleccionado.updatorUser.apellido.toLowerCase() }} {{ vehiculoSeleccionado.updatorUser.nombre.toLowerCase() }}
+                </div>
+            </div>
+        </div>
+            <div class="flex items-center pb-2">
+                <button (click)="nuevoVehiculo()" class="bg-gray-100 focus:outline-none hover:text-secondaryColor shadow text-gray-800 w-full border border-gray-300 font-semibold p-2 rounded mt-4"> Crear vehículo </button>
+                <button (click)="flagNuevoVehiculo = false" class="bg-gray-100 focus:outline-none ml-2 hover:text-secondaryColor shadow text-gray-800 w-full border border-gray-300 font-semibold p-2 rounded mt-4"> Regresar </button>
+            </div>   
+        </div>
+    </div>
+    <div *ngIf="vehiculoSeleccionado" class="text-sm p-2">
+        <div class="border p-2 border-gray-400">
+            <p> <span class="font-semibold"> Patente: </span>  {{ vehiculoSeleccionado?.patente }} </p>
+            <p class="mt-2"> <span class="font-semibold"> Marca: </span> {{ vehiculoSeleccionado?.marca.descripcion }} </p>
+            <p class="mt-2"> <span class="font-semibold"> Modelo: </span> {{ vehiculoSeleccionado?.modelo.descripcion }} </p>
+        </div>
+        <div class="flex items-center mt-4">
+            <button (click)="asignarVehiculo()" class="border focus:outline-none border-green-700 text-white bg-green-700 p-2 rounded w-1/2"> Aceptar </button>
+            <button (click)="eliminarVehiculo()" class="border focus:outline-none ml-2 border-red-700 text-white bg-red-700 p-2 rounded w-1/2"> Cancelar </button>
+        </div>
+    </div>    
+</app-modal>
+
+    <!-- Modal: Asginar persona -> Permisionario o Chofer -->
+    <app-modal [showModal]="showModalAsignarPersona">
+    
+    <div class="flex items-center justify-between bg-primary-800 rounded-t p-2">
+        <h1 class=" text-white py-1 rounded-t text-lg"> {{ flagEtapaPersona === 'permisionario' ? 'Alta de permisionario' : 'Alta de chofer' }}  </h1>
+        <svg (click)="cerrarModalNuevo('permisionario')" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="cursor-pointer feather feather-x text-white mr-2"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
+    </div>  
+    
+    <div *ngIf="!personaSeleccionada && !flagNuevaPersona" class="text-sm">
+        <h2 class="font-semibold px-2 pt-2 pb-1"> Buscador de personas </h2>
+        <div class="p-2 flex items-center">
+            <input [(ngModel)]="dni" type="text" (keyup.enter)="buscarPersona()" placeholder="Ingresar DNI" class="p-2 w-1/2 border border-gray-400 focus:outline-none rounded">
+            <button (click)="buscarPersona()" class="w-1/2 bg-gray-100 border font-semibold focus:outline-none border-gray-400 ml-2 rounded p-2 hover:text-secondaryColor">
+                Buscar persona
+            </button>
+        </div>
+    </div>
+
+    <div class="text-sm p-2" *ngIf="personaSeleccionada">
+        <p class="font-semibold mb-2 border border-gray-400 bg-gray-100 p-1 rounded"> Datos de persona </p>
+        <div class="border p-2 flex items-center border-gray-400">
+            <img [src]=" flagEtapaPersona === 'permisionario' ? '/assets/img/permisionario.svg' : '/assets/img/chofer.svg'" class="w-14">
+            <div class="ml-1 mt-2">
+                <p> <span class="font-semibold"> Apellido y Nombre: </span>  {{ personaSeleccionada?.apellido }} {{ personaSeleccionada?.nombre }} </p>
+                <p class="mt-2"> <span class="font-semibold"> DNI: </span> {{ personaSeleccionada?.dni }} </p>
+            </div> 
+        </div>
+    </div>
+    
+    <!-- Alta - Permisionario -->
+    <div *ngIf="personaSeleccionada && flagEtapaPersona === 'permisionario'" class="text-sm p-2">
+        <div>
+            <div>
+                <p class="font-semibold mb-2 border border-gray-400 bg-gray-100 p-1 rounded"> Formulario de alta </p>
+                <div>
+                    <div class="md:flex md:items-center">
+                        <div class="md:w-1/2">
+                            <p class="font-semibold"> Expediente </p>
+                            <input type="text" placeholder="Nro expediente" class="border mt-1 focus:outline-none border-gray-400 p-2 w-full rounded">
+                        </div>
+                    </div>
+                </div>
+                <div class="md:flex md:items-center mt-3">
+                    <div class="md:w-1/2">
+                        <p class="font-semibold"> Libre deuda anterior </p>
+                        <input type="text" placeholder="Nro libre deuda anterior" class="border mt-1 focus:outline-none border-gray-400 p-2 w-full rounded">
+                    </div>
+                    <div class="md:w-1/2 md:ml-2 mt-2 md:mt-0">
+                        <p class="font-semibold"> Libre deuda nuevo </p>
+                        <input type="text" placeholder="Nro libre deuda nuevo" class="border mt-1 focus:outline-none border-gray-400 p-2 w-full rounded">
+                    </div>
+                </div>
+                <div class="md:flex md:items-center mt-3">
+                    <div class="md:w-1/2">
+                        <p class="font-semibold"> Sellado control técnico </p>
+                        <input type="text" placeholder="Nro sellado" class="border mt-1 focus:outline-none border-gray-400 p-2 w-full rounded">
+                    </div>
+                    <div class="md:w-1/2 md:ml-2 mt-2 md:mt-0">
+                        <p class="font-semibold"> Sellado desinfección </p>
+                        <input type="text" placeholder="Nro sellado" class="border mt-1 focus:outline-none border-gray-400 p-2 w-full rounded">
+                    </div>
+                </div>
+                <div class="md:flex md:items-center mt-3">
+                    <div class="md:w-1/2">
+                        <p class="font-semibold"> Sellado transferencia </p>
+                        <input type="text" placeholder="Nro sellado" class="border mt-1 focus:outline-none border-gray-400 p-2 w-full rounded">
+                    </div>
+                    <div class="w-1/2 ml-2">
+                    </div>
+                </div>
+            </div> 
+            <div class="mt-4">
+                <p class="font-semibold mt-2 border border-gray-400 bg-gray-100 p-1 rounded"> Documentación </p>
+                <p class="text-xs text-gray-500 mt-1"> *Libre deuda rentas y libre deuda comercio </p>
+                <input class="block w-full mt-2 text-sm text-gray-900 border p-2 border-gray-400 cursor-pointer focus:outline-none" id="file_input" type="file">
+            </div>
+        </div>      
+    </div>
+
+        <!-- Alta - Chofer -->
+    <div *ngIf="personaSeleccionada && flagEtapaPersona === 'chofer'" class="text-sm p-2">
+        <div>
+            <div>
+                <p class="font-semibold mb-2 border border-gray-400 bg-gray-100 p-1 rounded"> Formulario de alta </p>
+                <div>
+                    <div class="md:flex md:items-center">
+                        <div class="md:w-1/2">
+                            <p class="font-semibold"> Carnet de conducir (Vencimiento) </p>
+                            <input type="date" class="border mt-1 focus:outline-none border-gray-400 p-2 w-full rounded">
+                        </div>
+                    </div>
+                </div>
+                <div class="md:flex md:items-center mt-3">
+                    <div class="md:w-1/2">
+                        <p class="font-semibold"> Libreta sanitaria </p>
+                        <input type="text" placeholder="Nro de libreta" class="border mt-1 focus:outline-none border-gray-400 p-2 w-full rounded">
+                    </div>
+                    <div class="md:w-1/2 md:ml-2 mt-2 md:mt-0">
+                        <p class="font-semibold"> Certificado de antecedentes </p>
+                        <input type="text" placeholder="Nro de certificado" class="border mt-1 focus:outline-none border-gray-400 p-2 w-full rounded">
+                    </div>
+                </div>
+                <div class="md:flex md:items-center mt-3">
+                    <div class="md:w-1/2">
+                        <p class="font-semibold"> Seguro de accidentes personales </p>
+                        <input type="text" placeholder="Nro de seguro" class="border mt-1 focus:outline-none border-gray-400 p-2 w-full rounded">
+                    </div>
+                    <div class="md:w-1/2 md:ml-2 mt-2 md:mt-0">
+                        <p class="font-semibold"> Tasa de sellado </p>
+                        <input type="text" placeholder="Colocar tasa" class="border mt-1 focus:outline-none border-gray-400 p-2 w-full rounded">
+                    </div>
+                </div>
+            </div> 
+            <div class="mt-4">
+                <p class="font-semibold mt-2 border border-gray-400 bg-gray-100 p-1 rounded"> Documentación </p>
+                <p class="text-xs text-gray-500 mt-1"> *Certificado de antedecentes </p>
+                <input class="block w-full mt-2 text-sm text-gray-900 border p-2 border-gray-400 cursor-pointer focus:outline-none" id="file_input" type="file">
+            </div>
+        </div>      
+    </div>
+
+    <div *ngIf="personaSeleccionada" class="flex items-center mt-4 px-2 pb-2 text-sm">
+        <button (click)="flagEtapaPersona === 'permisionario' ? asignarPermisionario() : asignarChofer()" class="border shadow focus:outline-none border-green-700 text-white bg-green-700 p-2 rounded w-1/2"> Aceptar </button>
+        <button (click)="eliminarPersona()" class="border shadow focus:outline-none ml-2 border-red-700 text-white bg-red-700 p-2 rounded w-1/2"> Cancelar </button>
+    </div>
+
+
+    <div *ngIf="flagNuevaPersona" class="px-4 py-2 text-sm">
+      <h1 class="font-semibold text-xl"> Creando nueva persona </h1>
+      <p class="text-xs text-gray-500"> *La persona no se encuentra en sistema, a continuación podrá crearla </p>
+      <div class="w-full md:flex md:items-center mt-3">
+          <div class="md:w-1/2">
+              <p class="font-semibold"> <span class="text-red-500"> * </span> Apellido </p>
+              <input [(ngModel)]="nuevaPersonaData.apellido"  class="py-2 mt-1 border-b-2 border-gray-300 tranform duration-500 focus:border-secondaryColor appearance-none outline-none w-full text-gray-800" placeholder="Ej. Moreno" type="text">
+          </div>
+          <div class="md:w-1/2 md:ml-4 mt-4 md:mt-0">
+              <p class="font-semibold"> <span class="text-red-500"> * </span> Nombre </p>
+              <input [(ngModel)]="nuevaPersonaData.nombre"  class="py-2 mt-1 border-b-2 border-gray-300 tranform duration-500 focus:border-secondaryColor appearance-none outline-none w-full text-gray-800" placeholder="Ej. Lucas Omar" type="text">
+          </div>
+      </div>
+      <div class="w-full md:flex md:items-center mt-3">
+        <div class="md:w-1/2">
+            <p class="font-semibold"> <span class="text-red-500"> * </span> DNI </p>
+            <input [(ngModel)]="nuevaPersonaData.dni"  class="py-2 mt-1 border-b-2 border-gray-300 tranform duration-500 focus:border-secondaryColor appearance-none outline-none w-full text-gray-800" placeholder="Ej. 34060398" type="text">
+        </div>
+        <div class="md:w-1/2 md:ml-4 mt-4 md:mt-0">
+            <p class="font-semibold"> <span class="text-red-500"> * </span> Teléfono </p>
+            <input [(ngModel)]="nuevaPersonaData.telefono"  class="py-2 mt-1 border-b-2 border-gray-300 tranform duration-500 focus:border-secondaryColor appearance-none outline-none w-full text-gray-800" placeholder="Ej. 2664869642" type="text">
+        </div>
+    </div>
+    <div class="w-full md:flex md:items-center mt-3">
+        <div class="md:w-1/2">
+            <p class="font-semibold"> <span class="text-red-500"> * </span> Domicilio </p>
+            <input [(ngModel)]="nuevaPersonaData.domicilio"  class="py-2 mt-1 border-b-2 border-gray-300 tranform duration-500 focus:border-secondaryColor appearance-none outline-none w-full text-gray-800" placeholder="Ej. Portugal 1030" type="text">
+        </div>
+        <div class="md:w-1/2 md:ml-4 mt-4 md:mt-0">
+            <p class="font-semibold"> <span class="text-red-500"> * </span> Email </p>
+            <input [(ngModel)]="nuevaPersonaData.mail"  class="py-2 mt-1 border-b-2 border-gray-300 tranform duration-500 focus:border-secondaryColor appearance-none outline-none w-full text-gray-800" placeholder="Ej. ing.lucasmoreno@gmail.com" type="text">
+        </div>
+    </div>
+    <div class="flex items-center"f>
+        <button (click)="nuevaPersona()" class="bg-green-700 focus:outline-none hover:bg-green-800 shadow text-white w-full p-2 rounded mt-4"> Crear persona </button>
+        <button (click)="flagNuevaPersona = false" class="bg-red-700 focus:outline-none ml-2 hover:bg-red-800 shadow text-white w-full border border-gray-300 p-2 rounded mt-4"> Regresar </button>
+    </div>
+  </div>
+</app-modal>
+
+
+<!-- Pagina principal -->
+<div class="gsap-contenido mb-20 max-w-6xl mx-auto border mt-4 rounded-t shadow border-gray-400">
+  <div class="flex items-center justify-between rounded-t p-3">
+    <div class="flex items-center">
+      <button title="Regresar" routerLink="/dashboard/licencias" class="p-1 focus:outline-none hover:text-secondaryColor">
+        <svg xmlns="http://www.w3.org/2000/svg" class="h-9 w-9" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M11 17l-5-5m0 0l5-5m-5 5h12" />
+        </svg>        
+      </button>
+      <div class="text-3xl font-semibold ml-2">
+        Detalles de licencia
+        <p [ngClass]="{'bg-green-100 border-green-400 text-green-700':licencia?.estado === 'Habilitada', 'bg-red-100 border-red-400 text-red-700':licencia?.estado === 'Inhabilitada'}" class="border w-max px-2 py-1 rounded text-xs"> {{ licencia?.estado }} </p>
+      </div>
+    </div>
+    <div class="text-xl w-max text-center px-2 py-1">
+      <p> N° de licencia </p>
+      <p class="font-semibold"> {{ licencia?.nro_licencia }} </p>
+    </div>
+  </div>
+  <div class="p-2">
+    
+    <!-- Permisionarios -->
+    
+    <div class="border-t-2 border-gray-400">
+      <div class="flex items-center justify-between text-lg p-2">
+        <div class="flex items-center">
+            <img class="w-20" src="/assets/img/permisionario.svg">
+            <div>
+                <p class="font-semibold text-xl"> Permisionario activo </p>
+                <div *ngIf="permisionario">
+                    <p class="text-xs"> {{ permisionario?.persona.apellido }} {{ permisionario?.persona.nombre }} </p>
+                    <p class="text-xs"> DNI {{ permisionario?.persona.dni }} </p>
+                </div>
+                <div *ngIf="!permisionario">
+                    <p class="text-xs text-gray-500"> Sin permisionario asignado </p>
+                </div>
+            </div>
+        </div>
+        <button (click)="abrirModalNuevo('permisionario')" class="hover:text-secondaryColor bg-gray-100 font-semibold text-sm mt-4 focus:outline-none p-2 mr-2 border border-gray-400 rounded">
+          Alta de permisionario
+        </button>
+      </div>
+
+      <div *ngIf="permisionariosLicencia.length !== 0" class="mt-2">
+        <h1 class="font-semibold ml-4"> Historial de Permisionarios de la Licencia </h1>
+      </div>
+
+      <div *ngIf="permisionariosLicencia.length !== 0" class="px-4 py-2 max-h-56 overflow-x-auto">
+        <div class="inline-block max-h-screen overflow-y-auto min-w-full overflow-hidden pb-5">
+            <table class="min-w-full leading-normal">
+                <thead>
+                    <tr class="border">
+                        <th class="px-5 py-2 border-b-2 border-gray-200 bg-gray-100 text-left text-sm font-semibold text-gray-900 tracking-wider">
+                            <div (click)="ordenarPorColumna('apellido')" class="cursor-pointer flex items-center focus:outline-none">
+                                <span> Apellido </span>
+                                <span class="ml-2 text-gray-600">    
+                                    <svg *ngIf="ordenar.columna == 'apellido' && ordenar.direccion == 1" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-chevron-down"><polyline points="6 9 12 15 18 9"></polyline></svg>                                   
+                                    <svg *ngIf="ordenar.columna == 'apellido' && ordenar.direccion == -1" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-chevron-up"><polyline points="18 15 12 9 6 15"></polyline></svg>
+                                    <svg *ngIf="ordenar.columna != 'apellido'" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-minus"><line x1="5" y1="12" x2="19" y2="12"></line></svg>
+                                </span>
+                            </div>
+                        </th>
+                        <th class="px-5 py-2 border-b-2 border-gray-200 bg-gray-100 text-left text-sm font-semibold text-gray-900 tracking-wider">
+                            <div (click)="ordenarPorColumna('nombre')" class="cursor-pointer flex items-center focus:outline-none">
+                                <span> Nombre </span>
+                                <span class="ml-2 text-gray-600">    
+                                    <svg *ngIf="ordenar.columna == 'nombre' && ordenar.direccion == 1" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-chevron-down"><polyline points="6 9 12 15 18 9"></polyline></svg>                                   
+                                    <svg *ngIf="ordenar.columna == 'nombre' && ordenar.direccion == -1" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-chevron-up"><polyline points="18 15 12 9 6 15"></polyline></svg>
+                                    <svg *ngIf="ordenar.columna != 'nombre'" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-minus"><line x1="5" y1="12" x2="19" y2="12"></line></svg>
+                                </span>
+                            </div>
+                        </th>
+                        <th class="px-5 py-2 border-b-2 border-gray-200 bg-gray-100 text-left text-sm font-semibold text-gray-900 tracking-wider">
+                          <div (click)="ordenarPorColumna('dni')" class="cursor-pointer flex items-center focus:outline-none">
+                              <span> DNI </span>
+                              <span class="ml-2 text-gray-600">    
+                                  <svg *ngIf="ordenar.columna == 'dni' && ordenar.direccion == 1" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-chevron-down"><polyline points="6 9 12 15 18 9"></polyline></svg>                                   
+                                  <svg *ngIf="ordenar.columna == 'dni' && ordenar.direccion == -1" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-chevron-up"><polyline points="18 15 12 9 6 15"></polyline></svg>
+                                  <svg *ngIf="ordenar.columna != 'dni'" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-minus"><line x1="5" y1="12" x2="19" y2="12"></line></svg>
+                              </span>
+                          </div>
+                      </th>
+                      <th class="px-5 border-b-2 border-gray-200 bg-gray-100 text-sm font-semibold text-gray-900 tracking-wider">
+                          <div (click)="ordenarPorColumna('fecha_alta')" class="cursor-pointer w-max flex items-center justify-center focus:outline-none">
+                              <span>
+                                  Fecha de alta                                                
+                              </span>
+                              <span class="ml-2">
+                                  <svg *ngIf="ordenar.columna == 'fecha_alta' && ordenar.direccion == 1" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-chevron-down"><polyline points="6 9 12 15 18 9"></polyline></svg>                                   
+                                  <svg *ngIf="ordenar.columna == 'fecha_alta' && ordenar.direccion == -1" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-chevron-up"><polyline points="18 15 12 9 6 15"></polyline></svg>
+                                  <svg *ngIf="ordenar.columna != 'fecha_alta'" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-minus"><line x1="5" y1="12" x2="19" y2="12"></line></svg>
+                              </span>
+                          </div>
+                      </th>
+                      <th class="px-5 border-b-2 border-gray-200 bg-gray-100 text-sm font-semibold text-gray-900 tracking-wider">
+                        <div (click)="ordenarPorColumna('fecha_baja')" class="cursor-pointer w-max flex items-center justify-center focus:outline-none">
+                            <span>
+                                Fecha de baja                                                
+                            </span>
+                            <span class="ml-2">
+                                <svg *ngIf="ordenar.columna == 'fecha_baja' && ordenar.direccion == 1" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-chevron-down"><polyline points="6 9 12 15 18 9"></polyline></svg>                                   
+                                <svg *ngIf="ordenar.columna == 'fecha_baja' && ordenar.direccion == -1" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-chevron-up"><polyline points="18 15 12 9 6 15"></polyline></svg>
+                                <svg *ngIf="ordenar.columna != 'fecha_baja'" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-minus"><line x1="5" y1="12" x2="19" y2="12"></line></svg>
+                            </span>
+                        </div>
+                        </th>
+                        <!-- <th class="px-5 border-b-2 border-gray-200 bg-gray-100 text-sm font-semibold text-gray-900 tracking-wider">
+                            <div class="text-center focus:outline-none">
+                                Accion                                               
+                            </div>
+                        </th> -->
+                    </tr>
+                </thead>
+                <tbody *ngIf="permisionariosLicencia?.length > 0">
+                    <tr [ngClass]="{'bg-yellow-100':relacion.activo}" class="animate__animated animate__fadeIn" *ngFor="let relacion of permisionariosLicencia | paginate: {itemsPerPage: cantidadItems, currentPage: paginaActual}">
+                        <td class="px-5 py-3 border-b border-gray-200 text-xs">
+                            <p class="text-gray-900 w-max whitespace-no-wrap">
+                                {{ relacion.persona.apellido }}
+                            </p>
+                        </td>
+                        <td class="px-5 py-3 border-b border-gray-200 text-xs">
+                            <p class="text-gray-900 w-max whitespace-no-wrap">
+                                {{ relacion.persona.nombre }}
+                            </p>
+                        </td>
+                        <td class="px-5 border-b border-gray-200 text-xs">
+                          <p class="text-gray-900 whitespace-no-wrap">
+                              {{ relacion.persona.dni }}
+                          </p>
+                        </td>
+                        <td class="px-5 border-b border-gray-200 text-xs">
+                            <p class="text-gray-900 whitespace-no-wrap">
+                                {{ relacion.fecha_alta | fecha }}
+                            </p>
+                        </td>
+                        <td class="px-5 border-b border-gray-200 text-xs">
+                          <p class="text-gray-900 whitespace-no-wrap">
+                              {{ relacion.activo ? 'Permisionario activo' : relacion.fecha_baja | fecha }}
+                          </p>
+                        </td>
+                        <!-- <td class="px-5 border-b border-gray-200 text-center text-xs">
+                            <button (click)="abrirModalBaja(relacion, 'permisionario')" *ngIf="relacion.activo" [title]="'Dar de baja a ' + relacion.persona.apellido_nombre" class="bg-white border border-gray-400 focus:outline-none hover:text-red-500 p-2 rounded">
+                                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-4 h-4">
+                                    <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
+                                </svg> 
+                            </button>
+                        </td> -->
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+  </div>
+
+<!-- Vehiculo -->
+  <div class="border-t-2 border-gray-400 mt-4">
+    <div class="flex items-center justify-between text-lg rounded p-2">
+      <div class="flex items-center">
+        <img class="w-20" src="/assets/img/vehiculo.svg">
+        <div class="ml-4">
+            <p class="font-semibold text-xl"> Vehículo activo </p>
+            <div *ngIf="vehiculo">
+                <p class="text-xs"> {{ vehiculo?.marca.descripcion }} {{ vehiculo?.modelo.descripcion }} </p>
+                <p class="text-xs"> {{ vehiculo?.patente }} </p>
+            </div>
+            <div *ngIf="!vehiculo">
+                <p class="text-xs text-gray-500"> Sin vehículo asignado </p>
+            </div>
+        </div>
+      </div>
+      <button (click)="abrirModalNuevo('vehiculo')" class="hover:text-secondaryColor bg-gray-100 font-semibold text-sm mt-4 focus:outline-none p-2 mr-2 border border-gray-400 rounded">
+        Alta de vehículo
+      </button>
+    </div>
+  
+    <div *ngIf="vehiculosLicencia.length !== 0" class="mt-2">
+        <h1 class="font-semibold ml-4"> Historial de Vehículos de la Licencia </h1>
+    </div>
+
+    <div *ngIf="vehiculosLicencia.length !== 0" class="px-4 py-2 max-h-56 overflow-x-auto">
+        <div class="inline-block max-h-screen overflow-y-auto min-w-full overflow-hidden pb-5">
+            <table class="min-w-full leading-normal">
+                <thead>
+                    <tr class="border">
+                        <th class="px-5 py-2 border-b-2 border-gray-200 bg-gray-100 text-left text-sm font-semibold text-gray-900 tracking-wider">
+                            <div (click)="ordenarPorColumna('patente')" class="cursor-pointer flex items-center focus:outline-none">
+                                <span> Patente </span>
+                                <span class="ml-2 text-gray-600">    
+                                    <svg *ngIf="ordenar.columna == 'patente' && ordenar.direccion == 1" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-chevron-down"><polyline points="6 9 12 15 18 9"></polyline></svg>                                   
+                                    <svg *ngIf="ordenar.columna == 'patente' && ordenar.direccion == -1" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-chevron-up"><polyline points="18 15 12 9 6 15"></polyline></svg>
+                                    <svg *ngIf="ordenar.columna != 'patente'" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-minus"><line x1="5" y1="12" x2="19" y2="12"></line></svg>
+                                </span>
+                            </div>
+                        </th>
+                        <th class="px-5 py-2 border-b-2 border-gray-200 bg-gray-100 text-left text-sm font-semibold text-gray-900 tracking-wider">
+                          <div (click)="ordenarPorColumna('marca.descripcion')" class="cursor-pointer flex items-center focus:outline-none">
+                              <span> Marca </span>
+                              <span class="ml-2 text-gray-600">    
+                                  <svg *ngIf="ordenar.columna == 'marca.descripcion' && ordenar.direccion == 1" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-chevron-down"><polyline points="6 9 12 15 18 9"></polyline></svg>                                   
+                                  <svg *ngIf="ordenar.columna == 'marca.descripcion' && ordenar.direccion == -1" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-chevron-up"><polyline points="18 15 12 9 6 15"></polyline></svg>
+                                  <svg *ngIf="ordenar.columna != 'marca.descripcion'" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-minus"><line x1="5" y1="12" x2="19" y2="12"></line></svg>
+                              </span>
+                          </div>
+                        </th>
+                        <th class="px-5 py-2 border-b-2 border-gray-200 bg-gray-100 text-left text-sm font-semibold text-gray-900 tracking-wider">
+                            <div (click)="ordenarPorColumna('modelo.descripcion')" class="cursor-pointer flex items-center focus:outline-none">
+                                <span> Modelo </span>
+                                <span class="ml-2 text-gray-600">    
+                                    <svg *ngIf="ordenar.columna == 'modelo.descripcion' && ordenar.direccion == 1" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-chevron-down"><polyline points="6 9 12 15 18 9"></polyline></svg>                                   
+                                    <svg *ngIf="ordenar.columna == 'modelo.descripcion' && ordenar.direccion == -1" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-chevron-up"><polyline points="18 15 12 9 6 15"></polyline></svg>
+                                    <svg *ngIf="ordenar.columna != 'modelo.descripcion'" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-minus"><line x1="5" y1="12" x2="19" y2="12"></line></svg>
+                                </span>
+                            </div>
+                          </th>
+                        <th class="px-5 border-b-2 border-gray-200 bg-gray-100 text-sm font-semibold text-gray-900 tracking-wider">
+                            <div (click)="ordenarPorColumna('fecha_alta')" class="cursor-pointer w-max flex items-center justify-center focus:outline-none">
+                                <span>
+                                    Fecha de alta                                                
+                                </span>
+                                <span class="ml-2">
+                                    <svg *ngIf="ordenar.columna == 'fecha_alta' && ordenar.direccion == 1" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-chevron-down"><polyline points="6 9 12 15 18 9"></polyline></svg>                                   
+                                    <svg *ngIf="ordenar.columna == 'fecha_alta' && ordenar.direccion == -1" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-chevron-up"><polyline points="18 15 12 9 6 15"></polyline></svg>
+                                    <svg *ngIf="ordenar.columna != 'fecha_alta'" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-minus"><line x1="5" y1="12" x2="19" y2="12"></line></svg>
+                                </span>
+                            </div>
+                        </th>
+                        <th class="px-5 border-b-2 border-gray-200 bg-gray-100 text-sm font-semibold text-gray-900 tracking-wider">
+                            <div (click)="ordenarPorColumna('fecha_baja')" class="cursor-pointer w-max flex items-center justify-center focus:outline-none">
+                                <span>
+                                    Fecha de baja                                                
+                                </span>
+                                <span class="ml-2">
+                                    <svg *ngIf="ordenar.columna == 'fecha_baja' && ordenar.direccion == 1" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-chevron-down"><polyline points="6 9 12 15 18 9"></polyline></svg>                                   
+                                    <svg *ngIf="ordenar.columna == 'fecha_baja' && ordenar.direccion == -1" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-chevron-up"><polyline points="18 15 12 9 6 15"></polyline></svg>
+                                    <svg *ngIf="ordenar.columna != 'fecha_baja'" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-minus"><line x1="5" y1="12" x2="19" y2="12"></line></svg>
+                                </span>
+                            </div>
+                        </th>
+                        <!-- <th class="px-5 border-b-2 border-gray-200 bg-gray-100 text-sm font-semibold text-gray-900 tracking-wider">
+                            <div class="text-center focus:outline-none">
+                                Accion                                               
+                            </div>
+                        </th> -->
+                    </tr>
+                </thead>
+                <tbody *ngIf="vehiculosLicencia?.length > 0">
+                    <tr [ngClass]="{'bg-yellow-100':relacion.activo}" class="animate__animated animate__fadeIn" *ngFor="let relacion of vehiculosLicencia | paginate: {itemsPerPage: cantidadItems, currentPage: paginaActual}">
+                        <td class="px-5 py-3 border-b border-gray-200 text-xs">
+                            <p class="text-gray-900 w-max whitespace-no-wrap">
+                                {{ relacion.vehiculo.patente }}
+                            </p>
+                        </td>
+                        <td class="px-5 border-b border-gray-200 text-xs">
+                          <p class="text-gray-900 whitespace-no-wrap">
+                                {{ relacion.vehiculo.marca.descripcion }}
+                          </p>
+                        </td>
+                        <td class="px-5 border-b border-gray-200 text-xs">
+                            <p class="text-gray-900 whitespace-no-wrap">
+                                {{ relacion.vehiculo.modelo.descripcion }}
+                            </p>
+                          </td>
+                        <td class="px-5 border-b border-gray-200 text-xs">
+                            <p class="text-gray-900 whitespace-no-wrap">
+                                {{ relacion.fecha_alta | fecha }}
+                            </p>
+                        </td>
+                        <td class="px-5 border-b border-gray-200 text-xs">
+                          <p class="text-gray-900 whitespace-no-wrap">
+                            {{ relacion.activo ? 'Vehículo activo' : relacion.fecha_baja | fecha }}
+                          </p>
+                      </td>
+                      <!-- <td class="px-5 border-b border-gray-200 text-center text-xs">
+                        <button (click)="abrirModalBaja(relacion, 'vehiculo')" *ngIf="relacion.activo" [title]="'Dar de baja a ' + relacion.vehiculo.patente" class="bg-white border border-gray-400 focus:outline-none hover:text-red-500 p-2 rounded">
+                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-4 h-4">
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
+                            </svg> 
+                        </button>
+                    </td> -->
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <!-- Choferes -->
+    <div class="border-t-2 border-gray-400 mt-4">
+        <div class="flex items-center justify-between text-lg rounded p-2">
+          <div class="flex items-center">
+            <img class="w-20" src="/assets/img/chofer.svg">
+            <div class="ml-4">
+                <p class="font-semibold text-xl"> Choferes </p>
+                <div *ngIf="choferes?.length === 0">
+                    <p class="text-xs text-gray-500"> Sin choferes asignados </p>
+                </div>
+            </div>
+          </div>
+          <button (click)="abrirModalNuevo('chofer')" class="hover:text-secondaryColor bg-gray-100 font-semibold text-sm mt-4 focus:outline-none p-2 mr-2 border border-gray-400 rounded">
+            Alta de chofer
+          </button>
+        </div>
+      
+        <div *ngIf="choferes?.length !== 0" class="mt-2">
+            <h1 class="font-semibold ml-4"> Historial de Choferes de la Licencia </h1>
+        </div>
+
+        <div *ngIf="choferes?.length !== 0" class="px-4 py-2 max-h-56 overflow-x-auto">
+            <div class="inline-block max-h-screen overflow-y-auto min-w-full overflow-hidden pb-5">
+                <table class="min-w-full leading-normal">
+                    <thead>
+                        <tr class="border">
+                            <th class="px-5 py-2 border-b-2 border-gray-200 bg-gray-100 text-left text-sm font-semibold text-gray-900 tracking-wider">
+                                <div (click)="ordenarPorColumna('apellido')" class="cursor-pointer flex items-center focus:outline-none">
+                                    <span> Apellido </span>
+                                    <span class="ml-2 text-gray-600">    
+                                        <svg *ngIf="ordenar.columna == 'apellido' && ordenar.direccion == 1" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-chevron-down"><polyline points="6 9 12 15 18 9"></polyline></svg>                                   
+                                        <svg *ngIf="ordenar.columna == 'apellido' && ordenar.direccion == -1" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-chevron-up"><polyline points="18 15 12 9 6 15"></polyline></svg>
+                                        <svg *ngIf="ordenar.columna != 'apellido'" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-minus"><line x1="5" y1="12" x2="19" y2="12"></line></svg>
+                                    </span>
+                                </div>
+                            </th>
+                            <th class="px-5 py-2 border-b-2 border-gray-200 bg-gray-100 text-left text-sm font-semibold text-gray-900 tracking-wider">
+                                <div (click)="ordenarPorColumna('nombre')" class="cursor-pointer flex items-center focus:outline-none">
+                                    <span> Apellido </span>
+                                    <span class="ml-2 text-gray-600">    
+                                        <svg *ngIf="ordenar.columna == 'nombre' && ordenar.direccion == 1" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-chevron-down"><polyline points="6 9 12 15 18 9"></polyline></svg>                                   
+                                        <svg *ngIf="ordenar.columna == 'nombre' && ordenar.direccion == -1" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-chevron-up"><polyline points="18 15 12 9 6 15"></polyline></svg>
+                                        <svg *ngIf="ordenar.columna != 'nombre'" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-minus"><line x1="5" y1="12" x2="19" y2="12"></line></svg>
+                                    </span>
+                                </div>
+                            </th>
+                            <th class="px-5 py-2 border-b-2 border-gray-200 bg-gray-100 text-left text-sm font-semibold text-gray-900 tracking-wider">
+                              <div (click)="ordenarPorColumna('dni')" class="cursor-pointer flex items-center focus:outline-none">
+                                  <span> DNI </span>
+                                  <span class="ml-2 text-gray-600">    
+                                      <svg *ngIf="ordenar.columna == 'dni' && ordenar.direccion == 1" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-chevron-down"><polyline points="6 9 12 15 18 9"></polyline></svg>                                   
+                                      <svg *ngIf="ordenar.columna == 'dni' && ordenar.direccion == -1" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-chevron-up"><polyline points="18 15 12 9 6 15"></polyline></svg>
+                                      <svg *ngIf="ordenar.columna != 'dni'" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-minus"><line x1="5" y1="12" x2="19" y2="12"></line></svg>
+                                  </span>
+                              </div>
+                          </th>
+                          <th class="px-5 border-b-2 border-gray-200 bg-gray-100 text-sm font-semibold text-gray-900 tracking-wider">
+                              <div (click)="ordenarPorColumna('fecha_alta')" class="cursor-pointer w-max flex items-center justify-center focus:outline-none">
+                                  <span>
+                                      Fecha de alta                                                
+                                  </span>
+                                  <span class="ml-2">
+                                      <svg *ngIf="ordenar.columna == 'fecha_alta' && ordenar.direccion == 1" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-chevron-down"><polyline points="6 9 12 15 18 9"></polyline></svg>                                   
+                                      <svg *ngIf="ordenar.columna == 'fecha_alta' && ordenar.direccion == -1" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-chevron-up"><polyline points="18 15 12 9 6 15"></polyline></svg>
+                                      <svg *ngIf="ordenar.columna != 'fecha_alta'" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-minus"><line x1="5" y1="12" x2="19" y2="12"></line></svg>
+                                  </span>
+                              </div>
+                          </th>
+                          <th class="px-5 border-b-2 border-gray-200 bg-gray-100 text-sm font-semibold text-gray-900 tracking-wider">
+                            <div (click)="ordenarPorColumna('fecha_baja')" class="cursor-pointer w-max flex items-center justify-center focus:outline-none">
+                                <span>
+                                    Fecha de baja                                                
+                                </span>
+                                <span class="ml-2">
+                                    <svg *ngIf="ordenar.columna == 'fecha_baja' && ordenar.direccion == 1" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-chevron-down"><polyline points="6 9 12 15 18 9"></polyline></svg>                                   
+                                    <svg *ngIf="ordenar.columna == 'fecha_baja' && ordenar.direccion == -1" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-chevron-up"><polyline points="18 15 12 9 6 15"></polyline></svg>
+                                    <svg *ngIf="ordenar.columna != 'fecha_baja'" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-minus"><line x1="5" y1="12" x2="19" y2="12"></line></svg>
+                                </span>
+                            </div>
+                            </th>
+                            <th class="px-5 border-b-2 border-gray-200 bg-gray-100 text-sm font-semibold text-gray-900 tracking-wider">
+                                <div class="cursor-pointer text-center focus:outline-none">
+                                    Accion                                               
+                                </div>
+                            </th>
+                        </tr>
+                    </thead>
+                    <tbody *ngIf="choferes?.length > 0">
+                        <tr [ngClass]="{'bg-yellow-100':relacion.activo}" class="animate__animated animate__fadeIn" *ngFor="let relacion of choferes | paginate: {itemsPerPage: cantidadItems, currentPage: paginaActual}">
+                            <td class="px-5 py-3 border-b border-gray-200 text-xs">
+                                <p class="text-gray-900 w-max whitespace-no-wrap">
+                                    {{ relacion.persona.apellido }}
+                                </p>
+                            </td>
+                            <td class="px-5 py-3 border-b border-gray-200 text-xs">
+                                <p class="text-gray-900 w-max whitespace-no-wrap">
+                                    {{ relacion.persona.nombre }}
+                                </p>
+                            </td>
+                            <td class="px-5 border-b border-gray-200 text-xs">
+                              <p class="text-gray-900 whitespace-no-wrap">
+                                  {{ relacion.persona.dni }}
+                              </p>
+                            </td>
+                            <td class="px-5 border-b border-gray-200 text-xs">
+                                <p class="text-gray-900 whitespace-no-wrap">
+                                    {{ relacion.fecha_alta | fecha }}
+                                </p>
+                            </td>
+                            <td class="px-5 border-b border-gray-200 text-xs">
+                              <p class="text-gray-900 whitespace-no-wrap">
+                                {{ relacion.activo ? 'Chofer activo' : relacion.fecha_baja | fecha }}
+                              </p>
+                            </td>
+                            <td class="px-5 border-b border-gray-200 text-center justify-center text-xs">
+                                <button (click)="abrirModalBaja(relacion, 'chofer')" *ngIf="relacion.activo" [title]="'Dar de baja a ' + relacion.persona.apellido_nombre" class="bg-white focus:outline-none border border-gray-400 hover:text-red-500 p-2 rounded">
+                                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-4 h-4">
+                                        <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
+                                    </svg> 
+                                </button>
+                                <button (click)="abrirModalDetalles('chofer', relacion)" title="Detalles" *ngIf="!relacion.activo" class="bg-white focus:outline-none border border-gray-400 hover:text-secondaryColor p-2 rounded">
+                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                                        <path stroke-linecap="round" stroke-linejoin="round" d="M8 5H6a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2v-1M8 5a2 2 0 002 2h2a2 2 0 002-2M8 5a2 2 0 012-2h2a2 2 0 012 2m0 0h2a2 2 0 012 2v3m2 4H10m0 0l3-3m-3 3l3 3" />
+                                    </svg>
+                                </button>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+  
+  </div>
+
+</div>

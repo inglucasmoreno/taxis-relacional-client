@@ -23,6 +23,8 @@ import { RelojesPrecintosMotivosComponent } from './relojes/relojes-precintos-mo
 import { RelojesMarcasComponent } from './relojes/relojes-marcas.component';
 import { VehiculosModelosComponent } from './vehiculos/vehiculos-modelos.component';
 import { VehiculosSegurosComponent } from './vehiculos/vehiculos-seguros.component';
+import { LicenciasComponent } from './licencias/licencias.component';
+import { LicenciasDetallesComponent } from './licencias/licencias-detalles.component';
 
 const routes: Routes = [
     {
@@ -66,6 +68,11 @@ const routes: Routes = [
             { path: 'relojes-modelos/:marca', data: { permisos: 'CONFIGURACIONES_NAV' }, canActivate: [PermisosGuard], component: RelojesModelosComponent }, 
             
             { path: 'relojes-precintos-motivos', data: { permisos: 'CONFIGURACIONES_NAV' }, canActivate: [PermisosGuard], component: RelojesPrecintosMotivosComponent}, 
+
+            // Licencias
+            { path: 'licencias', data: { permisos: 'LICENCIAS_NAV' }, canActivate: [PermisosGuard], component: LicenciasComponent}, 
+
+            { path: 'licencias-detalles/:id', data: { permisos: 'LICENCIAS_NAV' }, canActivate: [PermisosGuard], component: LicenciasDetallesComponent}, 
 
         ]
     }
