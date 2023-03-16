@@ -18,16 +18,16 @@ export class LicenciasVehiculosService {
 
   constructor(private http: HttpClient) { }
 
-  // Nueva relacion
-  nuevaRelacion(data: any): Observable<any> {
-    return this.http.post(`${base_url}/licencias-vehiculos`, data, {
+  // Relacion por ID
+  getRelacion(id: string): Observable<any> {
+    return this.http.get(`${base_url}/licencias-vehiculos/${id}`, {
       headers: this.getToken
     });
   };
 
-  // Relacion por ID
-  getRelacion(id: string): Observable<any> {
-    return this.http.get(`${base_url}/licencias-vehiculos/${id}`, {
+  // Nueva relacion
+  nuevaRelacion(data: any): Observable<any> {
+    return this.http.post(`${base_url}/licencias-vehiculos`, data, {
       headers: this.getToken
     });
   };

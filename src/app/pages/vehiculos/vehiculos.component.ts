@@ -213,7 +213,7 @@ export class VehiculosComponent implements OnInit {
 
     // Verificacion: Año vacio
     if (!this.ano || this.ano < this.LIMIT_ANO) {
-      this.alertService.info('Debes colocar una año válido');
+      this.alertService.info('Debes colocar un año válido');
       return;
     }
 

@@ -44,8 +44,8 @@ export class LicenciasChoferesService {
   }
 
   // Actualizar relaciones
-  actualizarRelaciones(id: string, data: any): Observable<any> {
-    return this.http.put(`${base_url}/licencias-choferes/${id}`, data, {
+  actualizarRelaciones(id: number, data: any): Observable<any> {
+    return this.http.patch(`${base_url}/licencias-choferes/${id}`, data, {
       headers: this.getToken
     });
   }
