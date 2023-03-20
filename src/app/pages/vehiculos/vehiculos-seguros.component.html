@@ -12,7 +12,7 @@
                   <p class="font-semibold"> <span class="text-red-500"> * </span> Empresa </p>
                   <select [(ngModel)]="empresa" class="py-2 mt-1 focus:outline-none outline-none border-b-2 border-gray-300 tranform duration-500 focus:border-secondaryColor w-full text-gray-800">
                       <option value=""> Seleccionar empresa </option>
-                      <option *ngFor="let empresa of empresas" [value]="empresa._id"> {{ empresa.descripcion }} </option>
+                      <option *ngFor="let empresa of empresas" [value]="empresa.id"> {{ empresa.descripcion }} </option>
                   </select>
               </div>
               <div class="w-1/2 ml-4">
@@ -69,7 +69,7 @@
 
 <!-- Seguro vigente -->
 <div class="container gsap-contenido md:mx-0">
-  <div class="max-w-xl mt-4 mx-4 md:mx-auto">
+  <div class="max-w-lg mt-4 mx-4 md:mx-auto">
       <div class="border border-gray-300 bg-primary-800 text-white p-2 rounded-t flex items-center justify-between">
           <div class="flex items-center">
               <button routerLink="/dashboard/vehiculos" class="hover:text-secondaryColor focus:outline-none">
@@ -77,7 +77,7 @@
                       <path fill-rule="evenodd" d="M9.707 16.707a1 1 0 01-1.414 0l-6-6a1 1 0 010-1.414l6-6a1 1 0 011.414 1.414L5.414 9H17a1 1 0 110 2H5.414l4.293 4.293a1 1 0 010 1.414z" clip-rule="evenodd" />
                   </svg>               
               </button>
-              <h1 class="ml-2"> Seguro vigente </h1>
+              <h1 class="ml-2 text-lg"> Seguro vigente </h1>
           </div>
           <div>
               <button *ngIf="seguroActivo" title="Editar seguro vigente" (click)="abrirModal('editar')" class="border border-gray-300 p-2 hover:text-secondaryColor focus:outline-none rounded bg-white text-gray-800">
@@ -92,29 +92,34 @@
               </button>
           </div>
       </div>
-      <div *ngIf="seguroActivo" class="border border-gray-300 p-2">
-          <p class="font-semibold"> {{ seguroActivo?.empresa.descripcion }} </p>
-          <p class="text-sm mt-2"> <span class="font-semibold"> Nro de poliza: </span> {{ seguroActivo?.nro_poliza }} </p>
-          <P class="text-sm mt-2 flex items-center"> 
-              <span class="flex items-center">
-                  <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-4 h-4">
-                      <path stroke-linecap="round" stroke-linejoin="round" d="M6.75 3v2.25M17.25 3v2.25M3 18.75V7.5a2.25 2.25 0 012.25-2.25h13.5A2.25 2.25 0 0121 7.5v11.25m-18 0A2.25 2.25 0 005.25 21h13.5A2.25 2.25 0 0021 18.75m-18 0v-7.5A2.25 2.25 0 015.25 9h13.5A2.25 2.25 0 0121 11.25v7.5" />
-                    </svg>
-                    <span class="ml-1">
-                      <span class="font-semibold"> Desde: </span>  
-                       {{ seguroActivo.fecha_desde | fecha }}
-                    </span>
-              </span>
-              <span class="flex items-center ml-4">
-                  <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-4 h-4">
-                      <path stroke-linecap="round" stroke-linejoin="round" d="M6.75 3v2.25M17.25 3v2.25M3 18.75V7.5a2.25 2.25 0 012.25-2.25h13.5A2.25 2.25 0 0121 7.5v11.25m-18 0A2.25 2.25 0 005.25 21h13.5A2.25 2.25 0 0021 18.75m-18 0v-7.5A2.25 2.25 0 015.25 9h13.5A2.25 2.25 0 0121 11.25v7.5" />
-                    </svg>
-                    <span class="ml-1">
-                      <span class="font-semibold"> Hasta: </span>
-                       {{ seguroActivo.fecha_hasta | fecha }}
-                    </span>
-              </span>  
-          </P>
+      <div *ngIf="seguroActivo" class="border flex items-center py-4 justify-center border-gray-400">
+        <div class="p-2">
+            <img class="w-24" src="assets/img/seguro_vehiculo.svg" alt="seguro_vehiculo.svg">
+        </div>
+        <div class="ml-4">
+            <p class="text-sm"> <span class="font-semibold"> Empresa: </span> <span> {{ seguroActivo?.empresa.descripcion }} </span> </p>
+            <p class="text-sm mt-2"> <span class="font-semibold"> Nro de poliza: </span> {{ seguroActivo?.nro_poliza }} </p>
+            <P class="text-sm mt-2 flex items-center"> 
+                <span class="flex items-center">
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-4 h-4">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M6.75 3v2.25M17.25 3v2.25M3 18.75V7.5a2.25 2.25 0 012.25-2.25h13.5A2.25 2.25 0 0121 7.5v11.25m-18 0A2.25 2.25 0 005.25 21h13.5A2.25 2.25 0 0021 18.75m-18 0v-7.5A2.25 2.25 0 015.25 9h13.5A2.25 2.25 0 0121 11.25v7.5" />
+                      </svg>
+                      <span class="ml-1">
+                        <span class="font-semibold"> Desde: </span>  
+                         {{ seguroActivo.fecha_desde | fecha }}
+                      </span>
+                </span>
+                <span class="flex items-center ml-4">
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-4 h-4">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M6.75 3v2.25M17.25 3v2.25M3 18.75V7.5a2.25 2.25 0 012.25-2.25h13.5A2.25 2.25 0 0121 7.5v11.25m-18 0A2.25 2.25 0 005.25 21h13.5A2.25 2.25 0 0021 18.75m-18 0v-7.5A2.25 2.25 0 015.25 9h13.5A2.25 2.25 0 0121 11.25v7.5" />
+                      </svg>
+                      <span class="ml-1">
+                        <span class="font-semibold"> Hasta: </span>
+                         {{ seguroActivo.fecha_hasta | fecha }}
+                      </span>
+                </span>  
+            </P>
+        </div>
       </div>
       <div class="border p-2 md:text-lg border-gray-300 shadow" *ngIf="!seguroActivo">
           <p class="text-gray-600"> No hay seguro activos para este vehículo </p>
@@ -166,10 +171,10 @@
                                           </path>
                                       </svg>
                                   </span>
-                                  <input #txtParametro placeholder="Empresa" (keyup)="filtrarParametro(txtParametro.value)" class="appearance-none rounded-r rounded-l border border-gray-400 border-b block pl-8 pr-6 py-2 w-full bg-white text-sm placeholder-gray-400 text-gray-700 focus:bg-white focus:placeholder-gray-600 focus:text-gray-700 focus:outline-none"
+                                  <input [(ngModel)]="filtro.parametro" placeholder="Empresa" (change)="cambiarPagina(1)" class="appearance-none rounded-r rounded-l border border-gray-400 border-b block pl-8 pr-6 py-2 w-full bg-white text-sm placeholder-gray-400 text-gray-700 focus:bg-white focus:placeholder-gray-600 focus:text-gray-700 focus:outline-none"
                                   />
                               </div>
-                              <select (change)="paginaActual = 1" class="bg-white text-sm focus:outline-none w-max px-2 py-2 md:py-0 md:ml-2 mt-2 md:mt-0 border text-gray-600 border-gray-400 rounded" [(ngModel)]="cantidadItems">
+                              <select (change)="cambiarPagina(1)" class="bg-white text-sm focus:outline-none w-max px-2 py-2 md:py-0 md:ml-2 mt-2 md:mt-0 border text-gray-600 border-gray-400 rounded" [(ngModel)]="cantidadItems">
                                   <option value="10"> 10 elementos </option>
                                   <option value="20"> 20 elementos </option>
                                   <option value="50"> 50 elementos </option>
@@ -244,8 +249,8 @@
                                       </tr>
                                   </thead>
                                   <tbody *ngIf="seguros">
-                                      <tr class="animate__animated animate__fadeIn" *ngFor="let seguro of seguros | paginate: { itemsPerPage: cantidadItems, currentPage: paginaActual, totalItems: totalItems }">
-                                          <td class="px-5 py-3 border-b border-gray-200 text-xs">
+                                      <tr [ngClass]="{'bg-yellow-100':seguro.activo}" class="animate__animated animate__fadeIn" *ngFor="let seguro of seguros | paginate: { itemsPerPage: cantidadItems, currentPage: paginaActual, totalItems: totalItems }">
+                                          <td class="px-5 py-4 border-b border-gray-200 text-xs">
                                               <p class="text-gray-900 w-max whitespace-no-wrap">
                                                   {{ seguro.empresa.descripcion }}
                                               </p>

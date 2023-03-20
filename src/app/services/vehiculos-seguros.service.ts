@@ -34,7 +34,6 @@ export class VehiculosSegurosService {
 
   // Listar seguros
   listarSeguros(parametros?: any): Observable<any> {
-    console.log(parametros);
     return this.http.get(`${base_url}/vehiculos-seguros`, {
       params: {
         direccion: parametros?.direccion || 1,
@@ -43,6 +42,7 @@ export class VehiculosSegurosService {
         parametro: parametros?.parametro || '',
         desde: parametros?.desde || 0,
         cantidadItems: parametros?.cantidadItems || 10000000,
+        vehiculo: Number(parametros.vehiculo)
       },
       headers: this.getToken
     });

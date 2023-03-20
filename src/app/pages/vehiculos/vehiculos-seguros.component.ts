@@ -81,6 +81,7 @@ export class VehiculosSegurosComponent implements OnInit {
 
     // Obtencion de IP
     this.activatedRoute.params.subscribe(({ id }) => {
+
       this.idVehiculo = id;
 
       const parametros = {
@@ -91,10 +92,10 @@ export class VehiculosSegurosComponent implements OnInit {
 
       // Listado de seguros    
       this.vehiculosSegurosService.listarSeguros(parametros).subscribe({
-        next: ({ seguros, totalItems }) => {
-          this.seguros = seguros.todos;
+        next: ({ seguros, totalItems, seguroActivo }) => {
+          this.seguros = seguros;
           this.totalItems = totalItems;
-          this.seguroActivo = seguros.activo;
+          this.seguroActivo = seguroActivo;
           this.alertService.close();
         }, error: ({ error }) => this.alertService.errorApi(error.message)
       });
@@ -162,10 +163,10 @@ export class VehiculosSegurosComponent implements OnInit {
       cantidadItems: this.cantidadItems
     }
     this.vehiculosSegurosService.listarSeguros(parametros)
-      .subscribe(({ seguros, totalItems }) => {
-        this.seguros = seguros.todos;
+      .subscribe(({ seguros, totalItems,seguroActivo }) => {
+        this.seguros = seguros;
         this.totalItems = totalItems;
-        this.seguroActivo = seguros.activo;
+        this.seguroActivo = seguroActivo;
         this.showModalSeguro = false;
         this.alertService.close();
       }, (({ error }) => {
@@ -224,7 +225,7 @@ export class VehiculosSegurosComponent implements OnInit {
   actualizarSeguro(): void {
 
     // Verificacion: Empresa
-    if (this.empresa.trim() === "") {
+    if (this.empresa.toString().trim() === "") {
       this.alertService.info('Debes colocar una empresa');
       return;
     }
