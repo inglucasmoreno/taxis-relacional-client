@@ -27,6 +27,7 @@ import { VehiculosModelosComponent } from './vehiculos/vehiculos-modelos.compone
 import { VehiculosSegurosComponent } from './vehiculos/vehiculos-seguros.component';
 import { LicenciasComponent } from './licencias/licencias.component';
 import { LicenciasDetallesComponent } from './licencias/licencias-detalles.component';
+import { VehiculosTitularesComponent } from './vehiculos/vehiculos-titulares.component';
 
 
 @NgModule({
@@ -51,6 +52,7 @@ import { LicenciasDetallesComponent } from './licencias/licencias-detalles.compo
     VehiculosSegurosComponent,
     LicenciasComponent,
     LicenciasDetallesComponent,
+    VehiculosTitularesComponent,
   ],
   imports: [
     CommonModule,

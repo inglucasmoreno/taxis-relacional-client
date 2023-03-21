@@ -25,6 +25,7 @@ import { VehiculosModelosComponent } from './vehiculos/vehiculos-modelos.compone
 import { VehiculosSegurosComponent } from './vehiculos/vehiculos-seguros.component';
 import { LicenciasComponent } from './licencias/licencias.component';
 import { LicenciasDetallesComponent } from './licencias/licencias-detalles.component';
+import { VehiculosTitularesComponent } from './vehiculos/vehiculos-titulares.component';
 
 const routes: Routes = [
     {
@@ -59,8 +60,10 @@ const routes: Routes = [
 
             { path: 'vehiculos-modelos/:marca', data: { permisos: 'CONFIGURACIONES_NAV' }, canActivate: [PermisosGuard], component: VehiculosModelosComponent }, 
 
-            { path: 'seguros-empresas', data: { permisos: 'CONFIGURACIONES_NAV' }, canActivate: [PermisosGuard], component: SegurosEmpresasComponent }, 
+            { path: 'vehiculos-titulares/:id', data: { permisos: 'VEHICULOS_NAV' }, canActivate: [PermisosGuard], component: VehiculosTitularesComponent },
 
+
+            { path: 'seguros-empresas', data: { permisos: 'CONFIGURACIONES_NAV' }, canActivate: [PermisosGuard], component: SegurosEmpresasComponent }, 
 
             //Relojes
             { path: 'relojes-marcas', data: { permisos: 'CONFIGURACIONES_NAV' }, canActivate: [PermisosGuard], component: RelojesMarcasComponent }, 
