@@ -22,6 +22,7 @@ export class VehiculosComponent implements OnInit {
 
   // Modal
   public showModalVehiculo = false;
+  public showModalTitulares = false;
 
   // Estado formulario 
   public estadoFormulario = 'crear';
@@ -327,6 +328,18 @@ export class VehiculosComponent implements OnInit {
       this.modelos = [];
     }
 
+  }
+
+  // Abrir titulares
+  abrirTitulares(): void {
+    this.showModalVehiculo = false;
+    this.showModalTitulares = true;
+  }
+
+  // Regresar a datos de vehiculo
+  regresarVehiculo(): void {
+    this.showModalVehiculo = true;
+    this.showModalTitulares = false;
   }
 
   // Reiniciando formulario

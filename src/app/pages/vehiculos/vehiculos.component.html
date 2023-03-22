@@ -1,4 +1,41 @@
 
+<app-modal [showModal]="showModalTitulares">
+    <div class="flex items-center justify-between bg-primary-800 rounded-t p-2">
+        <h1 class=" text-white px-2 py-1 rounded-t text-lg"> Carga de titulares </h1>
+        <svg (click)="regresarVehiculo()" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="cursor-pointer feather feather-x text-white mr-2"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
+    </div>
+    <div class="p-2">
+        <div>
+            <p class="font-semibold"> Buscar persona </p>
+        </div>
+        <div class="flex items-center mt-2 text-sm">
+            <input type="text" class="border border-gray-400 focus:outline-none rounded p-2" placeholder="DNI">
+            <button title="Buscar persona" class="ml-2 rounded focus:outline-none p-2 border border-gray-400 hover:text-secondaryColor">
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-5 h-5">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M21 21l-5.197-5.197m0 0A7.5 7.5 0 105.196 5.196a7.5 7.5 0 0010.607 10.607z" />
+                  </svg>
+            </button>
+        </div>
+        <div class="text-sm">
+            <h1 class="p-2 font-semibold bg-gray-100 border border-gray-400 mt-4">
+                Listado de titulares
+            </h1>
+            <div class="flex border-b border-gray-400 items-center py-3 px-2 justify-between">
+                <p class=""> MORENO LUCAS OMAR </p>
+                <P class="font-semibold"> % 50.00 </P>
+            </div>
+            <div class="flex border-b border-gray-400 items-center py-3 px-2 justify-between">
+                <p class=""> FET YAMIL DAHER </p>
+                <P class="font-semibold"> % 50.00 </P>
+            </div>
+        </div>
+        <div class="flex items-center">
+            <button (click)="regresarVehiculo()" class="bg-red-700 text-white focus:outline-none shadow w-full font-semibold p-2 rounded mt-4"> Regresar </button>
+            <button class="bg-secondaryColor ml-2 text-white focus:outline-none shadow w-full font-semibold p-2 rounded mt-4"> Crear vehículo </button>
+        </div>
+    </div>
+</app-modal>
+
 <!-- Modal: Crear / Editar vehiculo -->
 <app-modal [showModal]="showModalVehiculo">
   <div (keyup.enter)="estadoFormulario === 'crear' ? nuevoVehiculo() : actualizarVehiculo()">
@@ -81,8 +118,11 @@
                 </div>
             </div>
         </div>   
-          <button *ngIf="estadoFormulario == 'crear'" (click)="nuevoVehiculo()" class="bg-gray-100 focus:outline-none hover:text-secondaryColor shadow text-gray-800 w-full border border-gray-300 font-semibold p-2 rounded mt-4"> Crear vehiculo </button>
-          <button *ngIf="estadoFormulario == 'editar'" (click)="actualizarVehiculo()" class="bg-gray-100 focus:outline-none hover:text-secondaryColor shadow text-gray-800 w-full border border-gray-300 font-semibold p-2 rounded mt-4"> Actualizar vehiculo </button>
+
+        <div class="flex items-center">
+            <button (click)="showModalVehiculo = false" class="bg-red-700 text-white focus:outline-none shadow w-full font-semibold p-2 rounded mt-4"> Cancelar </button>
+            <button (click)="abrirTitulares()" class="bg-secondaryColor ml-2 text-white focus:outline-none shadow w-full font-semibold p-2 rounded mt-4"> Continuar </button>
+        </div>
       </div>
   </div>
 </app-modal>
