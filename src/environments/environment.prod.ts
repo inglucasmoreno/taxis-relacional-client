@@ -1,4 +1,4 @@
 export const environment = {
   production: true,
-  base_url: 'https://equinocciotech.com'
+  base_url: 'http://45.178.3.232:3024'
 };

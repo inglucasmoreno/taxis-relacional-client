@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { AlertService } from 'src/app/services/alert.service';
 import { AuthService } from 'src/app/services/auth.service';
 import { DataService } from 'src/app/services/data.service';
+import { SigemService } from 'src/app/services/sigem.service';
 import { VehiculosColoresService } from 'src/app/services/vehiculos-colores.service';
 import { VehiculosMarcasService } from 'src/app/services/vehiculos-marcas.service';
 import { VehiculosModelosService } from 'src/app/services/vehiculos-modelos.service';
@@ -22,7 +23,7 @@ export class VehiculosComponent implements OnInit {
 
   // Modal
   public showModalVehiculo = false;
-  public showModalTitulares = false;
+  public showModalTitulares = true;
 
   // Estado formulario 
   public estadoFormulario = 'crear';
@@ -49,6 +50,17 @@ export class VehiculosComponent implements OnInit {
   public color: string = '';
   public ano: number = null;
 
+  // Titulares del vehiculo
+  public totalPorcentaje = 0;
+  public porcentajeFaltante = 0;
+  public titulares: any = [];
+  public porcentaje: number = null;
+  public numero_titulo: string = '';
+
+  // Personas
+  public dni: string = '';
+  public personaSeleccionada: any = null;
+
   // Paginacion
   public totalItems: number;
   public desde: number = 0;
@@ -67,13 +79,16 @@ export class VehiculosComponent implements OnInit {
     columna: 'patente'
   }
 
-  constructor(private vehiculosService: VehiculosService,
+  constructor(
+    private sigemService: SigemService,
+    private vehiculosService: VehiculosService,
     private coloresService: VehiculosColoresService,
     private marcasService: VehiculosMarcasService,
     private modeloService: VehiculosModelosService,
     private authService: AuthService,
     private alertService: AlertService,
-    private dataService: DataService) { }
+    private dataService: DataService
+  ) { }
 
   ngOnInit(): void {
     this.dataService.ubicacionActual = 'Dashboard - Vehículos';
@@ -124,12 +139,6 @@ export class VehiculosComponent implements OnInit {
   abrirModal(estado: string, vehiculo: any = null): void {
     window.scrollTo(0, 0);
     this.reiniciarFormulario();
-    this.patente = '';
-    this.marca = '';
-    this.modelo = '';
-    this.motor = '';
-    this.chasis = '';
-    this.color = '';
 
     this.idVehiculo = 0;
 
@@ -332,8 +341,72 @@ export class VehiculosComponent implements OnInit {
 
   // Abrir titulares
   abrirTitulares(): void {
+
+    // Verificaciones
+    
+    if(this.patente.trim() === ''){
+      this.alertService.info('Debe colocar una patente');
+      return;
+    }
+
+    if(this.color.trim() === ''){
+      this.alertService.info('Debe seleccionar un color');
+      return;
+    }
+
+    if(this.marca.trim() === ''){
+      this.alertService.info('Debe seleccionar una marca');
+      return;
+    }
+
+    if(this.modelo.trim() === ''){
+      this.alertService.info('Debe seleccionar un modelo');
+      return;
+    }
+
+    if(this.modelo.trim() === ''){
+      this.alertService.info('Debe seleccionar un modelo');
+      return;
+    }
+
+    if(!this.ano || this.ano < this.LIMIT_ANO){
+      this.alertService.info('Debes colocar una año válido');
+      return;
+    }
+
     this.showModalVehiculo = false;
     this.showModalTitulares = true;
+  }
+
+  // Buscar persona
+  buscarPersona(): void {
+    
+    // Verificacion de DNI
+    if(this.dni.trim() === ''){
+      this.alertService.info('Debe colocar un DNI');
+      return;
+    }
+
+    this.alertService.loading();
+
+    const data = {
+      dni: this.dni,
+      creatorUser: this.authService.usuario.userId,
+      updatorUser: this.authService.usuario.userId
+    }
+
+    this.sigemService.getPersona(data).subscribe({
+      next: ({persona}) => {
+        this.dni = '';
+        this.numero_titulo = '';
+        this.porcentaje = null;
+        this.personaSeleccionada = persona;
+        this.calcularTotalesTitulo();
+        this.alertService.close();
+      }, error: ({error}) => this.alertService.errorApi(error.message)
+    })
+
+
   }
 
   // Regresar a datos de vehiculo
@@ -342,8 +415,73 @@ export class VehiculosComponent implements OnInit {
     this.showModalTitulares = false;
   }
 
+  // Agregar titular
+  agregarTitular(): void {
+
+    // Verificacion
+
+    if(this.numero_titulo.trim() === ''){
+      this.alertService.info('Debe colocar número de titulo');
+      return;
+    }
+
+    if(!this.porcentaje || this.porcentaje <= 0 || this.porcentaje > 100){
+      this.alertService.info('Debe colocar un porcentaje válido');
+      return;
+    }
+
+    if((this.totalPorcentaje + this.porcentaje) > 100){
+      this.alertService.info('El porcentaje total no puede superar 100');
+      return;      
+    }
+
+    let titularRepetido = this.titulares.find( titular => titular.id === this.personaSeleccionada.id );
+
+    if(titularRepetido){
+      this.alertService.info('La persona ya esta cargada como titular');
+      return;
+    }
+  
+    this.titulares.push({
+      ...this.personaSeleccionada,
+      numero_titulo: this.numero_titulo,
+      porcentaje: this.porcentaje
+    });
+    
+    this.personaSeleccionada = null;
+    this.calcularTotalesTitulo();
+
+  }
+
+  // Eliminar persona
+  eliminarPersona(): void {
+    this.personaSeleccionada = null;
+    this.numero_titulo = '';
+    this.porcentaje = null;
+    this.dni = '';
+    this.calcularTotalesTitulo();
+  }
+
+  // Eliminar titular
+  eliminarTitular(idTitular: String): void {
+    this.titulares = this.titulares.filter( titular => titular.id !== idTitular);
+    this.calcularTotalesTitulo();
+  }
+
+  // Totales titulos
+  calcularTotalesTitulo(): void {
+    let totalPorcentajeTMP = 0;
+    this.titulares.map( titular => {
+      totalPorcentajeTMP = totalPorcentajeTMP += titular.porcentaje;  
+    })    
+    this.totalPorcentaje = totalPorcentajeTMP;
+    this.porcentaje = 100 - this.totalPorcentaje;
+  }
+
   // Reiniciando formulario
   reiniciarFormulario(): void {
+    
+    // Formulario de vehiculo
     this.patente = '';
     this.marca = '';
     this.modelo = '';
@@ -351,6 +489,11 @@ export class VehiculosComponent implements OnInit {
     this.chasis = '';
     this.color = '';
     this.ano = null;
+    
+    // Formulario de titulares
+    this.personaSeleccionada = null;
+    this.titulares = [];
+    
   }
 
   // Filtrar Activo/Inactivo

@@ -1,39 +1,83 @@
 
 <app-modal [showModal]="showModalTitulares">
     <div class="flex items-center justify-between bg-primary-800 rounded-t p-2">
-        <h1 class=" text-white px-2 py-1 rounded-t text-lg"> Carga de titulares </h1>
+        <h1 class=" text-white px-2 py-1 rounded-t text-lg"> Titulares de vehículo </h1>
         <svg (click)="regresarVehiculo()" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="cursor-pointer feather feather-x text-white mr-2"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
     </div>
+
     <div class="p-2">
-        <div>
-            <p class="font-semibold"> Buscar persona </p>
-        </div>
-        <div class="flex items-center mt-2 text-sm">
-            <input type="text" class="border border-gray-400 focus:outline-none rounded p-2" placeholder="DNI">
-            <button title="Buscar persona" class="ml-2 rounded focus:outline-none p-2 border border-gray-400 hover:text-secondaryColor">
+
+        <!-- Sin persona seleccionada -->
+        <div *ngIf="!personaSeleccionada">
+            <p class="font-semibold text-center"> Buscador de persona </p>
+        </div>        
+        <div *ngIf="!personaSeleccionada" class="flex w-full items-center justify-center text-center mt-2 text-sm">
+            <input (keyup.enter)="buscarPersona()" [(ngModel)]="dni" type="text" class="border border-gray-400 focus:outline-none rounded p-2" placeholder="DNI">
+            <button (click)="buscarPersona()" title="Buscar persona" class="ml-2 rounded focus:outline-none p-2 border border-gray-400 hover:text-secondaryColor">
                 <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-5 h-5">
                     <path stroke-linecap="round" stroke-linejoin="round" d="M21 21l-5.197-5.197m0 0A7.5 7.5 0 105.196 5.196a7.5 7.5 0 0010.607 10.607z" />
                   </svg>
             </button>
         </div>
-        <div class="text-sm">
+        
+        <!-- Persona seleccionada -->
+
+        <div *ngIf="personaSeleccionada" class="border border-gray-400 mt-2">
+            <div class="flex items-center text-sm">
+                <div class="w-full flex items-center justify-between border-b pb-2 border-gray-400">
+                    <div class="flex items-center">
+                        <img class="w-24" src="assets/img/titular.svg" alt="titular.svg">
+                        <div>
+                            <p class="font-semibold"> {{ personaSeleccionada.apellido }} {{ personaSeleccionada.nombre }} </p>
+                            <p class="text-gray-500 text-xs"> DNI {{ personaSeleccionada.dni }} </p>
+                        </div>
+                    </div>
+                    <button (click)="eliminarPersona()" title="Eliminar persona" class="mr-4 focus:outline-none bg-red-700 text-white rounded p-2">
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-5 h-5">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M14.74 9l-.346 9m-4.788 0L9.26 9m9.968-3.21c.342.052.682.107 1.022.166m-1.022-.165L18.16 19.673a2.25 2.25 0 01-2.244 2.077H8.084a2.25 2.25 0 01-2.244-2.077L4.772 5.79m14.456 0a48.108 48.108 0 00-3.478-.397m-12 .562c.34-.059.68-.114 1.022-.165m0 0a48.11 48.11 0 013.478-.397m7.5 0v-.916c0-1.18-.91-2.164-2.09-2.201a51.964 51.964 0 00-3.32 0c-1.18.037-2.09 1.022-2.09 2.201v.916m7.5 0a48.667 48.667 0 00-7.5 0" />
+                        </svg>                      
+                    </button>
+                </div>
+            </div>
+            <div class="p-2 text-sm flex items-center">
+                <input (keyup.enter)="agregarTitular()" [(ngModel)]="numero_titulo" class="p-2 w-1/3 focus:outline-none border border-gray-400" placeholder="Nro titulo" type="text">
+                <input (keyup.enter)="agregarTitular()" [(ngModel)]="porcentaje" class="p-2 w-1/3 focus:outline-none border border-gray-400 ml-2" placeholder="Porcentaje titulo" type="number">
+                <button (click)="agregarTitular()" class="bg-green-700 w-1/3 ml-2 focus:outline-none text-white p-2"> Agregar </button>
+            </div>
+        </div>
+        
+        <div *ngIf="titulares.length > 0" class="text-sm">
             <h1 class="p-2 font-semibold bg-gray-100 border border-gray-400 mt-4">
                 Listado de titulares
             </h1>
-            <div class="flex border-b border-gray-400 items-center py-3 px-2 justify-between">
-                <p class=""> MORENO LUCAS OMAR </p>
-                <P class="font-semibold"> % 50.00 </P>
+            <div *ngFor="let titular of titulares" class="flex border-b border-gray-400 items-center py-3 px-2 justify-between">
+                <div class="flex items-center">
+                    <button (click)="eliminarTitular(titular.id)" title="Eliminar titular" class="hover:text-red-700 focus:outline-none">
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-5 h-5">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M14.74 9l-.346 9m-4.788 0L9.26 9m9.968-3.21c.342.052.682.107 1.022.166m-1.022-.165L18.16 19.673a2.25 2.25 0 01-2.244 2.077H8.084a2.25 2.25 0 01-2.244-2.077L4.772 5.79m14.456 0a48.108 48.108 0 00-3.478-.397m-12 .562c.34-.059.68-.114 1.022-.165m0 0a48.11 48.11 0 013.478-.397m7.5 0v-.916c0-1.18-.91-2.164-2.09-2.201a51.964 51.964 0 00-3.32 0c-1.18.037-2.09 1.022-2.09 2.201v.916m7.5 0a48.667 48.667 0 00-7.5 0" />
+                          </svg>                          
+                    </button>
+                    <div class="ml-2">
+                        <p class="font-semibold"> {{ titular.apellido }} {{ titular.nombre }} </p>
+                        <p class="text-gray-600 text-xs"> DNI {{ titular.dni }} </p>
+                        <p class="font-semibold text-xs"> (Nro. titulo {{ titular.numero_titulo }}) </p>
+                    </div>
+                </div>
+                <P class="font-semibold"> % {{ titular.porcentaje | moneda }} </P>
             </div>
-            <div class="flex border-b border-gray-400 items-center py-3 px-2 justify-between">
-                <p class=""> FET YAMIL DAHER </p>
-                <P class="font-semibold"> % 50.00 </P>
+            <div class="flex bg-gray-100 items-center justify-between p-2">
+                <p class="font-semibold"> PORCENTAJE TOTAL </p>
+                <p class="font-semibold"> % {{ totalPorcentaje | moneda }} </p>
             </div>
         </div>
-        <div class="flex items-center">
+
+        <div class="flex items-center mt-2 text-sm">
             <button (click)="regresarVehiculo()" class="bg-red-700 text-white focus:outline-none shadow w-full font-semibold p-2 rounded mt-4"> Regresar </button>
             <button class="bg-secondaryColor ml-2 text-white focus:outline-none shadow w-full font-semibold p-2 rounded mt-4"> Crear vehículo </button>
         </div>
+    
     </div>
+
 </app-modal>
 
 <!-- Modal: Crear / Editar vehiculo -->
