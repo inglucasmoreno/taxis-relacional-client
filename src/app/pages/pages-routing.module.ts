@@ -62,7 +62,6 @@ const routes: Routes = [
 
             { path: 'vehiculos-titulares/:id', data: { permisos: 'VEHICULOS_NAV' }, canActivate: [PermisosGuard], component: VehiculosTitularesComponent },
 
-
             { path: 'seguros-empresas', data: { permisos: 'CONFIGURACIONES_NAV' }, canActivate: [PermisosGuard], component: SegurosEmpresasComponent }, 
 
             //Relojes

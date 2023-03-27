@@ -25,6 +25,13 @@ export class VehiculosTitularesService {
     });
   };
 
+  // Nuevos titulares
+  nuevosTitulares(data: any): Observable<any> {
+    return this.http.post(`${base_url}/vehiculos-titulares/multiples`, data, {
+      headers: this.getToken
+    });
+  };
+
   // Titular por ID
   getTitular(id: number): Observable<any> {
     return this.http.get(`${base_url}/vehiculos-titulares/${id}`, {
@@ -37,7 +44,8 @@ export class VehiculosTitularesService {
     return this.http.get(`${base_url}/vehiculos-titulares`, {
       params: {
         direccion: parametros?.direccion || 1,
-        columna: parametros?.columna || 'descripcion'
+        columna: parametros?.columna || 'porcentaje',
+        vehiculo: parametros?.vehiculo || ''
       },
       headers: this.getToken
     });

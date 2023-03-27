@@ -2,10 +2,12 @@ import { Component, OnInit } from '@angular/core';
 import { AlertService } from 'src/app/services/alert.service';
 import { AuthService } from 'src/app/services/auth.service';
 import { DataService } from 'src/app/services/data.service';
+import { PersonasService } from 'src/app/services/personas.service';
 import { SigemService } from 'src/app/services/sigem.service';
 import { VehiculosColoresService } from 'src/app/services/vehiculos-colores.service';
 import { VehiculosMarcasService } from 'src/app/services/vehiculos-marcas.service';
 import { VehiculosModelosService } from 'src/app/services/vehiculos-modelos.service';
+import { VehiculosTitularesService } from 'src/app/services/vehiculos-titulares.service';
 import { VehiculosService } from 'src/app/services/vehiculos.service';
 
 @Component({
@@ -23,7 +25,8 @@ export class VehiculosComponent implements OnInit {
 
   // Modal
   public showModalVehiculo = false;
-  public showModalTitulares = true;
+  public showModalTitulares = false;
+  public showModalAltaPersona = false;
 
   // Estado formulario 
   public estadoFormulario = 'crear';
@@ -41,7 +44,6 @@ export class VehiculosComponent implements OnInit {
   public idVehiculo: number = 0;
   public vehiculos: any = [];
   public vehiculoSeleccionado: any;
-
   public patente: string = '';
   public marca: string = '';
   public modelo: string = '';
@@ -49,6 +51,16 @@ export class VehiculosComponent implements OnInit {
   public chasis: string = '';
   public color: string = '';
   public ano: number = null;
+
+  // Persona
+  public apellido: string = '';
+  public nombre: string = '';
+  public dni: string = '';
+  public domicilio: string = '';
+  public telefono: string = '';
+  public mail: string = '';
+  public sigem: boolean = false;
+  public genero: string = '';
 
   // Titulares del vehiculo
   public totalPorcentaje = 0;
@@ -58,7 +70,7 @@ export class VehiculosComponent implements OnInit {
   public numero_titulo: string = '';
 
   // Personas
-  public dni: string = '';
+  public dniBusqueda: string = '';
   public personaSeleccionada: any = null;
 
   // Paginacion
@@ -76,10 +88,12 @@ export class VehiculosComponent implements OnInit {
   // Ordenar
   public ordenar = {
     direccion: 1,  // Asc (1) | Desc (-1)
-    columna: 'patente'
+    columna: 'createdAt'
   }
 
   constructor(
+    private personasService: PersonasService,
+    private vehiculosTitulares: VehiculosTitularesService,
     private sigemService: SigemService,
     private vehiculosService: VehiculosService,
     private coloresService: VehiculosColoresService,
@@ -194,6 +208,7 @@ export class VehiculosComponent implements OnInit {
         this.vehiculos = vehiculos;
         this.totalItems = totalItems;
         this.showModalVehiculo = false;
+        this.showModalTitulares = false;
         this.alertService.close();
       }, (({ error }) => {
         this.alertService.errorApi(error.msg);
@@ -227,9 +242,15 @@ export class VehiculosComponent implements OnInit {
       return;
     }
 
+    // Verificacion: El porcentaje total debe ser 100
+    if (this.totalPorcentaje !== 100) {
+      this.alertService.info('El porcentaje total debe ser 100%');
+      return;
+    }
+
     this.alertService.loading();
 
-    const data = {
+    const dataVehiculo = {
       patente: this.patente.replace('-', '').replace(' ', '').trim(),
       marca: this.marca,
       modelo: this.modelo,
@@ -241,11 +262,33 @@ export class VehiculosComponent implements OnInit {
       updatorUser: this.authService.usuario.userId,
     }
 
-    this.vehiculosService.nuevoVehiculo(data).subscribe(() => {
-      this.listarVehiculos();
+    this.vehiculosService.nuevoVehiculo(dataVehiculo).subscribe(({ vehiculo }) => {
+      this.nuevosTitulares(vehiculo.id);
     }, ({ error }) => {
       this.alertService.errorApi(error.message);
     });
+
+  }
+
+  // Nuevos titulares
+  nuevosTitulares(vehiculo: number): void {
+    
+    let dataTitulares = [];
+
+    this.titulares.map( titular => {
+      dataTitulares.push({
+        ...titular,
+        vehiculo
+      });
+    })
+
+    console.log(dataTitulares);
+
+    this.vehiculosTitulares.nuevosTitulares(dataTitulares).subscribe({
+      next: () => {
+        this.listarVehiculos();
+      },error: ({error}) => this.alertService.errorApi(error.message)
+    })  
 
   }
 
@@ -343,33 +386,33 @@ export class VehiculosComponent implements OnInit {
   abrirTitulares(): void {
 
     // Verificaciones
-    
-    if(this.patente.trim() === ''){
+
+    if (this.patente.trim() === '') {
       this.alertService.info('Debe colocar una patente');
       return;
     }
 
-    if(this.color.trim() === ''){
+    if (this.color.trim() === '') {
       this.alertService.info('Debe seleccionar un color');
       return;
     }
 
-    if(this.marca.trim() === ''){
+    if (this.marca.trim() === '') {
       this.alertService.info('Debe seleccionar una marca');
       return;
     }
 
-    if(this.modelo.trim() === ''){
+    if (this.modelo.trim() === '') {
       this.alertService.info('Debe seleccionar un modelo');
       return;
     }
 
-    if(this.modelo.trim() === ''){
+    if (this.modelo.trim() === '') {
       this.alertService.info('Debe seleccionar un modelo');
       return;
     }
 
-    if(!this.ano || this.ano < this.LIMIT_ANO){
+    if (!this.ano || this.ano < this.LIMIT_ANO) {
       this.alertService.info('Debes colocar una año válido');
       return;
     }
@@ -380,9 +423,9 @@ export class VehiculosComponent implements OnInit {
 
   // Buscar persona
   buscarPersona(): void {
-    
+
     // Verificacion de DNI
-    if(this.dni.trim() === ''){
+    if (this.dniBusqueda.trim() === '') {
       this.alertService.info('Debe colocar un DNI');
       return;
     }
@@ -390,22 +433,96 @@ export class VehiculosComponent implements OnInit {
     this.alertService.loading();
 
     const data = {
-      dni: this.dni,
+      dni: this.dniBusqueda,
       creatorUser: this.authService.usuario.userId,
       updatorUser: this.authService.usuario.userId
     }
 
     this.sigemService.getPersona(data).subscribe({
-      next: ({persona}) => {
-        this.dni = '';
+      next: ({ persona }) => {
+
+        if(persona){
+          this.personaSeleccionada = persona;
+        }else{
+          this.reiniciarFormularioPersona();
+          this.dni = this.dniBusqueda;
+          this.showModalTitulares = false;
+          this.showModalAltaPersona = true;
+        }
+        
+        this.dniBusqueda = '';
         this.numero_titulo = '';
         this.porcentaje = null;
-        this.personaSeleccionada = persona;
         this.calcularTotalesTitulo();
         this.alertService.close();
-      }, error: ({error}) => this.alertService.errorApi(error.message)
+
+      }, error: ({ error }) => this.alertService.errorApi(error.message)
     })
 
+
+  }
+
+  // Nueva persona
+  nuevaPersona(): void {
+
+    // Verificacion: Apellido vacio
+    if (this.apellido.trim() === "") {
+      this.alertService.info('Debes colocar un apellido');
+      return;
+    }
+
+    // Verificacion: Nombre vacio
+    if (this.nombre.trim() === "") {
+      this.alertService.info('Debes colocar un nombre');
+      return;
+    }
+
+    // Verificacion: DNI
+    if (this.dni.trim() === "") {
+      this.alertService.info('Debes colocar un DNI');
+      return;
+    }
+
+    // Verificacion: Telefono
+    if (this.telefono.trim() === "") {
+      this.alertService.info('Debes colocar un número de teléfono');
+      return;
+    }
+
+    // Verificacion: Domicilio
+    if (this.domicilio.trim() === "") {
+      this.alertService.info('Debes colocar un domicilio');
+      return;
+    }
+
+    // Verificacion: Email
+    if (this.mail.trim() === "") {
+      this.alertService.info('Debes colocar un email');
+      return;
+    }
+
+    this.alertService.loading();
+
+    const data = {
+      apellido: this.apellido,
+      nombre: this.nombre,
+      dni: this.dni,
+      telefono: this.telefono,
+      mail: this.mail,
+      domicilio: this.domicilio,
+      sigem: false,
+      creatorUser: this.authService.usuario.userId,
+      updatorUser: this.authService.usuario.userId,
+    }
+
+    this.personasService.nuevaPersona(data).subscribe(({ persona }) => {
+      this.personaSeleccionada = persona;
+      this.showModalAltaPersona = false;
+      this.showModalTitulares = true;
+      this.alertService.close();
+    }, ({ error }) => {
+      this.alertService.errorApi(error.message);
+    });
 
   }
 
@@ -415,39 +532,53 @@ export class VehiculosComponent implements OnInit {
     this.showModalTitulares = false;
   }
 
+  // Regresar a titulares
+  regresarTitulares(): void {
+    this.showModalAltaPersona = false;
+    this.showModalTitulares = true;
+  }
+
   // Agregar titular
   agregarTitular(): void {
 
     // Verificacion
 
-    if(this.numero_titulo.trim() === ''){
+    if (this.numero_titulo.trim() === '') {
       this.alertService.info('Debe colocar número de titulo');
       return;
     }
 
-    if(!this.porcentaje || this.porcentaje <= 0 || this.porcentaje > 100){
+    if (!this.porcentaje || this.porcentaje <= 0 || this.porcentaje > 100) {
       this.alertService.info('Debe colocar un porcentaje válido');
       return;
     }
 
-    if((this.totalPorcentaje + this.porcentaje) > 100){
+    if ((this.totalPorcentaje + this.porcentaje) > 100) {
       this.alertService.info('El porcentaje total no puede superar 100');
-      return;      
+      return;
     }
 
-    let titularRepetido = this.titulares.find( titular => titular.id === this.personaSeleccionada.id );
+    let titularRepetido = this.titulares.find(titular => titular.id === this.personaSeleccionada.id);
 
-    if(titularRepetido){
+    if (titularRepetido) {
       this.alertService.info('La persona ya esta cargada como titular');
       return;
     }
-  
+
     this.titulares.push({
-      ...this.personaSeleccionada,
+      nombre: this.personaSeleccionada.nombre,
+      apellido: this.personaSeleccionada.apellido,
+      dni: this.personaSeleccionada.dni,
+      persona: this.personaSeleccionada.id,
       numero_titulo: this.numero_titulo,
-      porcentaje: this.porcentaje
+      porcentaje: this.porcentaje,
+      fecha_inscripcion_inicial: '2023-03-23',
+      creatorUser: this.authService.usuario.userId,
+      updatorUser: this.authService.usuario.userId,
     });
-    
+
+    console.log(this.titulares);
+
     this.personaSeleccionada = null;
     this.calcularTotalesTitulo();
 
@@ -458,29 +589,30 @@ export class VehiculosComponent implements OnInit {
     this.personaSeleccionada = null;
     this.numero_titulo = '';
     this.porcentaje = null;
-    this.dni = '';
+    this.dniBusqueda = '';
     this.calcularTotalesTitulo();
   }
 
   // Eliminar titular
-  eliminarTitular(idTitular: String): void {
-    this.titulares = this.titulares.filter( titular => titular.id !== idTitular);
+  eliminarTitular(idPersona: number): void {
+    console.log(idPersona);
+    this.titulares = this.titulares.filter(titular => titular.persona !== idPersona);
     this.calcularTotalesTitulo();
   }
 
   // Totales titulos
   calcularTotalesTitulo(): void {
     let totalPorcentajeTMP = 0;
-    this.titulares.map( titular => {
-      totalPorcentajeTMP = totalPorcentajeTMP += titular.porcentaje;  
-    })    
+    this.titulares.map(titular => {
+      totalPorcentajeTMP = totalPorcentajeTMP += titular.porcentaje;
+    })
     this.totalPorcentaje = totalPorcentajeTMP;
     this.porcentaje = 100 - this.totalPorcentaje;
   }
 
   // Reiniciando formulario
   reiniciarFormulario(): void {
-    
+
     // Formulario de vehiculo
     this.patente = '';
     this.marca = '';
@@ -489,11 +621,23 @@ export class VehiculosComponent implements OnInit {
     this.chasis = '';
     this.color = '';
     this.ano = null;
-    
+
     // Formulario de titulares
     this.personaSeleccionada = null;
     this.titulares = [];
-    
+
+  }
+
+  // Reiniciar formulario de persona
+  reiniciarFormularioPersona(): void {
+    this.apellido = '';
+    this.nombre = '';
+    this.dni = '';
+    this.domicilio = '';
+    this.telefono = '';
+    this.mail = '';
+    this.sigem = false;
+    this.genero = '';
   }
 
   // Filtrar Activo/Inactivo
