@@ -184,11 +184,11 @@
           </div>
           <div class="md:flex md:items-center mt-4">
               <div class="md:w-1/2">
-                  <p class="font-semibold"> Motor </p>
+                  <p class="font-semibold"> <span class="text-red-500"> * </span> Motor </p>
                   <input [(ngModel)]="motor" class="py-2 mt-1 border-b-2 border-gray-300 tranform duration-500 focus:border-secondaryColor appearance-none outline-none w-full text-gray-800" placeholder="Nro de motor" type="text">
               </div>
               <div class="md:w-1/2 md:ml-4 mt-4 md:mt-0">
-                  <p class="font-semibold"> Chasis </p>
+                  <p class="font-semibold"> <span class="text-red-500"> * </span> Chasis </p>
                   <input [(ngModel)]="chasis" class="py-2 mt-1 border-b-2 border-gray-300 tranform duration-500 focus:border-secondaryColor appearance-none outline-none w-full text-gray-800" placeholder="Nro de chasis" type="text">
               </div>
           </div>
@@ -412,13 +412,13 @@
                                   </td> -->
                                   <td class="px-5 py-2 border-b border-gray-200 text-xs text-center">
                                       <span class="flex items-center justify-center text-gray-900 whitespace-no-wrap">
-                                          <app-boton-tabla [routerLink]="['/dashboard/vehiculos-titulares', vehiculo.id]" title="Titulares">
+                                          <app-boton-tabla [routerLink]="['/dashboard/vehiculos/titulares', vehiculo.id]" title="Titulares">
                                               <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
                                                   <path stroke-linecap="round" stroke-linejoin="round" d="M11 3.055A9.001 9.001 0 1020.945 13H11V3.055z" />
                                                   <path stroke-linecap="round" stroke-linejoin="round" d="M20.488 9H15V3.512A9.025 9.025 0 0120.488 9z" />
                                                 </svg>
                                           </app-boton-tabla>
-                                          <app-boton-tabla class="ml-2" [routerLink]="['/dashboard/vehiculos-seguros', vehiculo.id]" title="Seguro de vehículo">
+                                          <app-boton-tabla class="ml-2" [routerLink]="['/dashboard/vehiculos/seguros', vehiculo.id]" title="Seguro de vehículo">
                                               <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
                                                   <path stroke-linecap="round" stroke-linejoin="round" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" />
                                                 </svg>

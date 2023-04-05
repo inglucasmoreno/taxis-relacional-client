@@ -1,3 +1,28 @@
+<!-- Modal: Tipos de tramite -->
+<app-modal [showModal]="showModalTramites">
+    <div class="flex items-center justify-between bg-primary-800 rounded-t p-2">
+        <h1 class="text-white py-1 rounded-t text-lg"> Listado de tramites </h1>
+        <svg (click)="showModalTramites = false" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="cursor-pointer feather feather-x text-white mr-2"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>    
+    </div> 
+    <div class="p-2">
+        <button class="p-2 w-full hover:text-secondaryColor focus:outline-none border shadow border-gray-400">
+            Transferencia continuando
+        </button>
+        <button class="p-2 w-full hover:text-secondaryColor focus:outline-none border mt-4 shadow border-gray-400">
+            Transferencia con cambio de unidad
+        </button>
+        <button class="p-2 w-full hover:text-secondaryColor focus:outline-none mt-4 border shadow border-gray-400">
+            Cambio de unidad
+        </button>
+        <button class="p-2 w-full hover:text-secondaryColor focus:outline-none mt-4 border shadow border-gray-400">
+            Asentar chofer
+        </button>
+        <button class="p-2 w-full hover:text-secondaryColor focus:outline-none mt-4 border shadow border-gray-400">
+            Baja de chofer
+        </button>
+    </div>
+</app-modal>
+
 <!-- Modal: Detalles -->
 <app-modal [showModal]="showModalDetalles">
     <div class="flex items-center justify-between bg-primary-800 rounded-t p-2">
@@ -214,7 +239,7 @@
     </div>
     
     <!-- Alta - Permisionario -->
-    <div *ngIf="personaSeleccionada && flagEtapaPersona === 'permisionario'" class="text-sm p-2">
+    <!-- <div *ngIf="personaSeleccionada && flagEtapaPersona === 'permisionario'" class="text-sm p-2">
         <div>
             <div>
                 <p class="font-semibold mb-2 border border-gray-400 bg-gray-100 p-1 rounded"> Formulario de alta </p>
@@ -261,10 +286,10 @@
                 <input class="block w-full mt-2 text-sm text-gray-900 border p-2 border-gray-400 cursor-pointer focus:outline-none" id="file_input" type="file">
             </div>
         </div>      
-    </div>
+    </div> -->
 
-        <!-- Alta - Chofer -->
-    <div *ngIf="personaSeleccionada && flagEtapaPersona === 'chofer'" class="text-sm p-2">
+    <!-- Alta - Chofer -->
+    <!-- <div *ngIf="personaSeleccionada && flagEtapaPersona === 'chofer'" class="text-sm p-2">
         <div>
             <div>
                 <p class="font-semibold mb-2 border border-gray-400 bg-gray-100 p-1 rounded"> Formulario de alta </p>
@@ -303,9 +328,9 @@
                 <input class="block w-full mt-2 text-sm text-gray-900 border p-2 border-gray-400 cursor-pointer focus:outline-none" id="file_input" type="file">
             </div>
         </div>      
-    </div>
+    </div> -->
 
-    <div *ngIf="personaSeleccionada" class="flex items-center mt-4 px-2 pb-2 text-sm">
+    <div *ngIf="personaSeleccionada" class="flex items-center mt-2 px-2 pb-2 text-sm">
         <button (click)="flagEtapaPersona === 'permisionario' ? asignarPermisionario() : asignarChofer()" class="border shadow focus:outline-none border-green-700 text-white bg-green-700 hover:bg-green-800 p-2 rounded w-1/2"> Aceptar </button>
         <button (click)="eliminarPersona()" class="border shadow focus:outline-none ml-2 border-red-700 text-white bg-red-700 hover:bg-red-800 p-2 rounded w-1/2"> Regresar </button>
     </div>
@@ -361,15 +386,24 @@
           <path stroke-linecap="round" stroke-linejoin="round" d="M11 17l-5-5m0 0l5-5m-5 5h12" />
         </svg>        
       </button>
-      <div class="text-3xl font-semibold ml-2">
-        Detalles de licencia
-        <p [ngClass]="{'bg-green-100 border-green-400 text-green-700':licencia?.estado === 'Habilitada', 'bg-red-100 border-red-400 text-red-700':licencia?.estado === 'Inhabilitada'}" class="border w-max px-2 py-1 rounded text-xs"> {{ licencia?.estado }} </p>
+      <div class="ml-2">
+        <p class="text-3xl font-semibold"> Detalles de licencia </p>
+        <p class="text-xl w-max py-1"> <span>  Licencia N° </span> <span class="font-semibold"> {{ licencia.nro_licencia }} </span> </p>
+        <p [ngClass]="{'bg-green-100 border-green-400 text-green-700':licencia?.estado === 'Habilitada', 'bg-red-100 border-red-400 text-red-700':licencia?.estado === 'Inhabilitada'}" class="border w-max mt-1 px-2 py-1 font-semibold rounded text-xs"> {{ licencia?.estado }} </p>
       </div>
     </div>
-    <div class="text-xl w-max text-center px-2 py-1">
+    <!-- <div class="text-xl w-max text-center px-2 py-1">
       <p> N° de licencia </p>
       <p class="font-semibold"> {{ licencia?.nro_licencia }} </p>
-    </div>
+    </div> -->
+    <div>
+        <button (click)="showModalTramites = true" title="Tipos de tramite" class="border border-gray-400 hover:text-secondaryColor bg-gray-100 rounded p-2 shadow focus:outline-none mr-2">
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-7 h-7">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M3.75 6.75h16.5M3.75 12h16.5m-16.5 5.25h16.5" />
+              </svg>              
+        </button>
+    </div> 
+
   </div>
   <div class="p-2">
     
@@ -390,7 +424,7 @@
                 </div>
             </div>
         </div>
-        <button (click)="abrirModalNuevo('permisionario')" class="hover:text-secondaryColor bg-gray-100 font-semibold text-sm mt-4 focus:outline-none p-2 mr-2 border border-gray-400 rounded">
+        <button *ngIf="permisionariosLicencia.length === 0" (click)="abrirModalNuevo('permisionario')" class="hover:text-secondaryColor bg-gray-100 font-semibold text-sm mt-4 focus:outline-none p-2 mr-2 border border-gray-400 rounded">
           Alta de permisionario
         </button>
       </div>
@@ -522,7 +556,7 @@
             </div>
         </div>
       </div>
-      <button (click)="abrirModalNuevo('vehiculo')" class="hover:text-secondaryColor bg-gray-100 font-semibold text-sm mt-4 focus:outline-none p-2 mr-2 border border-gray-400 rounded">
+      <button *ngIf="vehiculosLicencia.length === 0" (click)="abrirModalNuevo('vehiculo')" class="hover:text-secondaryColor bg-gray-100 font-semibold text-sm mt-4 focus:outline-none p-2 mr-2 border border-gray-400 rounded">
         Alta de vehículo
       </button>
     </div>

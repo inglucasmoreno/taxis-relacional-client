@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { Router } from '@angular/router';
 import { AlertService } from 'src/app/services/alert.service';
 import { AuthService } from 'src/app/services/auth.service';
 import { DataService } from 'src/app/services/data.service';
@@ -106,7 +107,8 @@ export class LicenciasComponent implements OnInit {
     private personasService: PersonasService,
     private vehiculosService: VehiculosService,
     private alertService: AlertService,
-    private dataService: DataService
+    private dataService: DataService,
+    private router: Router
   ) { }
 
   ngOnInit(): void {
@@ -175,10 +177,9 @@ export class LicenciasComponent implements OnInit {
       updatorUser: this.authService.usuario.userId,
     }
 
-    console.log(data);
-
-    this.licenciasService.nuevaLicencia(data).subscribe(() => {
-      this.listarLicencias();
+    this.licenciasService.nuevaLicencia(data).subscribe(({ licencia }) => {
+      this.router.navigateByUrl(`dashboard/licencias/detalles/${licencia.id}`);
+      this.alertService.close();
     }, ({ error }) => {
       this.alertService.errorApi(error.message);
     });

@@ -52,29 +52,29 @@ const routes: Routes = [
             // Vehiculos
             { path: 'vehiculos', data: { permisos: 'VEHICULOS_NAV' }, canActivate: [PermisosGuard], component: VehiculosComponent },
 
-            { path: 'vehiculos-seguros/:id', data: { permisos: 'VEHICULOS_NAV' }, canActivate: [PermisosGuard], component: VehiculosSegurosComponent },
+            { path: 'vehiculos/seguros/:id', data: { permisos: 'VEHICULOS_NAV' }, canActivate: [PermisosGuard], component: VehiculosSegurosComponent },
 
             { path: 'vehiculos-colores', data: { permisos: 'CONFIGURACIONES_NAV' }, canActivate: [PermisosGuard], component: VehiculosColoresComponent },
 
             { path: 'vehiculos-marcas', data: { permisos: 'CONFIGURACIONES_NAV' }, canActivate: [PermisosGuard], component: VehiculosMarcasComponent },
 
-            { path: 'vehiculos-modelos/:marca', data: { permisos: 'CONFIGURACIONES_NAV' }, canActivate: [PermisosGuard], component: VehiculosModelosComponent }, 
+            { path: 'vehiculos-marcas/modelos/:marca', data: { permisos: 'CONFIGURACIONES_NAV' }, canActivate: [PermisosGuard], component: VehiculosModelosComponent }, 
 
-            { path: 'vehiculos-titulares/:id', data: { permisos: 'VEHICULOS_NAV' }, canActivate: [PermisosGuard], component: VehiculosTitularesComponent },
+            { path: 'vehiculos/titulares/:id', data: { permisos: 'VEHICULOS_NAV' }, canActivate: [PermisosGuard], component: VehiculosTitularesComponent },
 
             { path: 'seguros-empresas', data: { permisos: 'CONFIGURACIONES_NAV' }, canActivate: [PermisosGuard], component: SegurosEmpresasComponent }, 
 
             //Relojes
             { path: 'relojes-marcas', data: { permisos: 'CONFIGURACIONES_NAV' }, canActivate: [PermisosGuard], component: RelojesMarcasComponent }, 
 
-            { path: 'relojes-modelos/:marca', data: { permisos: 'CONFIGURACIONES_NAV' }, canActivate: [PermisosGuard], component: RelojesModelosComponent }, 
+            { path: 'relojes-marcas/modelos/:marca', data: { permisos: 'CONFIGURACIONES_NAV' }, canActivate: [PermisosGuard], component: RelojesModelosComponent }, 
             
             { path: 'relojes-precintos-motivos', data: { permisos: 'CONFIGURACIONES_NAV' }, canActivate: [PermisosGuard], component: RelojesPrecintosMotivosComponent}, 
 
             // Licencias
             { path: 'licencias', data: { permisos: 'LICENCIAS_NAV' }, canActivate: [PermisosGuard], component: LicenciasComponent}, 
 
-            { path: 'licencias-detalles/:id', data: { permisos: 'LICENCIAS_NAV' }, canActivate: [PermisosGuard], component: LicenciasDetallesComponent}, 
+            { path: 'licencias/detalles/:id', data: { permisos: 'LICENCIAS_NAV' }, canActivate: [PermisosGuard], component: LicenciasDetallesComponent}, 
 
         ]
     }

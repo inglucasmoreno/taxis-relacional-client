@@ -52,6 +52,7 @@ export class LicenciasDetallesComponent implements OnInit {
   public showModalAsignarReloj = false;
   public showModalBajas = false;
   public showModalDetalles = false;
+  public showModalTramites = false;
 
   // Licencia
   public idLicencia: number = 0;
