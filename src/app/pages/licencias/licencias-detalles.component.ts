@@ -24,12 +24,15 @@ import { SigemService } from 'src/app/services/sigem.service';
 export class LicenciasDetallesComponent implements OnInit {
 
   // Constantes
-  public LIMIT_ANO = 1990;
+  public LIMIT_ANO: number = 1990;
+
+  // Flags
+  public showContenido: string = 'Detalles'; // Detalles | Historial
 
   // Etapas
-  public flagEtapaPersona = 'permisionario';
-  public flagEtapaBaja = 'permisionario';
-  public flagEtapaDetalles = 'permisionario';
+  public flagEtapaPersona: string = 'permisionario';
+  public flagEtapaBaja: string = 'permisionario';
+  public flagEtapaDetalles: string = 'permisionario';
 
   // Selecciones
   public permisionarioLicenciaSeleccionada: any = null;
@@ -46,18 +49,20 @@ export class LicenciasDetallesComponent implements OnInit {
   public estadoFormulario = 'crear';
 
   // Modal
-  public showModalAsignarVehiculo = false;
-  public showModalAsignarPersona = false;
-  public showModalAsignarChofer = false;
-  public showModalAsignarReloj = false;
-  public showModalBajas = false;
-  public showModalDetalles = false;
-  public showModalTramites = false;
+  public showModalAsignarVehiculo: boolean = false;
+  public showModalAsignarPersona: boolean = false;
+  public showModalAsignarChofer: boolean = false;
+  public showModalAsignarReloj: boolean = false;
+  public showModalBajas: boolean = false;
+  public showModalDetalles: boolean = false;
+  public showModalTramites: boolean = false;
+  public showModalEditarLicencia: boolean = false;
 
   // Licencia
   public idLicencia: number = 0;
   public licencias: any = [];
   public licencia: any = null;
+  public nro_licencia: string = '';
 
   // Licencia seleccionada
   public permisionario: any;
@@ -90,8 +95,8 @@ export class LicenciasDetallesComponent implements OnInit {
   public motivo_baja_chofer: string = '';
 
   // Valores INPUTS
-  public dni = '';
-  public patente = '';
+  public dni: string = '';
+  public patente: string = '';
 
   // Marcas
   public marcas: any[];
@@ -111,13 +116,13 @@ export class LicenciasDetallesComponent implements OnInit {
   public flagNuevoVehiculo: boolean = false;
 
   // Filtrado
-  public filtro = {
+  public filtro: any = {
     estado: 'Habilitada',
     parametro: ''
   }
 
   // Ordenar
-  public ordenar = {
+  public ordenar: any = {
     direccion: -1,  // Asc (1) | Desc (-1)
     columna: 'createdAt'
   }
@@ -664,6 +669,28 @@ export class LicenciasDetallesComponent implements OnInit {
       });
     }
 
+  }
+
+  // Abrir editar licencia
+  abrirEditarLicencia(): void {
+    this.nro_licencia = this.licencia.nro_licencia;
+    this.showModalEditarLicencia = true;  
+  }
+
+  // Editar licencia
+  editarLicencia(): void {
+    this.alertService.loading();
+    this.licenciasService.actualizarLicencias(this.idLicencia, {
+      nro_licencia: this.nro_licencia,
+      updatorUser: this.authService.usuario.userId    
+    }).subscribe({
+      next: ({ licencia }) => {
+        console.log(licencia);
+        this.licencia = licencia.licencia;
+        this.showModalEditarLicencia = false;
+        this.alertService.close();  
+      }, error: ({ error }) => this.alertService.errorApi(error.message)
+    })
   }
 
   // Eliminar persona seleccionada

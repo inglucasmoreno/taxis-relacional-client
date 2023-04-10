@@ -10,25 +10,25 @@
           <div class="flex items-center">
               <div class="w-1/2">
                   <p class="font-semibold"> <span class="text-red-500"> * </span> Empresa </p>
-                  <select [(ngModel)]="empresa" class="py-2 mt-1 focus:outline-none outline-none border-b-2 border-gray-300 tranform duration-500 focus:border-secondaryColor w-full text-gray-800">
+                  <select [(ngModel)]="empresa" class="select-general mt-1">
                       <option value=""> Seleccionar empresa </option>
                       <option *ngFor="let empresa of empresas" [value]="empresa.id"> {{ empresa.descripcion }} </option>
                   </select>
               </div>
               <div class="w-1/2 ml-4">
                   <p class="font-semibold"> <span class="text-red-500"> * </span> Nro de poliza </p>
-                  <input [(ngModel)]="nro_poliza" class="py-2 mt-1 border-b-2 bor5der-gray-300 tranform duration-500 focus:border-secondaryColor appearance-none outline-none w-full text-gray-800" placeholder="Colocar número de poliza" type="text">
+                  <input [(ngModel)]="nro_poliza" class="input-text-general mt-1" placeholder="Colocar número de poliza" type="text">
               </div>
           </div> 
 
           <div class="flex items-center mt-4">
               <div class="w-1/2">
                   <p class="font-semibold"> <span class="text-red-500"> * </span> Fecha desde </p>
-                  <input [(ngModel)]="fecha_desde" class="py-2 mt-1 border-b-2 border-gray-300 tranform duration-500 focus:border-secondaryColor appearance-none outline-none w-full text-gray-800" placeholder="Ej. Fiat" type="date">
+                  <input [(ngModel)]="fecha_desde" class="input-text-general mt-1" placeholder="Ej. Fiat" type="date">
               </div>
               <div class="w-1/2 ml-4">
                   <p class="font-semibold"> <span class="text-red-500"> * </span> Fecha hasta </p>
-                  <input [(ngModel)]="fecha_hasta" class="py-2 mt-1 border-b-2 border-gray-300 tranform duration-500 focus:border-secondaryColor appearance-none outline-none w-full text-gray-800" placeholder="Ej. Fiat" type="date">
+                  <input [(ngModel)]="fecha_hasta" class="input-text-general mt-1" placeholder="Ej. Fiat" type="date">
                   
               </div>
           </div> 
@@ -61,8 +61,10 @@
                 </div>
             </div>
         </div>   
-          <button *ngIf="estadoFormulario == 'crear'" (click)="nuevoSeguro()" class="bg-gray-100 focus:outline-none hover:text-secondaryColor shadow text-gray-800 w-full border border-gray-300 font-semibold p-2 rounded mt-4"> Crear seguro </button>
-          <button *ngIf="estadoFormulario == 'editar'" (click)="actualizarSeguro()" class="bg-gray-100 focus:outline-none hover:text-secondaryColor shadow text-gray-800 w-full border border-gray-300 font-semibold p-2 rounded mt-4"> Actualizar seguro </button>
+        <div class="mt-3">
+            <button *ngIf="estadoFormulario == 'crear'" (click)="nuevoSeguro()" class="btn-confirm"> Crear seguro </button>
+            <button *ngIf="estadoFormulario == 'editar'" (click)="actualizarSeguro()" class="btn-confirm"> Actualizar seguro </button>
+        </div>
       </div>
   </div>
 </app-modal>

@@ -1,266 +1,3 @@
-
-<!-- Modal: Asignar vehículo -->
-<app-modal [showModal]="showModalAsignarVehiculo">
-    <div class="flex items-center justify-between bg-primary-800 rounded-t p-2">
-        <h1 class=" text-white py-1 rounded-t text-lg"> Asignación de vehículo </h1>
-        <svg (click)="cerrarModalNuevo('vehiculo')" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="cursor-pointer feather feather-x text-white mr-2"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
-    </div>
-    <div>
-        <div *ngIf="!vehiculoSeleccionado && !flagNuevoVehiculo" class="text-sm">
-            <h2 class="font-semibold px-2 pt-2 pb-1"> Buscador de vehículos </h2>
-            <div class="p-2 flex items-center">
-                <input [(ngModel)]="patente" type="text" (keyup.enter)="buscarVehiculo()" placeholder="Ingresar patente" class="p-2 w-1/2 border border-gray-400 focus:outline-none rounded">
-                <button (click)="buscarVehiculo()" class="w-1/2 bg-gray-100 border font-semibold focus:outline-none border-gray-400 ml-2 rounded p-2 hover:text-secondaryColor">
-                    Buscar vehículo
-                </button>
-            </div>
-        </div>       
-    </div>
-    <div *ngIf="flagNuevoVehiculo" class="px-4 py-2 text-sm">
-        <div class="px-4 text-sm">
-            <h1 class="font-semibold text-xl"> Creando nuevo vehículo </h1>
-            <p class="text-xs text-gray-500"> *El vehículo no se encuentra en sistema, a continuación podrá crearlo </p>
-            <div class="md:flex md:items-center mt-4">
-                <div class="md:w-1/2">
-                    <p class="font-semibold"> <span class="text-red-500"> * </span> Patente </p>
-                    <input [(ngModel)]="nuevoVehiculoData.patente" class="py-2 mt-1 border-b-2 border-gray-300 tranform duration-500 focus:border-secondaryColor appearance-none outline-none w-full text-gray-800" placeholder="Ej. BX157" type="text">
-                </div>
-                <div class="md:w-1/2 md:ml-4 mt-4 md:mt-0">
-                    <p class="font-semibold"> <span class="text-red-500"> * </span> Color </p>
-                    <select [(ngModel)]="nuevoVehiculoData.color" class="py-2 mt-1 border-b-2 border-gray-300 tranform duration-500 focus:border-secondaryColor outline-none w-full text-gray-800">
-                        <option value=""> Seleccionar un color </option>
-                        <option [value]="color.id" *ngFor="let color of colores"> {{ color.descripcion }} </option>
-                    </select>
-                </div>
-            </div>
-            <div class="md:flex md:items-center mt-4">
-                <div class="md:w-1/2">
-                    <p class="font-semibold"> <span class="text-red-500"> * </span> Marca </p>
-                    <select (change)="buscarModelos()" [(ngModel)]="nuevoVehiculoData.marca" class="py-2 mt-1 border-b-2 border-gray-300 tranform duration-500 focus:border-secondaryColor outline-none w-full text-gray-800">
-                        <option value=""> Seleccionar una marca </option>
-                        <option [value]="marca.id" *ngFor="let marca of marcas"> {{ marca.descripcion }} </option>
-                    </select>
-                </div>
-                <div class="md:w-1/2 md:ml-4 mt-4 md:mt-0">
-                    <p class="font-semibold"> <span class="text-red-500"> * </span> Modelo </p>
-                    <select [disabled]="nuevoVehiculoData.marca.trim() === ''" [(ngModel)]="nuevoVehiculoData.modelo" class="py-2 mt-1 border-b-2 border-gray-300 tranform duration-500 focus:border-secondaryColor outline-none w-full text-gray-800">
-                        <option value=""> Seleccionar un modelo </option>
-                        <option [value]="modelo.id" *ngFor="let modelo of modelos"> {{ modelo.descripcion }} </option>
-                    </select>
-                </div>
-            </div>
-            <div class="md:flex md:items-center mt-4">
-                <div class="md:w-1/2">
-                    <p class="font-semibold"> Motor </p>
-                    <input [(ngModel)]="nuevoVehiculoData.motor" class="py-2 mt-1 border-b-2 border-gray-300 tranform duration-500 focus:border-secondaryColor appearance-none outline-none w-full text-gray-800" placeholder="Nro de motor" type="text">
-                </div>
-                <div class="md:w-1/2 md:ml-4 mt-4 md:mt-0">
-                    <p class="font-semibold"> Chasis </p>
-                    <input [(ngModel)]="nuevoVehiculoData.chasis" class="py-2 mt-1 border-b-2 border-gray-300 tranform duration-500 focus:border-secondaryColor appearance-none outline-none w-full text-gray-800" placeholder="Nro de chasis" type="text">
-                </div>
-            </div>
-            <div *ngIf="vehiculoSeleccionado && estadoFormulario === 'editar'" class="xl:flex items-center mt-4">
-              <div class="xl:w-1/2">
-                  <p class="font-semibold text-sm"> Fecha de alta </p>
-                  <div class="border text-sm mt-2 border-gray-300 rounded p-2 bg-gray-100">
-                      {{ vehiculoSeleccionado.createdAt | fecha }}
-                  </div>
-              </div>
-              <div class="xl:ml-4 xl:w-1/2 mt-4 xl:mt-0">
-                  <p class="font-semibold text-sm"> Usuario creador </p>
-                  <div class="border text-sm capitalize mt-2 border-gray-300 rounded p-2 bg-gray-100">
-                      {{ vehiculoSeleccionado.creatorUser.apellido.toLowerCase() }} {{ vehiculoSeleccionado.creatorUser.nombre.toLowerCase() }}
-                  </div>
-              </div>
-          </div> 
-          <div *ngIf="vehiculoSeleccionado && estadoFormulario === 'editar'" class="xl:flex items-center mt-4">
-              <div class="xl:w-1/2">
-                  <p class="font-semibold text-sm"> Ultima actualización </p>
-                  <div class="border text-sm mt-2 border-gray-300 rounded p-2 bg-gray-100">
-                      {{ vehiculoSeleccionado.updatedAt | fecha }}
-                  </div>
-              </div>
-              <div class="xl:ml-4 xl:w-1/2 mt-4 xl:mt-0">
-                  <p class="font-semibold text-sm"> Usuario ultima actualización </p>
-                  <div class="border text-sm capitalize mt-2 border-gray-300 rounded p-2 bg-gray-100">
-                      {{ vehiculoSeleccionado.updatorUser.apellido.toLowerCase() }} {{ vehiculoSeleccionado.updatorUser.nombre.toLowerCase() }}
-                  </div>
-              </div>
-          </div>
-            <div class="flex items-center pb-2">
-                <button (click)="nuevoVehiculo()" class="bg-gray-100 focus:outline-none hover:text-secondaryColor shadow text-gray-800 w-full border border-gray-300 font-semibold p-2 rounded mt-4"> Crear vehículo </button>
-                <button (click)="flagNuevoVehiculo = false" class="bg-gray-100 focus:outline-none ml-2 hover:text-secondaryColor shadow text-gray-800 w-full border border-gray-300 font-semibold p-2 rounded mt-4"> Regresar </button>
-            </div>   
-        </div>
-    </div>
-    <div *ngIf="vehiculoSeleccionado" class="text-sm p-2">
-        <div class="border p-2 border-gray-400">
-            <p> <span class="font-semibold"> Patente: </span>  {{ vehiculoSeleccionado?.patente }} </p>
-            <p class="mt-2"> <span class="font-semibold"> Marca: </span> {{ vehiculoSeleccionado?.marca.descripcion }} </p>
-            <p class="mt-2"> <span class="font-semibold"> Modelo: </span> {{ vehiculoSeleccionado?.modelo.descripcion }} </p>
-        </div>
-        <div class="flex items-center mt-4">
-            <button (click)="asignarVehiculo()" class="border focus:outline-none border-green-700 text-white bg-green-700 p-2 rounded w-1/2"> Aceptar </button>
-            <button (click)="eliminarVehiculo()" class="border focus:outline-none ml-2 border-red-700 text-white bg-red-700 p-2 rounded w-1/2"> Cancelar </button>
-        </div>
-    </div>    
-</app-modal>
-
-<!-- Modal: Asignar permisionario -->
-<app-modal [showModal]="showModalAsignarPermisionario">
-    <div class="flex items-center justify-between bg-primary-800 rounded-t p-2">
-        <h1 class=" text-white py-1 rounded-t text-lg"> Asignación de permisionario </h1>
-        <svg (click)="cerrarModalNuevo('permisionario')" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="cursor-pointer feather feather-x text-white mr-2"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
-    </div>  
-    <div *ngIf="!personaSeleccionada && !flagNuevaPersona" class="text-sm">
-        <h2 class="font-semibold px-2 pt-2 pb-1"> Buscador de personas </h2>
-        <div class="p-2 flex items-center">
-            <input [(ngModel)]="dni" type="text" (keyup.enter)="buscarPersona()" placeholder="Ingresar DNI" class="p-2 w-1/2 border border-gray-400 focus:outline-none rounded">
-            <button (click)="buscarPersona()" class="w-1/2 bg-gray-100 border font-semibold focus:outline-none border-gray-400 ml-2 rounded p-2 hover:text-secondaryColor">
-                Buscar persona
-            </button>
-        </div>
-    </div>
-    <div *ngIf="personaSeleccionada" class="text-sm p-2">
-        <div class="border p-2 border-gray-400">
-            <p> <span class="font-semibold"> Apellido y Nombre: </span>  {{ personaSeleccionada?.apellido_nombre }} </p>
-            <p class="mt-2"> <span class="font-semibold"> DNI: </span> {{ personaSeleccionada?.dni }} </p>
-        </div>
-        <div class="flex items-center mt-4">
-            <button (click)="asignarPermisionario()" class="border focus:outline-none border-green-700 text-white bg-green-700 p-2 rounded w-1/2"> Aceptar </button>
-            <button (click)="eliminarPersona()" class="border focus:outline-none ml-2 border-red-700 text-white bg-red-700 p-2 rounded w-1/2"> Cancelar </button>
-        </div>
-    </div>
-    <div *ngIf="flagNuevaPersona" class="px-4 py-2 text-sm">
-        <h1 class="font-semibold text-xl"> Creando nueva persona </h1>
-        <p class="text-xs text-gray-500"> *La persona no se encuentra en sistema, a continuación podrá crearla </p>
-        <div class="w-full md:flex md:items-center mt-3">
-            <div class="md:w-1/2">
-                <p class="font-semibold"> <span class="text-red-500"> * </span> Apellido y Nombre </p>
-                <input [(ngModel)]="nuevaPersonaData.apellido_nombre"  class="py-2 mt-1 border-b-2 border-gray-300 tranform duration-500 focus:border-secondaryColor appearance-none outline-none w-full text-gray-800" placeholder="Ej. Moreno Lucas Omar" type="text">
-            </div>
-            <div class="md:w-1/2 md:ml-4 mt-4 md:mt-0">
-                <p class="font-semibold"> <span class="text-red-500"> * </span> DNI </p>
-                <input [(ngModel)]="nuevaPersonaData.dni"  class="py-2 mt-1 border-b-2 border-gray-300 tranform duration-500 focus:border-secondaryColor appearance-none outline-none w-full text-gray-800" placeholder="Ej. 34060398" type="text">
-            </div>
-        </div>
-        <div class="mt-4 w-full md:flex md:items-center">
-            <div class="md:w-1/2">
-                <p class="font-semibold"> <span class="text-red-500"> * </span> Fecha de nacimiento </p>
-                <input [(ngModel)]="nuevaPersonaData.fecha_nacimiento" class="py-2 mt-1 border-b-2 border-gray-300 tranform duration-500 focus:border-secondaryColor appearance-none outline-none w-full text-gray-800" type="date">
-            </div>
-            <div class="md:w-1/2 md:ml-4 mt-4 md:mt-0">
-                <p class="font-semibold"> Teléfono </p>
-                <input [(ngModel)]="nuevaPersonaData.telefono" class="py-2 mt-1 border-b-2 border-gray-300 tranform duration-500 focus:border-secondaryColor appearance-none outline-none w-full text-gray-800" placeholder="Ej. 2664869642" type="text">
-            </div>
-        </div>
-        <div class="mt-4">
-            <p class="font-semibold"> Dirección </p>
-            <input [(ngModel)]="nuevaPersonaData.direccion" placeholder="Portugal 1030 casa 4" class="py-2 mt-1 border-b-2 border-gray-300 tranform duration-500 focus:border-secondaryColor appearance-none outline-none w-full text-gray-800" type="text">
-        </div> 
-        <div class="flex items-center"f>
-            <button (click)="nuevaPersona()" class="bg-gray-100 focus:outline-none hover:text-secondaryColor shadow text-gray-800 w-full border border-gray-300 font-semibold p-2 rounded mt-4"> Crear persona </button>
-            <button (click)="flagNuevaPersona = false" class="bg-gray-100 focus:outline-none ml-2 hover:text-secondaryColor shadow text-gray-800 w-full border border-gray-300 font-semibold p-2 rounded mt-4"> Regresar </button>
-        </div>
-    </div>
-</app-modal>
-
-<!-- Modal: Nueva licencia -->
-<app-modal-medium [showModal]="showModalDetalles">
-    <div class="flex items-center justify-between bg-primary-800 rounded-t p-2">
-        <h1 class=" text-white py-1 rounded-t text-lg"> Detalles de licencia </h1>
-        <svg (click)="showModalDetalles = false" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="cursor-pointer feather feather-x text-white mr-2"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
-    </div>  
-    <div class="p-2 text-sm">
-        <div class="flex items-center py-2 justify-between">
-            <p> <span class="font-semibold"> Número de licencia: </span>  {{ licenciaSeleccionada?.nro_licencia }} </p>
-            <p> <span class="font-semibold"> Fecha de alta: </span>  {{ licenciaSeleccionada?.createdAt | fecha }} </p>
-        </div>
-        <div class="mt-2">
-
-            <!-- Vehículo -->
-
-            <div class="bg-gray-100 p-1 flex items-center mt-4 justify-between rounded border border-gray-300">
-                <h2 class="font-semibold py-2 pl-1"> Vehículo </h2>
-                <button (click)="abrirModalNuevo('vehiculo')" title="Asignar vehículo" class="bg-white p-2 focus:outline-none hover:text-secondaryColor rounded border border-gray-300">
-                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
-                        <path fill-rule="evenodd" d="M10 3a1 1 0 011 1v5h5a1 1 0 110 2h-5v5a1 1 0 11-2 0v-5H4a1 1 0 110-2h5V4a1 1 0 011-1z" clip-rule="evenodd" />
-                    </svg>                    
-                </button>
-            </div>
-            <p class="mt-2" *ngIf="!licenciaVehiculo"> No hay vehículo asociado a esta licencia </p>
-            <div *ngIf="licenciaVehiculo">
-                <div class="border border-l-8 p-2 flex items-center justify-between border-gray-300 mt-2 w-full">
-                    <div class="border p-2 border-gray-400">
-                        <p> <span class="font-semibold"> Patente: </span>  {{ licenciaVehiculo?.patente }} </p>
-                        <p class="mt-2"> <span class="font-semibold"> Marca: </span> {{ licenciaVehiculo?.marca.descripcion }} </p>
-                        <p class="mt-2"> <span class="font-semibold"> Modelo: </span> {{ licenciaVehiculo?.modelo.descripcion }} </p>
-                        <p class="text-xs text-gray-500"> Desde el {{ licenciaVehiculo?.fecha_alta | fecha }} </p>      
-                    </div>
-                    <button (click)="bajaPersona('permisionario')" title="Baja de permisionario" class="border focus:outline-none border-gray-300 p-2 hover:text-red-700 rounded">
-                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-                            <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
-                        </svg>
-                    </button>
-                </div>
-            </div>
-
-
-            <!-- Permisionario -->
-
-            <div class="bg-gray-100 p-1 mt-4 flex items-center justify-between rounded border border-gray-300">
-                <h2 class="font-semibold py-2 pl-1"> Permisionario </h2>
-                <button *ngIf="!licenciaPermisionario" (click)="abrirModalNuevo('permisionario')" title="Asignar permisionario" class="bg-white p-2 focus:outline-none hover:text-secondaryColor rounded border border-gray-300">
-                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
-                        <path fill-rule="evenodd" d="M10 3a1 1 0 011 1v5h5a1 1 0 110 2h-5v5a1 1 0 11-2 0v-5H4a1 1 0 110-2h5V4a1 1 0 011-1z" clip-rule="evenodd" />
-                      </svg>                    
-                </button>
-            </div>
-            <p class="mt-2" *ngIf="!licenciaPermisionario"> No hay permisionario asociado a esta licencia </p>
-            <div *ngIf="licenciaPermisionario">
-                <div class="border border-l-8 p-2 flex items-center justify-between border-gray-300 mt-2 w-full">
-                    <div>
-                        <p class="font-semibold"> {{ licenciaPermisionario?.persona.apellido_nombre }} </p>
-                        <p> DNI {{ licenciaPermisionario?.persona.dni }} </p>  
-                        <p class="text-xs text-gray-500"> Desde el {{ licenciaPermisionario?.fecha_alta | fecha }} </p>      
-                    </div>
-                    <button (click)="bajaPersona('permisionario')" title="Baja de permisionario" class="border focus:outline-none border-gray-300 p-2 hover:text-red-700 rounded">
-                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-                            <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
-                        </svg>
-                    </button>
-                </div>
-            </div>
-
-            <!-- Choferes -->
-
-            <div class="bg-gray-100 p-1 flex items-center mt-4 justify-between rounded border border-gray-300">
-                <h2 class="font-semibold py-2 pl-1"> Choferes </h2>
-                <button (click)="abrirModalNuevo('chofer')" title="Asignar chofer" class="bg-white p-2 focus:outline-none hover:text-secondaryColor rounded border border-gray-300">
-                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
-                        <path fill-rule="evenodd" d="M10 3a1 1 0 011 1v5h5a1 1 0 110 2h-5v5a1 1 0 11-2 0v-5H4a1 1 0 110-2h5V4a1 1 0 011-1z" clip-rule="evenodd" />
-                    </svg>                    
-                </button>
-            </div>
-            <p class="mt-2"> No hay choferes asociados a esta licencia </p>
-
-            <!-- Relojes -->
-
-            <div class="bg-gray-100 p-1 flex items-center mt-4 justify-between rounded border border-gray-300">
-                <h2 class="font-semibold py-2 pl-1"> Reloj </h2>
-                <button (click)="abrirModalNuevo('reloj')" title="Asignar reloj" class="bg-white p-2 focus:outline-none hover:text-secondaryColor rounded border border-gray-300">
-                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
-                        <path fill-rule="evenodd" d="M10 3a1 1 0 011 1v5h5a1 1 0 110 2h-5v5a1 1 0 11-2 0v-5H4a1 1 0 110-2h5V4a1 1 0 011-1z" clip-rule="evenodd" />
-                        </svg>                    
-                </button>
-            </div>
-            <p class="mt-2"> No hay reloj asociado a esta licencia </p>
-
-        </div>
-    </div> 
-</app-modal-medium>
-
-
 <!-- Modal: Crear / Editar licencia -->
 <app-modal [showModal]="showModalLicencia">
   <div (keyup.enter)="estadoFormulario === 'crear' ? nuevaLicencia() : actualizarLicencia()">
@@ -270,7 +7,7 @@
       </div>
       <div class="p-4 text-sm">
           <p class="font-semibold"> <span class="text-red-500"> * </span> Número de licencia </p>
-          <input [(ngModel)]="nro_licencia" class="py-2 mt-1 border-b-2 border-gray-300 tranform duration-500 focus:border-secondaryColor appearance-none outline-none w-full text-gray-800" placeholder="Ej. 125" type="text">
+          <input [(ngModel)]="nro_licencia" class="input-text-general" placeholder="Ej. 125" type="text">
           <div *ngIf="licenciaSeleccionada && estadoFormulario === 'editar'" class="xl:flex items-center mt-4">
             <div class="xl:w-1/2">
                 <p class="font-semibold text-sm"> Fecha de alta </p>
@@ -299,8 +36,8 @@
                 </div>
             </div>
         </div>   
-          <button *ngIf="estadoFormulario == 'crear'" (click)="nuevaLicencia()" class="bg-gray-100 focus:outline-none hover:text-secondaryColor shadow text-gray-800 w-full border border-gray-300 font-semibold p-2 rounded mt-4"> Crear licencia </button>
-          <button *ngIf="estadoFormulario == 'editar'" (click)="actualizarLicencia()" class="bg-gray-100 focus:outline-none hover:text-secondaryColor shadow text-gray-800 w-full border border-gray-300 font-semibold p-2 rounded mt-4"> Actualizar licencia </button>
+          <button *ngIf="estadoFormulario == 'crear'" (click)="nuevaLicencia()" class="btn-confirm mt-3"> Crear licencia </button>
+          <button *ngIf="estadoFormulario == 'editar'" (click)="actualizarLicencia()" class="btn-confirm mt-4"> Actualizar licencia </button>
       </div>
   </div>
 </app-modal>
@@ -408,17 +145,17 @@
                               <tr class="animate__animated animate__fadeIn" *ngFor="let licencia of licencias | filtroLicencias:filtro.parametro:filtro.estado | paginate: {itemsPerPage: cantidadItems, currentPage: paginaActual}">
                                   <td class="px-5 py-2 border-b border-gray-200 text-xs">
                                       <p class="text-gray-900 w-max whitespace-no-wrap">
-                                          {{ licencia.nro_licencia }}
+                                          {{ licencia?.nro_licencia }}
                                       </p>
                                   </td>
                                   <td class="px-5 py-2 border-b border-gray-200 text-xs">
                                       <p class="text-gray-900 whitespace-no-wrap">
-                                          {{ licencia.createdAt | fecha }}
+                                          {{ licencia?.createdAt | fecha }}
                                       </p>
                                   </td>
                                   <td class="px-5 py-2 border-b border-gray-200 text-xs">
-                                    <p [ngClass]="{'text-green-700 bg-green-50 border-green-300':licencia.estado === 'Habilitada', 'text-red-700 bg-red-50 border-red-300':licencia.estado === 'Inhabilitada'}" class="text-gray-900 whitespace-no-wrap p-1 w-max font-semibold rounded border">
-                                        {{ licencia.estado }}
+                                    <p [ngClass]="{'text-green-700 bg-green-50 border-green-300':licencia?.estado === 'Habilitada', 'text-red-700 bg-red-50 border-red-300':licencia?.estado === 'Inhabilitada'}" class="text-gray-900 whitespace-no-wrap p-1 w-max font-semibold rounded border">
+                                        {{ licencia?.estado }}
                                     </p>
                                   </td>
                                   <td class="px-5 py-2 border-b border-gray-200 text-xs text-center">

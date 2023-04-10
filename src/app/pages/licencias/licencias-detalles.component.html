@@ -1,3 +1,46 @@
+<!-- Modal: Crear / Editar licencia -->
+<app-modal [showModal]="showModalEditarLicencia">
+    <div (keyup.enter)="editarLicencia()">
+        <div class="flex items-center justify-between bg-primary-800 rounded-t p-2">
+            <h1 class=" text-white px-2 py-1 rounded-t text-lg"> Editando licencia </h1>
+            <svg (click)="showModalEditarLicencia = false" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="cursor-pointer feather feather-x text-white mr-2"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
+        </div>
+        <div class="p-4 text-sm">
+            <p class="font-semibold"> <span class="text-red-500"> * </span> Número de licencia </p>
+            <input [(ngModel)]="nro_licencia" class="input-text-general" placeholder="Ej. 125" type="text">
+            <div class="xl:flex items-center mt-4">
+              <div class="xl:w-1/2">
+                  <p class="font-semibold text-sm"> Fecha de alta </p>
+                  <div class="border text-sm mt-2 border-gray-300 rounded p-2 bg-gray-100">
+                      {{ licencia?.createdAt | fecha }}
+                  </div>
+              </div>
+              <div class="xl:ml-4 xl:w-1/2 mt-4 xl:mt-0">
+                  <p class="font-semibold text-sm"> Usuario creador </p>
+                  <div class="border text-sm capitalize mt-2 border-gray-300 rounded p-2 bg-gray-100">
+                      {{ licencia?.creatorUser.apellido.toLowerCase() }} {{ licencia?.creatorUser.nombre.toLowerCase() }}
+                  </div>
+              </div>
+          </div> 
+          <div class="xl:flex items-center mt-4">
+              <div class="xl:w-1/2">
+                  <p class="font-semibold text-sm"> Ultima actualización </p>
+                  <div class="border text-sm mt-2 border-gray-300 rounded p-2 bg-gray-100">
+                      {{ licencia?.updatedAt | fecha }}
+                  </div>
+              </div>
+              <div class="xl:ml-4 xl:w-1/2 mt-4 xl:mt-0">
+                  <p class="font-semibold text-sm"> Usuario ultima actualización </p>
+                  <div class="border text-sm capitalize mt-2 border-gray-300 rounded p-2 bg-gray-100">
+                      {{ licencia?.updatorUser.apellido.toLowerCase() }} {{ licencia?.updatorUser.nombre.toLowerCase() }}
+                  </div>
+              </div>
+          </div>   
+            <button (click)="editarLicencia()" class="btn-confirm mt-4"> Editar licencia </button>
+        </div>
+    </div>
+  </app-modal>
+
 <!-- Modal: Tipos de tramite -->
 <app-modal [showModal]="showModalTramites">
     <div class="flex items-center justify-between bg-primary-800 rounded-t p-2">
@@ -5,20 +48,30 @@
         <svg (click)="showModalTramites = false" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="cursor-pointer feather feather-x text-white mr-2"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>    
     </div> 
     <div class="p-2">
-        <button class="p-2 w-full hover:text-secondaryColor focus:outline-none border shadow border-gray-400">
-            Transferencia continuando
+        <button class="w-full hover:bg-yellow-50 focus:outline-none border shadow font-semibold border-gray-400">
+            <div class="border-l-8 border-yellow-700 p-2">
+                Transferencia continuando
+            </div> 
         </button>
-        <button class="p-2 w-full hover:text-secondaryColor focus:outline-none border mt-4 shadow border-gray-400">
-            Transferencia con cambio de unidad
+        <button class="w-full hover:bg-orange-50 focus:outline-none border mt-4 shadow font-semibold border-gray-400">
+            <div class="border-l-8 border-orange-700 p-2">
+                Transferencia con cambio de unidad
+            </div>
         </button>
-        <button class="p-2 w-full hover:text-secondaryColor focus:outline-none mt-4 border shadow border-gray-400">
-            Cambio de unidad
+        <button class="w-full hover:bg-blue-50 focus:outline-none mt-4 border shadow font-semibold border-gray-400">
+            <div class="border-l-8 border-blue-700 p-2">
+                Cambio de unidad
+            </div>
         </button>
-        <button class="p-2 w-full hover:text-secondaryColor focus:outline-none mt-4 border shadow border-gray-400">
-            Asentar chofer
+        <button class="w-full hover:bg-green-50 focus:outline-none mt-4 border shadow font-semibold border-gray-400">
+            <div class="border-l-8 border-green-700 p-2">
+                Asentar chofer
+            </div>
         </button>
-        <button class="p-2 w-full hover:text-secondaryColor focus:outline-none mt-4 border shadow border-gray-400">
-            Baja de chofer
+        <button class="w-full hover:bg-red-50 focus:outline-none mt-4 border shadow font-semibold border-gray-400">
+            <div class="border-l-8 border-red-700 p-2">
+                Baja de chofer
+            </div> 
         </button>
     </div>
 </app-modal>
@@ -116,11 +169,11 @@
             <div class="md:flex md:items-center mt-4">
                 <div class="md:w-1/2">
                     <p class="font-semibold"> <span class="text-red-500"> * </span> Patente </p>
-                    <input [(ngModel)]="nuevoVehiculoData.patente" class="py-2 mt-1 border-b-2 border-gray-300 tranform duration-500 focus:border-secondaryColor appearance-none outline-none w-full text-gray-800" placeholder="Ej. BX157" type="text">
+                    <input [(ngModel)]="nuevoVehiculoData.patente" class="input-text-general" placeholder="Ej. BX157" type="text">
                 </div>
                 <div class="md:w-1/2 md:ml-4 mt-4 md:mt-0">
                     <p class="font-semibold"> <span class="text-red-500"> * </span> Color </p>
-                    <select [(ngModel)]="nuevoVehiculoData.color" class="py-2 mt-1 border-b-2 border-gray-300 tranform duration-500 focus:border-secondaryColor outline-none w-full text-gray-800">
+                    <select [(ngModel)]="nuevoVehiculoData.color" class="select-general">
                         <option value=""> Seleccionar un color </option>
                         <option [value]="color.id" *ngFor="let color of colores"> {{ color.descripcion }} </option>
                     </select>
@@ -129,14 +182,14 @@
             <div class="md:flex md:items-center mt-4">
                 <div class="md:w-1/2">
                     <p class="font-semibold"> <span class="text-red-500"> * </span> Marca </p>
-                    <select (change)="buscarModelos()" [(ngModel)]="nuevoVehiculoData.marca" class="py-2 mt-1 border-b-2 border-gray-300 tranform duration-500 focus:border-secondaryColor outline-none w-full text-gray-800">
+                    <select (change)="buscarModelos()" [(ngModel)]="nuevoVehiculoData.marca" class="select-general">
                         <option value=""> Seleccionar una marca </option>
                         <option [value]="marca.id" *ngFor="let marca of marcas"> {{ marca.descripcion }} </option>
                     </select>
                 </div>
                 <div class="md:w-1/2 md:ml-4 mt-4 md:mt-0">
                     <p class="font-semibold"> <span class="text-red-500"> * </span> Modelo </p>
-                    <select [disabled]="nuevoVehiculoData.marca.trim() === ''" [(ngModel)]="nuevoVehiculoData.modelo" class="py-2 mt-1 border-b-2 border-gray-300 tranform duration-500 focus:border-secondaryColor outline-none w-full text-gray-800">
+                    <select [disabled]="nuevoVehiculoData.marca.trim() === ''" [(ngModel)]="nuevoVehiculoData.modelo" class="select-general">
                         <option value=""> Seleccionar un modelo </option>
                         <option [value]="modelo.id" *ngFor="let modelo of modelos"> {{ modelo.descripcion }} </option>
                     </select>
@@ -145,17 +198,17 @@
             <div class="md:flex md:items-center mt-4">
                 <div class="md:w-1/2">
                     <p class="font-semibold"> Motor </p>
-                    <input [(ngModel)]="nuevoVehiculoData.motor" class="py-2 mt-1 border-b-2 border-gray-300 tranform duration-500 focus:border-secondaryColor appearance-none outline-none w-full text-gray-800" placeholder="Nro de motor" type="text">
+                    <input [(ngModel)]="nuevoVehiculoData.motor" class="input-text-general" placeholder="Nro de motor" type="text">
                 </div>
                 <div class="md:w-1/2 md:ml-4 mt-4 md:mt-0">
                     <p class="font-semibold"> Chasis </p>
-                    <input [(ngModel)]="nuevoVehiculoData.chasis" class="py-2 mt-1 border-b-2 border-gray-300 tranform duration-500 focus:border-secondaryColor appearance-none outline-none w-full text-gray-800" placeholder="Nro de chasis" type="text">
+                    <input [(ngModel)]="nuevoVehiculoData.chasis" class="input-text-general" placeholder="Nro de chasis" type="text">
                 </div>
             </div>
             <div class="md:flex md:items-center mt-4">
                 <div class="md:w-1/2">
                     <p class="font-semibold"> <span class="text-red-500"> * </span> Año </p>
-                    <input [(ngModel)]="nuevoVehiculoData.ano" class="py-2 mt-1 border-b-2 border-gray-300 tranform duration-500 focus:border-secondaryColor appearance-none outline-none w-full text-gray-800" placeholder="Ej. 2015" type="number">
+                    <input [(ngModel)]="nuevoVehiculoData.ano" class="input-text-general" placeholder="Ej. 2015" type="number">
                 </div>
                 <div class="md:w-1/2 md:ml-4 mt-4 md:mt-0"></div>
               </div>
@@ -238,98 +291,6 @@
         </div>
     </div>
     
-    <!-- Alta - Permisionario -->
-    <!-- <div *ngIf="personaSeleccionada && flagEtapaPersona === 'permisionario'" class="text-sm p-2">
-        <div>
-            <div>
-                <p class="font-semibold mb-2 border border-gray-400 bg-gray-100 p-1 rounded"> Formulario de alta </p>
-                <div>
-                    <div class="md:flex md:items-center">
-                        <div class="md:w-1/2">
-                            <p class="font-semibold"> Expediente </p>
-                            <input type="text" placeholder="Nro expediente" class="border mt-1 focus:outline-none border-gray-400 p-2 w-full rounded">
-                        </div>
-                    </div>
-                </div>
-                <div class="md:flex md:items-center mt-3">
-                    <div class="md:w-1/2">
-                        <p class="font-semibold"> Libre deuda anterior </p>
-                        <input type="text" placeholder="Nro libre deuda anterior" class="border mt-1 focus:outline-none border-gray-400 p-2 w-full rounded">
-                    </div>
-                    <div class="md:w-1/2 md:ml-2 mt-2 md:mt-0">
-                        <p class="font-semibold"> Libre deuda nuevo </p>
-                        <input type="text" placeholder="Nro libre deuda nuevo" class="border mt-1 focus:outline-none border-gray-400 p-2 w-full rounded">
-                    </div>
-                </div>
-                <div class="md:flex md:items-center mt-3">
-                    <div class="md:w-1/2">
-                        <p class="font-semibold"> Sellado control técnico </p>
-                        <input type="text" placeholder="Nro sellado" class="border mt-1 focus:outline-none border-gray-400 p-2 w-full rounded">
-                    </div>
-                    <div class="md:w-1/2 md:ml-2 mt-2 md:mt-0">
-                        <p class="font-semibold"> Sellado desinfección </p>
-                        <input type="text" placeholder="Nro sellado" class="border mt-1 focus:outline-none border-gray-400 p-2 w-full rounded">
-                    </div>
-                </div>
-                <div class="md:flex md:items-center mt-3">
-                    <div class="md:w-1/2">
-                        <p class="font-semibold"> Sellado transferencia </p>
-                        <input type="text" placeholder="Nro sellado" class="border mt-1 focus:outline-none border-gray-400 p-2 w-full rounded">
-                    </div>
-                    <div class="w-1/2 ml-2">
-                    </div>
-                </div>
-            </div> 
-            <div class="mt-4">
-                <p class="font-semibold mt-2 border border-gray-400 bg-gray-100 p-1 rounded"> Documentación </p>
-                <p class="text-xs text-gray-500 mt-1"> *Libre deuda rentas y libre deuda comercio </p>
-                <input class="block w-full mt-2 text-sm text-gray-900 border p-2 border-gray-400 cursor-pointer focus:outline-none" id="file_input" type="file">
-            </div>
-        </div>      
-    </div> -->
-
-    <!-- Alta - Chofer -->
-    <!-- <div *ngIf="personaSeleccionada && flagEtapaPersona === 'chofer'" class="text-sm p-2">
-        <div>
-            <div>
-                <p class="font-semibold mb-2 border border-gray-400 bg-gray-100 p-1 rounded"> Formulario de alta </p>
-                <div>
-                    <div class="md:flex md:items-center">
-                        <div class="md:w-1/2">
-                            <p class="font-semibold"> Carnet de conducir (Vencimiento) </p>
-                            <input type="date" class="border mt-1 focus:outline-none border-gray-400 p-2 w-full rounded">
-                        </div>
-                    </div>
-                </div>
-                <div class="md:flex md:items-center mt-3">
-                    <div class="md:w-1/2">
-                        <p class="font-semibold"> Libreta sanitaria </p>
-                        <input type="text" placeholder="Nro de libreta" class="border mt-1 focus:outline-none border-gray-400 p-2 w-full rounded">
-                    </div>
-                    <div class="md:w-1/2 md:ml-2 mt-2 md:mt-0">
-                        <p class="font-semibold"> Certificado de antecedentes </p>
-                        <input type="text" placeholder="Nro de certificado" class="border mt-1 focus:outline-none border-gray-400 p-2 w-full rounded">
-                    </div>
-                </div>
-                <div class="md:flex md:items-center mt-3">
-                    <div class="md:w-1/2">
-                        <p class="font-semibold"> Seguro de accidentes personales </p>
-                        <input type="text" placeholder="Nro de seguro" class="border mt-1 focus:outline-none border-gray-400 p-2 w-full rounded">
-                    </div>
-                    <div class="md:w-1/2 md:ml-2 mt-2 md:mt-0">
-                        <p class="font-semibold"> Tasa de sellado </p>
-                        <input type="text" placeholder="Colocar tasa" class="border mt-1 focus:outline-none border-gray-400 p-2 w-full rounded">
-                    </div>
-                </div>
-            </div> 
-            <div class="mt-4">
-                <p class="font-semibold mt-2 border border-gray-400 bg-gray-100 p-1 rounded"> Documentación </p>
-                <p class="text-xs text-gray-500 mt-1"> *Certificado de antedecentes </p>
-                <input class="block w-full mt-2 text-sm text-gray-900 border p-2 border-gray-400 cursor-pointer focus:outline-none" id="file_input" type="file">
-            </div>
-        </div>      
-    </div> -->
-
     <div *ngIf="personaSeleccionada" class="flex items-center mt-2 px-2 pb-2 text-sm">
         <button (click)="flagEtapaPersona === 'permisionario' ? asignarPermisionario() : asignarChofer()" class="border shadow focus:outline-none border-green-700 text-white bg-green-700 hover:bg-green-800 p-2 rounded w-1/2"> Aceptar </button>
         <button (click)="eliminarPersona()" class="border shadow focus:outline-none ml-2 border-red-700 text-white bg-red-700 hover:bg-red-800 p-2 rounded w-1/2"> Regresar </button>
@@ -342,31 +303,31 @@
       <div class="w-full md:flex md:items-center mt-3">
           <div class="md:w-1/2">
               <p class="font-semibold"> <span class="text-red-500"> * </span> Apellido </p>
-              <input [(ngModel)]="nuevaPersonaData.apellido"  class="py-2 mt-1 border-b-2 border-gray-300 tranform duration-500 focus:border-secondaryColor appearance-none outline-none w-full text-gray-800" placeholder="Ej. Moreno" type="text">
+              <input [(ngModel)]="nuevaPersonaData.apellido"  class="input-text-general" placeholder="Ej. Moreno" type="text">
           </div>
           <div class="md:w-1/2 md:ml-4 mt-4 md:mt-0">
               <p class="font-semibold"> <span class="text-red-500"> * </span> Nombre </p>
-              <input [(ngModel)]="nuevaPersonaData.nombre"  class="py-2 mt-1 border-b-2 border-gray-300 tranform duration-500 focus:border-secondaryColor appearance-none outline-none w-full text-gray-800" placeholder="Ej. Lucas Omar" type="text">
+              <input [(ngModel)]="nuevaPersonaData.nombre"  class="input-text-general" placeholder="Ej. Lucas Omar" type="text">
           </div>
       </div>
       <div class="w-full md:flex md:items-center mt-3">
         <div class="md:w-1/2">
             <p class="font-semibold"> <span class="text-red-500"> * </span> DNI </p>
-            <input [(ngModel)]="nuevaPersonaData.dni"  class="py-2 mt-1 border-b-2 border-gray-300 tranform duration-500 focus:border-secondaryColor appearance-none outline-none w-full text-gray-800" placeholder="Ej. 34060398" type="text">
+            <input [(ngModel)]="nuevaPersonaData.dni"  class="input-text-general" placeholder="Ej. 34060398" type="text">
         </div>
         <div class="md:w-1/2 md:ml-4 mt-4 md:mt-0">
             <p class="font-semibold"> <span class="text-red-500"> * </span> Teléfono </p>
-            <input [(ngModel)]="nuevaPersonaData.telefono"  class="py-2 mt-1 border-b-2 border-gray-300 tranform duration-500 focus:border-secondaryColor appearance-none outline-none w-full text-gray-800" placeholder="Ej. 2664869642" type="text">
+            <input [(ngModel)]="nuevaPersonaData.telefono"  class="input-text-general" placeholder="Ej. 2664869642" type="text">
         </div>
     </div>
     <div class="w-full md:flex md:items-center mt-3">
         <div class="md:w-1/2">
             <p class="font-semibold"> <span class="text-red-500"> * </span> Domicilio </p>
-            <input [(ngModel)]="nuevaPersonaData.domicilio"  class="py-2 mt-1 border-b-2 border-gray-300 tranform duration-500 focus:border-secondaryColor appearance-none outline-none w-full text-gray-800" placeholder="Ej. Portugal 1030" type="text">
+            <input [(ngModel)]="nuevaPersonaData.domicilio"  class="input-text-general" placeholder="Ej. Portugal 1030" type="text">
         </div>
         <div class="md:w-1/2 md:ml-4 mt-4 md:mt-0">
             <p class="font-semibold"> <span class="text-red-500"> * </span> Email </p>
-            <input [(ngModel)]="nuevaPersonaData.mail"  class="py-2 mt-1 border-b-2 border-gray-300 tranform duration-500 focus:border-secondaryColor appearance-none outline-none w-full text-gray-800" placeholder="Ej. ing.lucasmoreno@gmail.com" type="text">
+            <input [(ngModel)]="nuevaPersonaData.mail"  class="input-text-general" placeholder="Ej. ing.lucasmoreno@gmail.com" type="text">
         </div>
     </div>
     <div class="flex items-center"f>
@@ -379,7 +340,9 @@
 
 <!-- Pagina principal -->
 <div class="gsap-contenido mb-20 max-w-6xl mx-auto border mt-4 rounded-t shadow border-gray-400">
-  <div class="flex items-center justify-between rounded-t p-3">
+    
+    <!-- Detalles de licencia -->
+    <div class="flex items-center justify-between rounded-t p-3">
     <div class="flex items-center">
       <button title="Regresar" routerLink="/dashboard/licencias" class="p-1 focus:outline-none hover:text-secondaryColor">
         <svg xmlns="http://www.w3.org/2000/svg" class="h-9 w-9" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
@@ -388,14 +351,21 @@
       </button>
       <div class="ml-2">
         <p class="text-3xl font-semibold"> Detalles de licencia </p>
-        <p class="text-xl w-max py-1"> <span>  Licencia N° </span> <span class="font-semibold"> {{ licencia.nro_licencia }} </span> </p>
+        <div class="text-xl flex items-center w-max py-1">
+            <div>
+                <span>  Licencia N° </span> 
+                <span class="font-semibold"> {{ licencia?.nro_licencia }} </span> 
+            </div> 
+            <button (click)="abrirEditarLicencia()" class="hover:text-secondaryColor focus:outline-none ml-2" title="Editar licencia">
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-4 h-4">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M16.862 4.487l1.687-1.688a1.875 1.875 0 112.652 2.652L6.832 19.82a4.5 4.5 0 01-1.897 1.13l-2.685.8.8-2.685a4.5 4.5 0 011.13-1.897L16.863 4.487zm0 0L19.5 7.125" />
+                  </svg>                  
+            </button>
+        </div>
         <p [ngClass]="{'bg-green-100 border-green-400 text-green-700':licencia?.estado === 'Habilitada', 'bg-red-100 border-red-400 text-red-700':licencia?.estado === 'Inhabilitada'}" class="border w-max mt-1 px-2 py-1 font-semibold rounded text-xs"> {{ licencia?.estado }} </p>
       </div>
     </div>
-    <!-- <div class="text-xl w-max text-center px-2 py-1">
-      <p> N° de licencia </p>
-      <p class="font-semibold"> {{ licencia?.nro_licencia }} </p>
-    </div> -->
+
     <div>
         <button (click)="showModalTramites = true" title="Tipos de tramite" class="border border-gray-400 hover:text-secondaryColor bg-gray-100 rounded p-2 shadow focus:outline-none mr-2">
             <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-7 h-7">
@@ -405,11 +375,20 @@
     </div> 
 
   </div>
-  <div class="p-2">
+
+  <div class="px-2 mt-2">
+        <div class="border text-sm flex items-center justify-between border-gray-400 w-full">
+            <button (click)="showContenido = 'Detalles'" [ngClass]="{'bg-secondaryColor text-white' : showContenido === 'Detalles'}" class="w-1/2 border-r bg-gray-100 focus:outline-none font-semibold border-gray-400 p-2"> Detalles de la licencia </button>
+            <button (click)="showContenido = 'Historial'" [ngClass]="{'bg-secondaryColor text-white' : showContenido === 'Historial'}" class="w-1/2 p-2 bg-gray-100 font-semibold focus:outline-none"> Historal de cambios </button>
+        </div>
+  </div>
+
+  <!-- Contenido actual de la licencia -->
+  <div *ngIf="showContenido === 'Detalles'" class="p-2">
     
     <!-- Permisionarios -->
     
-    <div class="border-t-2 border-gray-400">
+    <div class="border-gray-400">
       <div class="flex items-center justify-between text-lg p-2">
         <div class="flex items-center">
             <img class="w-20" src="/assets/img/permisionario.svg">
@@ -541,7 +520,7 @@
   </div>
 
 <!-- Vehiculo -->
-  <div class="border-t-2 border-gray-400 mt-4">
+  <div class="border-t border-gray-400 mt-4">
     <div class="flex items-center justify-between text-lg rounded p-2">
       <div class="flex items-center">
         <img class="w-20" src="/assets/img/vehiculo.svg">
@@ -672,7 +651,7 @@
     </div>
 
     <!-- Choferes -->
-    <div class="border-t-2 border-gray-400 mt-4">
+    <div class="border-t border-gray-400 mt-4">
         <div class="flex items-center justify-between text-lg rounded p-2">
           <div class="flex items-center">
             <img class="w-20" src="/assets/img/chofer.svg">
@@ -804,5 +783,14 @@
         </div>
   
   </div>
+
+    </div>
+
+</div>
+
+<!-- Historial de cambios -->
+<div *ngIf="showContenido === 'Historial'" class="p-2">
+    <p class="bg-gray-100 text-gray-700 p-2 border border-gray-400"> No se encontro historial de movimientos </p>   
+</div> 
 
 </div>

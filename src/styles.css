@@ -23,3 +23,23 @@ div {
 i {
     -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
 }
+
+/* Boton confirmar */
+.btn-confirm {
+    @apply bg-secondaryColor focus:outline-none text-white shadow w-full font-semibold p-2 rounded
+}
+
+/* Boton cancelar */
+.btn-cancel {
+    @apply bg-red-700 focus:outline-none text-white shadow w-full font-semibold p-2 rounded
+}
+
+/* Input -> Text */
+.input-text-general {
+    @apply py-2 px-1 border-b-2 border-gray-300 focus:border-secondaryColor appearance-none outline-none w-full text-gray-800
+}
+
+/* Select */
+.select-general {
+    @apply py-2 px-1 border-b-2 border-gray-300 focus:border-secondaryColor outline-none w-full text-gray-800 cursor-pointer
+}

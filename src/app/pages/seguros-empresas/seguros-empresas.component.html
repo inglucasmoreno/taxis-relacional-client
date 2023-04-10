@@ -9,7 +9,7 @@
           <div class="md:flex md:items-center">
               <div class="md:w-1/2">
                   <p class="font-semibold"> <span class="text-red-500"> * </span> Razón social </p>
-                  <input [(ngModel)]="descripcion" class="py-2 mt-1 border-b-2 border-gray-300 tranform duration-500 focus:border-secondaryColor appearance-none outline-none w-full text-gray-800" placeholder="Ej. Rivadavia" type="text">
+                  <input [(ngModel)]="descripcion" class="input-text-general" placeholder="Ej. Rivadavia" type="text">
               </div>
               <div class="md:w-1/2 md:ml-4">
               </div>
@@ -17,11 +17,11 @@
           <div class="md:flex md:items-center mt-2 md:mt-4">
               <div class="md:w-1/2">
                   <p class="font-semibold"> <span class="text-red-500"> * </span> Dirección </p>
-                  <input [(ngModel)]="direccion" class="py-2 mt-1 border-b-2 border-gray-300 tranform duration-500 focus:border-secondaryColor appearance-none outline-none w-full text-gray-800" placeholder="Ej. Pringles 772" type="text">
+                  <input [(ngModel)]="direccion" class="input-text-general" placeholder="Ej. Pringles 772" type="text">
               </div>
               <div class="md:w-1/2 md:ml-4 mt-2 md:mt-0">
                   <p class="font-semibold"> <span class="text-red-500"> * </span> Teléfono </p>
-                  <input [(ngModel)]="telefono" class="py-2 mt-1 border-b-2 border-gray-300 tranform duration-500 focus:border-secondaryColor appearance-none outline-none w-full text-gray-800" placeholder="Ej. 2664869642" type="text">
+                  <input [(ngModel)]="telefono" class="input-text-general" placeholder="Ej. 2664869642" type="text">
               </div>
           </div>
           <div *ngIf="empresaSeleccionada && estadoFormulario === 'editar'" class="xl:flex items-center mt-4">
@@ -52,8 +52,10 @@
                 </div>
             </div>
         </div>   
-          <button *ngIf="estadoFormulario == 'crear'" (click)="nuevaEmpresa()" class="bg-gray-100 focus:outline-none hover:text-secondaryColor shadow text-gray-800 w-full border border-gray-300 font-semibold p-2 rounded mt-4"> Crear empresa </button>
-          <button *ngIf="estadoFormulario == 'editar'" (click)="actualizarEmpresa()" class="bg-gray-100 focus:outline-none hover:text-secondaryColor shadow text-gray-800 w-full border border-gray-300 font-semibold p-2 rounded mt-4"> Actualizar empresa </button>
+        <div class="mt-3">
+            <button *ngIf="estadoFormulario == 'crear'" (click)="nuevaEmpresa()" class="btn-confirm"> Crear empresa </button>
+            <button *ngIf="estadoFormulario == 'editar'" (click)="actualizarEmpresa()" class="btn-confirm"> Actualizar empresa </button>
+        </div>
       </div>
   </div>
 </app-modal>
