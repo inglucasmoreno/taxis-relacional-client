@@ -26,6 +26,10 @@ import { VehiculosSegurosComponent } from './vehiculos/vehiculos-seguros.compone
 import { LicenciasComponent } from './licencias/licencias.component';
 import { LicenciasDetallesComponent } from './licencias/licencias-detalles.component';
 import { VehiculosTitularesComponent } from './vehiculos/vehiculos-titulares.component';
+import { CambioUnidadComponent } from './licencias/cambio-unidad.component';
+import { TransferenciaContinuandoComponent } from './licencias/transferencia-continuando.component';
+import { TransferenciaCambioUnidadComponent } from './licencias/transferencia-cambio-unidad.component';
+import { TiposServiciosComponent } from './tipos-servicios/tipos-servicios.component';
 
 const routes: Routes = [
     {
@@ -74,7 +78,16 @@ const routes: Routes = [
             // Licencias
             { path: 'licencias', data: { permisos: 'LICENCIAS_NAV' }, canActivate: [PermisosGuard], component: LicenciasComponent}, 
 
-            { path: 'licencias/detalles/:id', data: { permisos: 'LICENCIAS_NAV' }, canActivate: [PermisosGuard], component: LicenciasDetallesComponent}, 
+            { path: 'licencias/detalles/:id', data: { permisos: 'LICENCIAS_NAV' }, canActivate: [PermisosGuard], component: LicenciasDetallesComponent},
+            
+            { path: 'licencias/detalles/cambio-unidad/:id', data: { permisos: 'LICENCIAS_NAV' }, canActivate: [PermisosGuard], component: CambioUnidadComponent}, 
+
+            { path: 'licencias/detalles/transferencia-continuando/:id', data: { permisos: 'LICENCIAS_NAV' }, canActivate: [PermisosGuard], component: TransferenciaContinuandoComponent}, 
+
+            { path: 'licencias/detalles/transferencia-cambio-unidad/:id', data: { permisos: 'LICENCIAS_NAV' }, canActivate: [PermisosGuard], component: TransferenciaCambioUnidadComponent}, 
+            
+            { path: 'tipos-servicios', data: { permisos: 'CONFIGURACIONES_NAV' }, canActivate: [PermisosGuard], component: TiposServiciosComponent}, 
+
 
         ]
     }

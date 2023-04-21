@@ -169,8 +169,6 @@ export class VehiculosComponent implements OnInit {
     this.vehiculoSeleccionado = vehiculo;
     this.vehiculosService.getVehiculo(vehiculo.id).subscribe(({ vehiculo }) => {
 
-      console.log(vehiculo);
-
       this.patente = vehiculo.patente;
       this.marca = String(vehiculo.marca.id);
       this.modelo = String(vehiculo.modelo.id);
@@ -236,6 +234,18 @@ export class VehiculosComponent implements OnInit {
       return;
     }
 
+    // Verificacion: Motor vacio
+    if (this.motor.trim() === "") {
+      this.alertService.info('Debes colocar un número de motor');
+      return;
+    }
+
+    // Verificacion: Chasis vacio
+    if (this.chasis.trim() === "") {
+      this.alertService.info('Debes colocar un número de chasis');
+      return;
+    }
+
     // Verificacion: Año vacio
     if (!this.ano || this.ano < this.LIMIT_ANO) {
       this.alertService.info('Debes colocar un año válido');
@@ -272,23 +282,21 @@ export class VehiculosComponent implements OnInit {
 
   // Nuevos titulares
   nuevosTitulares(vehiculo: number): void {
-    
+
     let dataTitulares = [];
 
-    this.titulares.map( titular => {
+    this.titulares.map(titular => {
       dataTitulares.push({
         ...titular,
         vehiculo
       });
     })
 
-    console.log(dataTitulares);
-
     this.vehiculosTitulares.nuevosTitulares(dataTitulares).subscribe({
       next: () => {
         this.listarVehiculos();
-      },error: ({error}) => this.alertService.errorApi(error.message)
-    })  
+      }, error: ({ error }) => this.alertService.errorApi(error.message)
+    })
 
   }
 
@@ -310,6 +318,24 @@ export class VehiculosComponent implements OnInit {
     // Verificacion: Modelo vacio
     if (this.modelo.trim() === "") {
       this.alertService.info('Debes colocar una modelo');
+      return;
+    }
+
+    // Verificacion: Motor vacio
+    if (this.motor.trim() === "") {
+      this.alertService.info('Debes colocar un número de motor');
+      return;
+    }
+
+    // Verificacion: Chasis vacio
+    if (this.chasis.trim() === "") {
+      this.alertService.info('Debes colocar un número de chasis');
+      return;
+    }
+
+    // Verificacion: Año vacio
+    if (!this.ano || this.ano < this.LIMIT_ANO) {
+      this.alertService.info('Debes colocar un año válido');
       return;
     }
 
@@ -441,15 +467,15 @@ export class VehiculosComponent implements OnInit {
     this.sigemService.getPersona(data).subscribe({
       next: ({ persona }) => {
 
-        if(persona){
+        if (persona) {
           this.personaSeleccionada = persona;
-        }else{
+        } else {
           this.reiniciarFormularioPersona();
           this.dni = this.dniBusqueda;
           this.showModalTitulares = false;
           this.showModalAltaPersona = true;
         }
-        
+
         this.dniBusqueda = '';
         this.numero_titulo = '';
         this.porcentaje = null;
@@ -577,8 +603,6 @@ export class VehiculosComponent implements OnInit {
       updatorUser: this.authService.usuario.userId,
     });
 
-    console.log(this.titulares);
-
     this.personaSeleccionada = null;
     this.calcularTotalesTitulo();
 
@@ -595,7 +619,6 @@ export class VehiculosComponent implements OnInit {
 
   // Eliminar titular
   eliminarTitular(idPersona: number): void {
-    console.log(idPersona);
     this.titulares = this.titulares.filter(titular => titular.persona !== idPersona);
     this.calcularTotalesTitulo();
   }

@@ -230,7 +230,8 @@
 
         <div class="flex items-center mt-4">
             <button (click)="showModalVehiculo = false" class="btn-cancel"> Cancelar </button>
-            <button (click)="abrirTitulares()" class="btn-confirm ml-2"> Continuar </button>
+            <button *ngIf="estadoFormulario === 'crear'" (click)="abrirTitulares()" class="btn-confirm ml-2"> Continuar </button>
+            <button *ngIf="estadoFormulario === 'editar'" (click)="actualizarVehiculo()" class="btn-confirm ml-2"> Actualizar </button>
         </div>
       </div>
   </div>
@@ -295,7 +296,12 @@
                   <div class="inline-block max-h-screen overflow-y-auto min-w-full overflow-hidden pb-5">
                       <table class="min-w-full leading-normal">
                           <thead>
-                              <tr class="border">
+                                <tr class="border">
+                                    <th class="px-5 py-2 border-b-2 border-gray-200 bg-gray-100 text-left text-sm font-semibold text-gray-900 tracking-wider">
+                                        <div class="flex items-center focus:outline-none">
+                                            <span> Icono </span>
+                                        </div>
+                                    </th>                                   
                                   <th class="px-5 py-2 border-b-2 border-gray-200 bg-gray-100 text-left text-sm font-semibold text-gray-900 tracking-wider">
                                       <div (click)="ordenarPorColumna('patente')" class="cursor-pointer flex items-center focus:outline-none">
                                           <span> Patente </span>
@@ -377,59 +383,62 @@
                           </thead>
                           <tbody *ngIf="vehiculos">
                               <tr class="animate__animated animate__fadeIn" *ngFor="let vehiculo of vehiculos | paginate: { itemsPerPage: cantidadItems, currentPage: paginaActual, totalItems: totalItems }">
-                                  <td class="px-5 py-2 border-b border-gray-200 text-xs">
+                                    <td class="px-5 py-2 border-b border-gray-200 text-xs">
+                                        <img class="w-10" src="assets/img/vehiculo.svg" alt="vehiculo.svg">
+                                    </td>
+                                    <td class="px-5 py-2 border-b border-gray-200 text-xs">
                                       <p class="text-gray-900 w-max whitespace-no-wrap">
                                           {{ vehiculo.patente }}
                                       </p>
-                                  </td>
-                                  <td class="px-5 py-2 border-b border-gray-200 text-xs">
-                                      <p class="text-gray-900 w-max whitespace-no-wrap">
-                                          {{ vehiculo.marca.descripcion }}
-                                      </p>
-                                  </td>
-                                  <td class="px-5 py-2 border-b border-gray-200 text-xs">
-                                      <p class="text-gray-900 w-max whitespace-no-wrap">
-                                          {{ vehiculo.modelo.descripcion }}
-                                      </p>
-                                  </td>
-                                  <td class="px-5 py-2 border-b border-gray-200 text-xs">
-                                      <p class="text-gray-900 w-max whitespace-no-wrap">
-                                          {{ vehiculo.color.descripcion }}
-                                      </p>
-                                  </td>
-                                  <td class="px-5 py-2 border-b border-gray-200 text-xs">
-                                    <p class="text-gray-900 w-max whitespace-no-wrap">
-                                        {{ vehiculo.ano }}
-                                    </p>
-                                </td>
-                                  <td class="px-5 py-2 border-b border-gray-200 text-xs">
-                                      <p class="text-gray-900 whitespace-no-wrap">
-                                          {{ vehiculo.createdAt | fecha }}
-                                      </p>
-                                  </td>
-                                  <!-- <td class="px-5 py-2 border-b border-gray-200 text-xs">
-                                      <app-pastilla-estado [activo]=vehiculo.activo (click)="actualizarEstado(vehiculo)"></app-pastilla-estado>
-                                  </td> -->
-                                  <td class="px-5 py-2 border-b border-gray-200 text-xs text-center">
-                                      <span class="flex items-center justify-center text-gray-900 whitespace-no-wrap">
-                                          <app-boton-tabla [routerLink]="['/dashboard/vehiculos/titulares', vehiculo.id]" title="Titulares">
-                                              <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-                                                  <path stroke-linecap="round" stroke-linejoin="round" d="M11 3.055A9.001 9.001 0 1020.945 13H11V3.055z" />
-                                                  <path stroke-linecap="round" stroke-linejoin="round" d="M20.488 9H15V3.512A9.025 9.025 0 0120.488 9z" />
+                                    </td>
+                                    <td class="px-5 py-2 border-b border-gray-200 text-xs">
+                                        <p class="text-gray-900 w-max whitespace-no-wrap">
+                                            {{ vehiculo.marca.descripcion }}
+                                        </p>
+                                    </td>
+                                    <td class="px-5 py-2 border-b border-gray-200 text-xs">
+                                        <p class="text-gray-900 w-max whitespace-no-wrap">
+                                            {{ vehiculo.modelo.descripcion }}
+                                        </p>
+                                    </td>
+                                    <td class="px-5 py-2 border-b border-gray-200 text-xs">
+                                        <p class="text-gray-900 w-max whitespace-no-wrap">
+                                            {{ vehiculo.color.descripcion }}
+                                        </p>
+                                    </td>
+                                    <td class="px-5 py-2 border-b border-gray-200 text-xs">
+                                        <p class="text-gray-900 w-max whitespace-no-wrap">
+                                            {{ vehiculo.ano }}
+                                        </p>
+                                    </td>
+                                    <td class="px-5 py-2 border-b border-gray-200 text-xs">
+                                        <p class="text-gray-900 whitespace-no-wrap">
+                                            {{ vehiculo.createdAt | fecha }}
+                                        </p>
+                                    </td>
+                                    <!-- <td class="px-5 py-2 border-b border-gray-200 text-xs">
+                                        <app-pastilla-estado [activo]=vehiculo.activo (click)="actualizarEstado(vehiculo)"></app-pastilla-estado>
+                                    </td> -->
+                                    <td class="px-5 py-2 border-b border-gray-200 text-xs text-center">
+                                        <span class="flex items-center justify-center text-gray-900 whitespace-no-wrap">
+                                            <app-boton-tabla [routerLink]="['/dashboard/vehiculos/titulares', vehiculo.id]" title="Titulares">
+                                                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                                                    <path stroke-linecap="round" stroke-linejoin="round" d="M11 3.055A9.001 9.001 0 1020.945 13H11V3.055z" />
+                                                    <path stroke-linecap="round" stroke-linejoin="round" d="M20.488 9H15V3.512A9.025 9.025 0 0120.488 9z" />
+                                                    </svg>
+                                            </app-boton-tabla>
+                                            <app-boton-tabla class="ml-2" [routerLink]="['/dashboard/vehiculos/seguros', vehiculo.id]" title="Seguro de vehículo">
+                                                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                                                    <path stroke-linecap="round" stroke-linejoin="round" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" />
+                                                    </svg>
+                                            </app-boton-tabla>
+                                            <app-boton-tabla class="ml-2" (click)="abrirModal('editar', vehiculo)" title="Editar vehiculo">
+                                                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                                                    <path stroke-linecap="round" stroke-linejoin="round" d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z" />
                                                 </svg>
-                                          </app-boton-tabla>
-                                          <app-boton-tabla class="ml-2" [routerLink]="['/dashboard/vehiculos/seguros', vehiculo.id]" title="Seguro de vehículo">
-                                              <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-                                                  <path stroke-linecap="round" stroke-linejoin="round" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" />
-                                                </svg>
-                                          </app-boton-tabla>
-                                          <app-boton-tabla class="ml-2" (click)="abrirModal('editar', vehiculo)" title="Editar vehiculo">
-                                              <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-                                                  <path stroke-linecap="round" stroke-linejoin="round" d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z" />
-                                              </svg>
-                                          </app-boton-tabla>
-                                      </span>
-                                  </td>
+                                            </app-boton-tabla>
+                                        </span>
+                                    </td>
                               </tr>
                           </tbody>
                       </table>

@@ -28,6 +28,10 @@ import { VehiculosSegurosComponent } from './vehiculos/vehiculos-seguros.compone
 import { LicenciasComponent } from './licencias/licencias.component';
 import { LicenciasDetallesComponent } from './licencias/licencias-detalles.component';
 import { VehiculosTitularesComponent } from './vehiculos/vehiculos-titulares.component';
+import { CambioUnidadComponent } from './licencias/cambio-unidad.component';
+import { TransferenciaContinuandoComponent } from './licencias/transferencia-continuando.component';
+import { TransferenciaCambioUnidadComponent } from './licencias/transferencia-cambio-unidad.component';
+import { TiposServiciosComponent } from './tipos-servicios/tipos-servicios.component';
 
 
 @NgModule({
@@ -53,6 +57,10 @@ import { VehiculosTitularesComponent } from './vehiculos/vehiculos-titulares.com
     LicenciasComponent,
     LicenciasDetallesComponent,
     VehiculosTitularesComponent,
+    CambioUnidadComponent,
+    TransferenciaContinuandoComponent,
+    TransferenciaCambioUnidadComponent,
+    TiposServiciosComponent
   ],
   imports: [
     CommonModule,

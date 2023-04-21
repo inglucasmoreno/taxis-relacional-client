@@ -1,5 +1,6 @@
 
 export const itemsConfiguraciones = [
+  { svg: '', route: 'tipos-servicios', item: 'Tipos de servicios', permiso:['CONFIGURACIONES_NAV'] },
   { svg: '', route: 'vehiculos-colores', item: 'Colores de vehículos', permiso:['CONFIGURACIONES_NAV'] },
   { svg: '', route: 'vehiculos-marcas', item: 'Marcas de vehículos', permiso:['CONFIGURACIONES_NAV'] },
   { svg: '', route: 'relojes-marcas', item: 'Marcas de relojes', permiso:['CONFIGURACIONES_NAV'] },

@@ -14,6 +14,7 @@ import { VehiculosService } from 'src/app/services/vehiculos.service';
 import gsap from 'gsap';
 import { LicenciasChoferesService } from 'src/app/services/licencias-choferes.service';
 import { SigemService } from 'src/app/services/sigem.service';
+import { TiposServiciosService } from 'src/app/services/tipos-servicios.service';
 
 @Component({
   selector: 'app-licencias-detalles',
@@ -62,6 +63,7 @@ export class LicenciasDetallesComponent implements OnInit {
   public idLicencia: number = 0;
   public licencias: any = [];
   public licencia: any = null;
+  public tipo_servicio: string = '';
   public nro_licencia: string = '';
 
   // Licencia seleccionada
@@ -107,6 +109,9 @@ export class LicenciasDetallesComponent implements OnInit {
   // Modelos
   public modelos: any[];
 
+  // Tipos de servicio
+  public tipos_servicios: any[] = [];
+
   // Paginacion
   public paginaActual: number = 1;
   public cantidadItems: number = 10;
@@ -129,6 +134,7 @@ export class LicenciasDetallesComponent implements OnInit {
 
   constructor(
     private activatedRoute: ActivatedRoute,
+    private tiposServiciosService: TiposServiciosService,
     private dataService: DataService,
     private licenciasService: LicenciasService,
     private licenciasPermisionariosService: LicenciasPermisionariosService,
@@ -248,8 +254,6 @@ export class LicenciasDetallesComponent implements OnInit {
     this.sigemService.getPersona(data).subscribe({
       next: ({ persona, success }) => {
 
-        console.log(persona, success);
-
         if (!success) {
           this.flagNuevaPersona = true;
           this.nuevaPersonaData = {
@@ -268,23 +272,6 @@ export class LicenciasDetallesComponent implements OnInit {
 
       }, error: ({ error }) => this.alertService.errorApi(error.message)
     })
-
-    // this.personasService.getPersonaPorParametro({ parametro: 'dni', valor: this.dni }).subscribe({
-    //   next: ({ persona }) => {
-    //     if (!persona) {
-    //       this.flagNuevaPersona = true;
-    //       this.nuevaPersonaData = {
-    //         apellido_nombre: '',
-    //         dni: this.dni,
-    //         fecha_nacimiento: '',
-    //         telefono: '',
-    //         direccion: ''
-    //       }
-    //     };
-    //     this.personaSeleccionada = persona ? persona : null;
-    //     this.alertService.close();
-    //   }, error: ({ error }) => this.alertService.errorApi(error.message)
-    // })
 
   }
 
@@ -454,7 +441,6 @@ export class LicenciasDetallesComponent implements OnInit {
 
     this.vehiculosService.nuevoVehiculo(data).subscribe({
       next: ({ vehiculo }) => {
-        console.log(vehiculo);
         this.vehiculoSeleccionado = vehiculo;
         this.flagNuevoVehiculo = false;
         this.alertService.close();
@@ -500,7 +486,6 @@ export class LicenciasDetallesComponent implements OnInit {
 
     } else if (destino === 'chofer') {
       this.choferLicenciaSeleccionada = elemento;
-      console.log(this.choferLicenciaSeleccionada);
       this.flagEtapaDetalles = 'chofer';
       this.showModalDetalles = true;
 
@@ -673,22 +658,44 @@ export class LicenciasDetallesComponent implements OnInit {
 
   // Abrir editar licencia
   abrirEditarLicencia(): void {
-    this.nro_licencia = this.licencia.nro_licencia;
-    this.showModalEditarLicencia = true;  
+    this.alertService.loading();
+    this.tiposServiciosService.listarTipos().subscribe({
+      next: ({ tipos }) => {
+        this.tipos_servicios = tipos;
+        this.nro_licencia = this.licencia.nro_licencia;
+        this.tipo_servicio = this.licencia.tipo_servicio.id;
+        this.showModalEditarLicencia = true;
+        this.alertService.close();
+      }, error: ({ error }) => this.alertService.errorApi(error.message)
+    })
   }
 
   // Editar licencia
   editarLicencia(): void {
+
+    // Verificacion: Numero de licencia vacia
+    if (this.nro_licencia.trim() === "") {
+      this.alertService.info('Debes colocar un número de licencia');
+      return;
+    }
+
+    // Verificacion: Tipo de servicio
+    if (this.tipo_servicio === "") {
+      this.alertService.info('Debes seleccionar un tipo de servicio');
+      return;
+    }
+
     this.alertService.loading();
+
     this.licenciasService.actualizarLicencias(this.idLicencia, {
       nro_licencia: this.nro_licencia,
-      updatorUser: this.authService.usuario.userId    
+      tipo_servicio: this.tipo_servicio,
+      updatorUser: this.authService.usuario.userId
     }).subscribe({
       next: ({ licencia }) => {
-        console.log(licencia);
         this.licencia = licencia.licencia;
         this.showModalEditarLicencia = false;
-        this.alertService.close();  
+        this.alertService.close();
       }, error: ({ error }) => this.alertService.errorApi(error.message)
     })
   }

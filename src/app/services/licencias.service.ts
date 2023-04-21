@@ -37,7 +37,13 @@ export class LicenciasService {
     return this.http.get(`${base_url}/licencias`, {
       params: {
         direccion: parametros?.direccion || 1,
-        columna: parametros?.columna || 'descripcion'
+        columna: parametros?.columna || 'createdAt',
+        activo: parametros?.activo || '',
+        parametro: parametros?.parametro || '',
+        estado: parametros?.estado || '',
+        tipo_servicio: parametros?.tipo_servicio || '',
+        desde: parametros?.desde || 0,
+        cantidadItems: parametros?.cantidadItems || 10000000,
       },
       headers: this.getToken
     });

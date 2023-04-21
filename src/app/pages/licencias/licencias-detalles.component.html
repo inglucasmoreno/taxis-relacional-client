@@ -6,8 +6,19 @@
             <svg (click)="showModalEditarLicencia = false" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="cursor-pointer feather feather-x text-white mr-2"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
         </div>
         <div class="p-4 text-sm">
-            <p class="font-semibold"> <span class="text-red-500"> * </span> Número de licencia </p>
-            <input [(ngModel)]="nro_licencia" class="input-text-general" placeholder="Ej. 125" type="text">
+            <div class="w-full xl:flex xl:items-center">
+                <div class="xl:w-1/2">
+                    <p class="font-semibold"> <span class="text-red-500"> * </span> Número de licencia </p>
+                    <input [(ngModel)]="nro_licencia" class="input-text-general" placeholder="Ej. 125" type="text">
+                </div>
+                <div class="xl:w-1/2 xl:ml-4 mt-4 xl:mt-0">
+                    <p class="font-semibold"> <span class="text-red-500"> * </span> Tipo de servicio </p>
+                    <select [(ngModel)]="tipo_servicio" class="select-general">
+                        <option value=""> Seleccionar un tipo de servicio </option>
+                        <option *ngFor="let tipo of tipos_servicios" [value]="tipo.id"> {{ tipo.descripcion }} </option>
+                    </select>
+                </div>
+            </div>
             <div class="xl:flex items-center mt-4">
               <div class="xl:w-1/2">
                   <p class="font-semibold text-sm"> Fecha de alta </p>
@@ -48,17 +59,17 @@
         <svg (click)="showModalTramites = false" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="cursor-pointer feather feather-x text-white mr-2"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>    
     </div> 
     <div class="p-2">
-        <button class="w-full hover:bg-yellow-50 focus:outline-none border shadow font-semibold border-gray-400">
+        <button [routerLink]="['/dashboard/licencias/detalles/transferencia-continuando', idLicencia]" class="w-full hover:bg-yellow-50 focus:outline-none border shadow font-semibold border-gray-400">
             <div class="border-l-8 border-yellow-700 p-2">
                 Transferencia continuando
             </div> 
         </button>
-        <button class="w-full hover:bg-orange-50 focus:outline-none border mt-4 shadow font-semibold border-gray-400">
+        <button [routerLink]="['/dashboard/licencias/detalles/transferencia-cambio-unidad', idLicencia]" class="w-full hover:bg-orange-50 focus:outline-none border mt-4 shadow font-semibold border-gray-400">
             <div class="border-l-8 border-orange-700 p-2">
                 Transferencia con cambio de unidad
             </div>
         </button>
-        <button class="w-full hover:bg-blue-50 focus:outline-none mt-4 border shadow font-semibold border-gray-400">
+        <button [routerLink]="['/dashboard/licencias/detalles/cambio-unidad', idLicencia]" class="w-full hover:bg-blue-50 focus:outline-none mt-4 border shadow font-semibold border-gray-400">
             <div class="border-l-8 border-blue-700 p-2">
                 Cambio de unidad
             </div>
@@ -148,7 +159,7 @@
 <!-- Modal: Asignar vehículo -->
 <app-modal [showModal]="showModalAsignarVehiculo">
     <div class="flex items-center justify-between bg-primary-800 rounded-t p-2">
-        <h1 class=" text-white py-1 rounded-t text-lg"> Alta de vehículo </h1>
+        <h1 class=" text-white py-1 rounded-t text-lg"> Alta de unidad </h1>
         <svg (click)="cerrarModalNuevo('vehiculo')" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="cursor-pointer feather feather-x text-white mr-2"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
     </div>
     <div>
@@ -256,14 +267,14 @@
             </div>
         </div>
         <div class="flex items-center mt-4">
-            <button (click)="asignarVehiculo()" class="border focus:outline-none border-green-700 hover:bg-green-800 text-white bg-green-700 p-2 rounded w-1/2"> Aceptar </button>
-            <button (click)="eliminarVehiculo()" class="border focus:outline-none ml-2 border-red-700 hover:bg-red-800 text-white bg-red-700 p-2 rounded w-1/2"> Regresar </button>
+            <button (click)="eliminarVehiculo()" class="border focus:outline-none border-red-700 hover:bg-red-800 text-white bg-red-700 p-2 rounded w-1/2"> Regresar </button>
+            <button (click)="asignarVehiculo()" class="border focus:outline-none ml-2 border-green-700 hover:bg-green-800 text-white bg-green-700 p-2 rounded w-1/2"> Aceptar </button>
         </div>
     </div>    
 </app-modal>
 
-    <!-- Modal: Asginar persona -> Permisionario o Chofer -->
-    <app-modal [showModal]="showModalAsignarPersona">
+<!-- Modal: Asginar persona -> Permisionario o Chofer -->
+<app-modal [showModal]="showModalAsignarPersona">
     
     <div class="flex items-center justify-between bg-primary-800 rounded-t p-2">
         <h1 class=" text-white py-1 rounded-t text-lg"> {{ flagEtapaPersona === 'permisionario' ? 'Alta de permisionario' : 'Alta de chofer' }}  </h1>
@@ -292,8 +303,8 @@
     </div>
     
     <div *ngIf="personaSeleccionada" class="flex items-center mt-2 px-2 pb-2 text-sm">
-        <button (click)="flagEtapaPersona === 'permisionario' ? asignarPermisionario() : asignarChofer()" class="border shadow focus:outline-none border-green-700 text-white bg-green-700 hover:bg-green-800 p-2 rounded w-1/2"> Aceptar </button>
-        <button (click)="eliminarPersona()" class="border shadow focus:outline-none ml-2 border-red-700 text-white bg-red-700 hover:bg-red-800 p-2 rounded w-1/2"> Regresar </button>
+        <button (click)="eliminarPersona()" class="border shadow focus:outline-none border-red-700 text-white bg-red-700 hover:bg-red-800 p-2 rounded w-1/2"> Regresar </button>
+        <button (click)="flagEtapaPersona === 'permisionario' ? asignarPermisionario() : asignarChofer()" class="border shadow focus:outline-none border-green-700 text-white ml-2 bg-green-700 hover:bg-green-800 p-2 rounded w-1/2"> Aceptar </button>
     </div>
 
 
@@ -331,8 +342,8 @@
         </div>
     </div>
     <div class="flex items-center"f>
-        <button (click)="nuevaPersona()" class="bg-green-700 focus:outline-none hover:bg-green-800 shadow text-white w-full p-2 rounded mt-4"> Crear persona </button>
-        <button (click)="flagNuevaPersona = false" class="bg-red-700 focus:outline-none ml-2 hover:bg-red-800 shadow text-white w-full border border-gray-300 p-2 rounded mt-4"> Regresar </button>
+        <button (click)="flagNuevaPersona = false" class="bg-red-700 focus:outline-none hover:bg-red-800 shadow text-white w-full border border-gray-300 p-2 rounded mt-4"> Regresar </button>
+        <button (click)="nuevaPersona()" class="bg-green-700 focus:outline-none ml-2 hover:bg-green-800 shadow text-white w-full p-2 rounded mt-4"> Crear persona </button>
     </div>
   </div>
 </app-modal>
@@ -362,7 +373,11 @@
                   </svg>                  
             </button>
         </div>
-        <p [ngClass]="{'bg-green-100 border-green-400 text-green-700':licencia?.estado === 'Habilitada', 'bg-red-100 border-red-400 text-red-700':licencia?.estado === 'Inhabilitada'}" class="border w-max mt-1 px-2 py-1 font-semibold rounded text-xs"> {{ licencia?.estado }} </p>
+        <div class="flex items-center">
+            <p class="text-xs bg-blue-100 border text-blue-800 border-blue-300 font-semibold px-2 py-1 rounded w-max"> {{ licencia?.tipo_servicio.descripcion }} </p>
+            <p [ngClass]="{'bg-green-100 border-green-400 text-green-700':licencia?.estado === 'Habilitada', 'bg-red-100 border-red-400 text-red-700':licencia?.estado === 'Inhabilitada'}" class="border w-max ml-1 px-2 py-1 font-semibold rounded text-xs"> {{ licencia?.estado }} </p>
+        </div> 
+
       </div>
     </div>
 
@@ -391,8 +406,8 @@
     <div class="border-gray-400">
       <div class="flex items-center justify-between text-lg p-2">
         <div class="flex items-center">
-            <img class="w-20" src="/assets/img/permisionario.svg">
-            <div>
+            <img class="w-16 ml-2" src="/assets/img/permisionario.svg">
+            <div class="ml-4">
                 <p class="font-semibold text-xl"> Permisionario activo </p>
                 <div *ngIf="permisionario">
                     <p class="text-xs"> {{ permisionario?.persona.apellido }} {{ permisionario?.persona.nombre }} </p>
@@ -525,7 +540,7 @@
       <div class="flex items-center">
         <img class="w-20" src="/assets/img/vehiculo.svg">
         <div class="ml-4">
-            <p class="font-semibold text-xl"> Vehículo activo </p>
+            <p class="font-semibold text-xl"> Unidad activa </p>
             <div *ngIf="vehiculo">
                 <p class="text-xs"> {{ vehiculo?.marca.descripcion }} {{ vehiculo?.modelo.descripcion }} </p>
                 <p class="text-xs"> {{ vehiculo?.patente }} </p>
@@ -536,12 +551,12 @@
         </div>
       </div>
       <button *ngIf="vehiculosLicencia.length === 0" (click)="abrirModalNuevo('vehiculo')" class="hover:text-secondaryColor bg-gray-100 font-semibold text-sm mt-4 focus:outline-none p-2 mr-2 border border-gray-400 rounded">
-        Alta de vehículo
+        Alta de unidad
       </button>
     </div>
   
     <div *ngIf="vehiculosLicencia.length !== 0" class="mt-2">
-        <h1 class="font-semibold ml-4"> Historial de Vehículos de la Licencia </h1>
+        <h1 class="font-semibold ml-4"> Historial de Unidades de la Licencia </h1>
     </div>
 
     <div *ngIf="vehiculosLicencia.length !== 0" class="px-4 py-2 max-h-56 overflow-x-auto">
@@ -654,7 +669,7 @@
     <div class="border-t border-gray-400 mt-4">
         <div class="flex items-center justify-between text-lg rounded p-2">
           <div class="flex items-center">
-            <img class="w-20" src="/assets/img/chofer.svg">
+            <img class="w-16 ml-2" src="/assets/img/chofer.svg">
             <div class="ml-4">
                 <p class="font-semibold text-xl"> Choferes </p>
                 <div *ngIf="choferes?.length === 0">
