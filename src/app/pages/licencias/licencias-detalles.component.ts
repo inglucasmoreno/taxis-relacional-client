@@ -127,9 +127,19 @@ export class LicenciasDetallesComponent implements OnInit {
   }
 
   // Ordenar
-  public ordenar: any = {
+  public ordenarPermisionarios: any = {
     direccion: -1,  // Asc (1) | Desc (-1)
-    columna: 'createdAt'
+    columna: 'fecha_alta'
+  }
+
+  public ordenarVehiculos: any = {
+    direccion: -1,  // Asc (1) | Desc (-1)
+    columna: 'fecha_alta'
+  }
+
+  public ordenarChoferes: any = {
+    direccion: -1,  // Asc (1) | Desc (-1)
+    columna: 'fecha_alta'
   }
 
   constructor(
@@ -173,8 +183,8 @@ export class LicenciasDetallesComponent implements OnInit {
 
         const parametrosPermisionarios = {
           licencia: this.idLicencia,
-          columna: this.ordenar.columna,
-          direccion: this.ordenar.direccion
+          columna: this.ordenarPermisionarios.columna,
+          direccion: this.ordenarPermisionarios.direccion
         }
 
         // Historial de permisionarios
@@ -184,8 +194,8 @@ export class LicenciasDetallesComponent implements OnInit {
 
             const parametrosVehiculos = {
               licencia: this.idLicencia,
-              columna: this.ordenar.columna,
-              direccion: this.ordenar.direccion
+              columna: this.ordenarVehiculos.columna,
+              direccion: this.ordenarVehiculos.direccion
             }
 
             // Historial de vehiculos
@@ -208,8 +218,8 @@ export class LicenciasDetallesComponent implements OnInit {
   listarPermisionarios(): void {
     const parametros = {
       licencia: this.idLicencia,
-      columna: this.ordenar.columna,
-      direccion: this.ordenar.direccion
+      columna: this.ordenarPermisionarios.columna,
+      direccion: this.ordenarPermisionarios.direccion
     }
     this.licenciasPermisionariosService.listarRelaciones(parametros).subscribe({
       next: ({ relaciones }) => {
@@ -223,12 +233,27 @@ export class LicenciasDetallesComponent implements OnInit {
   listarVehiculos(): void {
     const parametros = {
       licencia: this.idLicencia,
-      columna: this.ordenar.columna,
-      direccion: this.ordenar.direccion
+      columna: this.ordenarVehiculos.columna,
+      direccion: this.ordenarVehiculos.direccion
     }
     this.licenciasVehiculosService.listarRelaciones(parametros).subscribe({
       next: ({ relaciones }) => {
         this.vehiculosLicencia = relaciones;
+        this.alertService.close();
+      }, error: ({ error }) => this.alertService.errorApi(error.message)
+    })
+  }
+
+  // Listar choferes
+  listarChoferes(): void {
+    const parametros = {
+      licencia: this.idLicencia,
+      columna: this.ordenarChoferes.columna,
+      direccion: this.ordenarChoferes.direccion
+    }
+    this.licenciasChoferesService.listarRelaciones(parametros).subscribe({
+      next: ({ relaciones }) => {
+        this.choferes = relaciones;
         this.alertService.close();
       }, error: ({ error }) => this.alertService.errorApi(error.message)
     })
@@ -712,12 +737,28 @@ export class LicenciasDetallesComponent implements OnInit {
     this.vehiculoSeleccionado = null;
   }
 
-  // Ordenar por columna
-  ordenarPorColumna(columna: string) {
-    this.ordenar.columna = columna;
-    this.ordenar.direccion = this.ordenar.direccion == 1 ? -1 : 1;
+  // Ordenar por columna - Permisionarios
+  ordenarPorColumnaPermisionarios(columna: string) {
+    this.ordenarPermisionarios.columna = columna;
+    this.ordenarPermisionarios.direccion = this.ordenarPermisionarios.direccion == 1 ? -1 : 1;
     this.alertService.loading();
     this.listarPermisionarios();
+  }
+
+  // Ordenar por columna - Vehiculos
+  ordenarPorColumnaVehiculos(columna: string) {
+    this.ordenarVehiculos.columna = columna;
+    this.ordenarVehiculos.direccion = this.ordenarVehiculos.direccion == 1 ? -1 : 1;
+    this.alertService.loading();
+    this.listarVehiculos();
+  }
+
+  // Ordenar por columna - Choferes
+  ordenarPorColumnaChoferes(columna: string) {
+    this.ordenarChoferes.columna = columna;
+    this.ordenarChoferes.direccion = this.ordenarChoferes.direccion == 1 ? -1 : 1;
+    this.alertService.loading();
+    this.listarChoferes();
   }
 
 }

@@ -34,6 +34,7 @@ export class LicenciasChoferesService {
 
   // Listar relaciones
   listarRelaciones(parametros?: any): Observable<any> {
+    console.log(parametros);
     return this.http.get(`${base_url}/licencias-choferes`, {
       params: {
         direccion: parametros?.direccion || 1,

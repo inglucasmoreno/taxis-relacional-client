@@ -74,16 +74,6 @@
                 Cambio de unidad
             </div>
         </button>
-        <!-- <button class="w-full hover:bg-green-50 focus:outline-none mt-4 border shadow font-semibold border-gray-400">
-            <div class="border-l-8 border-green-700 p-2">
-                Asentar chofer
-            </div>
-        </button>
-        <button class="w-full hover:bg-red-50 focus:outline-none mt-4 border shadow font-semibold border-gray-400">
-            <div class="border-l-8 border-red-700 p-2">
-                Baja de chofer
-            </div> 
-        </button> -->
     </div>
 </app-modal>
 
@@ -135,7 +125,7 @@
     <div *ngIf="flagEtapaBaja === 'chofer'" class="text-center py-4 text-xl">
         <div class="flex items-center justify-between">
             <div class="flex items-center w-1/2">
-                <img class="w-20" src="/assets/img/chofer.svg" alt="">
+                <img class="ml-2 w-20" src="/assets/img/chofer.svg" alt="chofer.svg">
                 <div class="ml-4 text-sm">
                     <p class="font-semibold"> {{ this.choferLicenciaSeleccionada?.persona.apellido + ' ' + this.choferLicenciaSeleccionada?.persona.nombre }} </p>
                     <p> DNI {{ this.choferLicenciaSeleccionada?.persona.dni }}  </p>
@@ -433,64 +423,59 @@
                 <thead>
                     <tr class="border">
                         <th class="px-5 py-2 border-b-2 border-gray-200 bg-gray-100 text-left text-sm font-semibold text-gray-900 tracking-wider">
-                            <div (click)="ordenarPorColumna('apellido')" class="cursor-pointer flex items-center focus:outline-none">
+                            <div (click)="ordenarPorColumnaPermisionarios('apellido')" class="cursor-pointer flex items-center focus:outline-none">
                                 <span> Apellido </span>
                                 <span class="ml-2 text-gray-600">    
-                                    <svg *ngIf="ordenar.columna == 'apellido' && ordenar.direccion == 1" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-chevron-down"><polyline points="6 9 12 15 18 9"></polyline></svg>                                   
-                                    <svg *ngIf="ordenar.columna == 'apellido' && ordenar.direccion == -1" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-chevron-up"><polyline points="18 15 12 9 6 15"></polyline></svg>
-                                    <svg *ngIf="ordenar.columna != 'apellido'" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-minus"><line x1="5" y1="12" x2="19" y2="12"></line></svg>
+                                    <svg *ngIf="ordenarPermisionarios.columna == 'apellido' && ordenarPermisionarios.direccion == 1" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-chevron-down"><polyline points="6 9 12 15 18 9"></polyline></svg>                                   
+                                    <svg *ngIf="ordenarPermisionarios.columna == 'apellido' && ordenarPermisionarios.direccion == -1" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-chevron-up"><polyline points="18 15 12 9 6 15"></polyline></svg>
+                                    <svg *ngIf="ordenarPermisionarios.columna != 'apellido'" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-minus"><line x1="5" y1="12" x2="19" y2="12"></line></svg>
                                 </span>
                             </div>
                         </th>
                         <th class="px-5 py-2 border-b-2 border-gray-200 bg-gray-100 text-left text-sm font-semibold text-gray-900 tracking-wider">
-                            <div (click)="ordenarPorColumna('nombre')" class="cursor-pointer flex items-center focus:outline-none">
+                            <div (click)="ordenarPorColumnaPermisionarios('nombre')" class="cursor-pointer flex items-center focus:outline-none">
                                 <span> Nombre </span>
                                 <span class="ml-2 text-gray-600">    
-                                    <svg *ngIf="ordenar.columna == 'nombre' && ordenar.direccion == 1" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-chevron-down"><polyline points="6 9 12 15 18 9"></polyline></svg>                                   
-                                    <svg *ngIf="ordenar.columna == 'nombre' && ordenar.direccion == -1" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-chevron-up"><polyline points="18 15 12 9 6 15"></polyline></svg>
-                                    <svg *ngIf="ordenar.columna != 'nombre'" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-minus"><line x1="5" y1="12" x2="19" y2="12"></line></svg>
+                                    <svg *ngIf="ordenarPermisionarios.columna == 'nombre' && ordenarPermisionarios.direccion == 1" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-chevron-down"><polyline points="6 9 12 15 18 9"></polyline></svg>                                   
+                                    <svg *ngIf="ordenarPermisionarios.columna == 'nombre' && ordenarPermisionarios.direccion == -1" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-chevron-up"><polyline points="18 15 12 9 6 15"></polyline></svg>
+                                    <svg *ngIf="ordenarPermisionarios.columna != 'nombre'" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-minus"><line x1="5" y1="12" x2="19" y2="12"></line></svg>
                                 </span>
                             </div>
                         </th>
                         <th class="px-5 py-2 border-b-2 border-gray-200 bg-gray-100 text-left text-sm font-semibold text-gray-900 tracking-wider">
-                          <div (click)="ordenarPorColumna('dni')" class="cursor-pointer flex items-center focus:outline-none">
+                          <div (click)="ordenarPorColumnaPermisionarios('dni')" class="cursor-pointer flex items-center focus:outline-none">
                               <span> DNI </span>
                               <span class="ml-2 text-gray-600">    
-                                  <svg *ngIf="ordenar.columna == 'dni' && ordenar.direccion == 1" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-chevron-down"><polyline points="6 9 12 15 18 9"></polyline></svg>                                   
-                                  <svg *ngIf="ordenar.columna == 'dni' && ordenar.direccion == -1" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-chevron-up"><polyline points="18 15 12 9 6 15"></polyline></svg>
-                                  <svg *ngIf="ordenar.columna != 'dni'" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-minus"><line x1="5" y1="12" x2="19" y2="12"></line></svg>
+                                  <svg *ngIf="ordenarPermisionarios.columna == 'dni' && ordenarPermisionarios.direccion == 1" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-chevron-down"><polyline points="6 9 12 15 18 9"></polyline></svg>                                   
+                                  <svg *ngIf="ordenarPermisionarios.columna == 'dni' && ordenarPermisionarios.direccion == -1" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-chevron-up"><polyline points="18 15 12 9 6 15"></polyline></svg>
+                                  <svg *ngIf="ordenarPermisionarios.columna != 'dni'" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-minus"><line x1="5" y1="12" x2="19" y2="12"></line></svg>
                               </span>
                           </div>
                       </th>
                       <th class="px-5 border-b-2 border-gray-200 bg-gray-100 text-sm font-semibold text-gray-900 tracking-wider">
-                          <div (click)="ordenarPorColumna('fecha_alta')" class="cursor-pointer w-max flex items-center justify-center focus:outline-none">
+                          <div (click)="ordenarPorColumnaPermisionarios('fecha_alta')" class="cursor-pointer w-max flex items-center justify-center focus:outline-none">
                               <span>
                                   Fecha de alta                                                
                               </span>
                               <span class="ml-2">
-                                  <svg *ngIf="ordenar.columna == 'fecha_alta' && ordenar.direccion == 1" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-chevron-down"><polyline points="6 9 12 15 18 9"></polyline></svg>                                   
-                                  <svg *ngIf="ordenar.columna == 'fecha_alta' && ordenar.direccion == -1" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-chevron-up"><polyline points="18 15 12 9 6 15"></polyline></svg>
-                                  <svg *ngIf="ordenar.columna != 'fecha_alta'" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-minus"><line x1="5" y1="12" x2="19" y2="12"></line></svg>
+                                  <svg *ngIf="ordenarPermisionarios.columna == 'fecha_alta' && ordenarPermisionarios.direccion == 1" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-chevron-down"><polyline points="6 9 12 15 18 9"></polyline></svg>                                   
+                                  <svg *ngIf="ordenarPermisionarios.columna == 'fecha_alta' && ordenarPermisionarios.direccion == -1" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-chevron-up"><polyline points="18 15 12 9 6 15"></polyline></svg>
+                                  <svg *ngIf="ordenarPermisionarios.columna != 'fecha_alta'" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-minus"><line x1="5" y1="12" x2="19" y2="12"></line></svg>
                               </span>
                           </div>
                       </th>
                       <th class="px-5 border-b-2 border-gray-200 bg-gray-100 text-sm font-semibold text-gray-900 tracking-wider">
-                        <div (click)="ordenarPorColumna('fecha_baja')" class="cursor-pointer w-max flex items-center justify-center focus:outline-none">
+                        <div (click)="ordenarPorColumnaPermisionarios('fecha_baja')" class="cursor-pointer w-max flex items-center justify-center focus:outline-none">
                             <span>
                                 Fecha de baja                                                
                             </span>
                             <span class="ml-2">
-                                <svg *ngIf="ordenar.columna == 'fecha_baja' && ordenar.direccion == 1" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-chevron-down"><polyline points="6 9 12 15 18 9"></polyline></svg>                                   
-                                <svg *ngIf="ordenar.columna == 'fecha_baja' && ordenar.direccion == -1" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-chevron-up"><polyline points="18 15 12 9 6 15"></polyline></svg>
-                                <svg *ngIf="ordenar.columna != 'fecha_baja'" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-minus"><line x1="5" y1="12" x2="19" y2="12"></line></svg>
+                                <svg *ngIf="ordenarPermisionarios.columna == 'fecha_baja' && ordenarPermisionarios.direccion == 1" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-chevron-down"><polyline points="6 9 12 15 18 9"></polyline></svg>                                   
+                                <svg *ngIf="ordenarPermisionarios.columna == 'fecha_baja' && ordenarPermisionarios.direccion == -1" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-chevron-up"><polyline points="18 15 12 9 6 15"></polyline></svg>
+                                <svg *ngIf="ordenarPermisionarios.columna != 'fecha_baja'" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-minus"><line x1="5" y1="12" x2="19" y2="12"></line></svg>
                             </span>
                         </div>
                         </th>
-                        <!-- <th class="px-5 border-b-2 border-gray-200 bg-gray-100 text-sm font-semibold text-gray-900 tracking-wider">
-                            <div class="text-center focus:outline-none">
-                                Accion                                               
-                            </div>
-                        </th> -->
                     </tr>
                 </thead>
                 <tbody *ngIf="permisionariosLicencia?.length > 0">
@@ -520,13 +505,6 @@
                               {{ relacion.activo ? 'Permisionario activo' : relacion.fecha_baja | fecha }}
                           </p>
                         </td>
-                        <!-- <td class="px-5 border-b border-gray-200 text-center text-xs">
-                            <button (click)="abrirModalBaja(relacion, 'permisionario')" *ngIf="relacion.activo" [title]="'Dar de baja a ' + relacion.persona.apellido_nombre" class="bg-white border border-gray-400 focus:outline-none hover:text-red-500 p-2 rounded">
-                                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-4 h-4">
-                                    <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
-                                </svg> 
-                            </button>
-                        </td> -->
                     </tr>
                 </tbody>
             </table>
@@ -565,64 +543,59 @@
                 <thead>
                     <tr class="border">
                         <th class="px-5 py-2 border-b-2 border-gray-200 bg-gray-100 text-left text-sm font-semibold text-gray-900 tracking-wider">
-                            <div (click)="ordenarPorColumna('patente')" class="cursor-pointer flex items-center focus:outline-none">
+                            <div (click)="ordenarPorColumnaVehiculos('patente')" class="cursor-pointer flex items-center focus:outline-none">
                                 <span> Patente </span>
                                 <span class="ml-2 text-gray-600">    
-                                    <svg *ngIf="ordenar.columna == 'patente' && ordenar.direccion == 1" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-chevron-down"><polyline points="6 9 12 15 18 9"></polyline></svg>                                   
-                                    <svg *ngIf="ordenar.columna == 'patente' && ordenar.direccion == -1" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-chevron-up"><polyline points="18 15 12 9 6 15"></polyline></svg>
-                                    <svg *ngIf="ordenar.columna != 'patente'" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-minus"><line x1="5" y1="12" x2="19" y2="12"></line></svg>
+                                    <svg *ngIf="ordenarVehiculos.columna == 'patente' && ordenarVehiculos.direccion == 1" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-chevron-down"><polyline points="6 9 12 15 18 9"></polyline></svg>                                   
+                                    <svg *ngIf="ordenarVehiculos.columna == 'patente' && ordenarVehiculos.direccion == -1" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-chevron-up"><polyline points="18 15 12 9 6 15"></polyline></svg>
+                                    <svg *ngIf="ordenarVehiculos.columna != 'patente'" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-minus"><line x1="5" y1="12" x2="19" y2="12"></line></svg>
                                 </span>
                             </div>
                         </th>
                         <th class="px-5 py-2 border-b-2 border-gray-200 bg-gray-100 text-left text-sm font-semibold text-gray-900 tracking-wider">
-                          <div (click)="ordenarPorColumna('marca.descripcion')" class="cursor-pointer flex items-center focus:outline-none">
+                          <div (click)="ordenarPorColumnaVehiculos('marca')" class="cursor-pointer flex items-center focus:outline-none">
                               <span> Marca </span>
                               <span class="ml-2 text-gray-600">    
-                                  <svg *ngIf="ordenar.columna == 'marca.descripcion' && ordenar.direccion == 1" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-chevron-down"><polyline points="6 9 12 15 18 9"></polyline></svg>                                   
-                                  <svg *ngIf="ordenar.columna == 'marca.descripcion' && ordenar.direccion == -1" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-chevron-up"><polyline points="18 15 12 9 6 15"></polyline></svg>
-                                  <svg *ngIf="ordenar.columna != 'marca.descripcion'" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-minus"><line x1="5" y1="12" x2="19" y2="12"></line></svg>
+                                  <svg *ngIf="ordenarVehiculos.columna == 'marca' && ordenarVehiculos.direccion == 1" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-chevron-down"><polyline points="6 9 12 15 18 9"></polyline></svg>                                   
+                                  <svg *ngIf="ordenarVehiculos.columna == 'marca' && ordenarVehiculos.direccion == -1" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-chevron-up"><polyline points="18 15 12 9 6 15"></polyline></svg>
+                                  <svg *ngIf="ordenarVehiculos.columna != 'marca'" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-minus"><line x1="5" y1="12" x2="19" y2="12"></line></svg>
                               </span>
                           </div>
                         </th>
                         <th class="px-5 py-2 border-b-2 border-gray-200 bg-gray-100 text-left text-sm font-semibold text-gray-900 tracking-wider">
-                            <div (click)="ordenarPorColumna('modelo.descripcion')" class="cursor-pointer flex items-center focus:outline-none">
+                            <div (click)="ordenarPorColumnaVehiculos('modelo')" class="cursor-pointer flex items-center focus:outline-none">
                                 <span> Modelo </span>
                                 <span class="ml-2 text-gray-600">    
-                                    <svg *ngIf="ordenar.columna == 'modelo.descripcion' && ordenar.direccion == 1" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-chevron-down"><polyline points="6 9 12 15 18 9"></polyline></svg>                                   
-                                    <svg *ngIf="ordenar.columna == 'modelo.descripcion' && ordenar.direccion == -1" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-chevron-up"><polyline points="18 15 12 9 6 15"></polyline></svg>
-                                    <svg *ngIf="ordenar.columna != 'modelo.descripcion'" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-minus"><line x1="5" y1="12" x2="19" y2="12"></line></svg>
+                                    <svg *ngIf="ordenarVehiculos.columna == 'modelo' && ordenarVehiculos.direccion == 1" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-chevron-down"><polyline points="6 9 12 15 18 9"></polyline></svg>                                   
+                                    <svg *ngIf="ordenarVehiculos.columna == 'modelo' && ordenarVehiculos.direccion == -1" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-chevron-up"><polyline points="18 15 12 9 6 15"></polyline></svg>
+                                    <svg *ngIf="ordenarVehiculos.columna != 'modelo'" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-minus"><line x1="5" y1="12" x2="19" y2="12"></line></svg>
                                 </span>
                             </div>
                           </th>
                         <th class="px-5 border-b-2 border-gray-200 bg-gray-100 text-sm font-semibold text-gray-900 tracking-wider">
-                            <div (click)="ordenarPorColumna('fecha_alta')" class="cursor-pointer w-max flex items-center justify-center focus:outline-none">
+                            <div (click)="ordenarPorColumnaVehiculos('fecha_alta')" class="cursor-pointer w-max flex items-center justify-center focus:outline-none">
                                 <span>
                                     Fecha de alta                                                
                                 </span>
                                 <span class="ml-2">
-                                    <svg *ngIf="ordenar.columna == 'fecha_alta' && ordenar.direccion == 1" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-chevron-down"><polyline points="6 9 12 15 18 9"></polyline></svg>                                   
-                                    <svg *ngIf="ordenar.columna == 'fecha_alta' && ordenar.direccion == -1" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-chevron-up"><polyline points="18 15 12 9 6 15"></polyline></svg>
-                                    <svg *ngIf="ordenar.columna != 'fecha_alta'" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-minus"><line x1="5" y1="12" x2="19" y2="12"></line></svg>
+                                    <svg *ngIf="ordenarVehiculos.columna == 'fecha_alta' && ordenarVehiculos.direccion == 1" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-chevron-down"><polyline points="6 9 12 15 18 9"></polyline></svg>                                   
+                                    <svg *ngIf="ordenarVehiculos.columna == 'fecha_alta' && ordenarVehiculos.direccion == -1" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-chevron-up"><polyline points="18 15 12 9 6 15"></polyline></svg>
+                                    <svg *ngIf="ordenarVehiculos.columna != 'fecha_alta'" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-minus"><line x1="5" y1="12" x2="19" y2="12"></line></svg>
                                 </span>
                             </div>
                         </th>
                         <th class="px-5 border-b-2 border-gray-200 bg-gray-100 text-sm font-semibold text-gray-900 tracking-wider">
-                            <div (click)="ordenarPorColumna('fecha_baja')" class="cursor-pointer w-max flex items-center justify-center focus:outline-none">
+                            <div (click)="ordenarPorColumnaVehiculos('fecha_baja')" class="cursor-pointer w-max flex items-center justify-center focus:outline-none">
                                 <span>
                                     Fecha de baja                                                
                                 </span>
                                 <span class="ml-2">
-                                    <svg *ngIf="ordenar.columna == 'fecha_baja' && ordenar.direccion == 1" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-chevron-down"><polyline points="6 9 12 15 18 9"></polyline></svg>                                   
-                                    <svg *ngIf="ordenar.columna == 'fecha_baja' && ordenar.direccion == -1" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-chevron-up"><polyline points="18 15 12 9 6 15"></polyline></svg>
-                                    <svg *ngIf="ordenar.columna != 'fecha_baja'" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-minus"><line x1="5" y1="12" x2="19" y2="12"></line></svg>
+                                    <svg *ngIf="ordenarVehiculos.columna == 'fecha_baja' && ordenarVehiculos.direccion == 1" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-chevron-down"><polyline points="6 9 12 15 18 9"></polyline></svg>                                   
+                                    <svg *ngIf="ordenarVehiculos.columna == 'fecha_baja' && ordenarVehiculos.direccion == -1" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-chevron-up"><polyline points="18 15 12 9 6 15"></polyline></svg>
+                                    <svg *ngIf="ordenarVehiculos.columna != 'fecha_baja'" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-minus"><line x1="5" y1="12" x2="19" y2="12"></line></svg>
                                 </span>
                             </div>
                         </th>
-                        <!-- <th class="px-5 border-b-2 border-gray-200 bg-gray-100 text-sm font-semibold text-gray-900 tracking-wider">
-                            <div class="text-center focus:outline-none">
-                                Accion                                               
-                            </div>
-                        </th> -->
                     </tr>
                 </thead>
                 <tbody *ngIf="vehiculosLicencia?.length > 0">
@@ -652,13 +625,6 @@
                             {{ relacion.activo ? 'Vehículo activo' : relacion.fecha_baja | fecha }}
                           </p>
                       </td>
-                      <!-- <td class="px-5 border-b border-gray-200 text-center text-xs">
-                        <button (click)="abrirModalBaja(relacion, 'vehiculo')" *ngIf="relacion.activo" [title]="'Dar de baja a ' + relacion.vehiculo.patente" class="bg-white border border-gray-400 focus:outline-none hover:text-red-500 p-2 rounded">
-                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-4 h-4">
-                                <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
-                            </svg> 
-                        </button>
-                    </td> -->
                     </tr>
                 </tbody>
             </table>
@@ -692,56 +658,56 @@
                     <thead>
                         <tr class="border">
                             <th class="px-5 py-2 border-b-2 border-gray-200 bg-gray-100 text-left text-sm font-semibold text-gray-900 tracking-wider">
-                                <div (click)="ordenarPorColumna('apellido')" class="cursor-pointer flex items-center focus:outline-none">
+                                <div (click)="ordenarPorColumnaChoferes('apellido')" class="cursor-pointer flex items-center focus:outline-none">
                                     <span> Apellido </span>
                                     <span class="ml-2 text-gray-600">    
-                                        <svg *ngIf="ordenar.columna == 'apellido' && ordenar.direccion == 1" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-chevron-down"><polyline points="6 9 12 15 18 9"></polyline></svg>                                   
-                                        <svg *ngIf="ordenar.columna == 'apellido' && ordenar.direccion == -1" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-chevron-up"><polyline points="18 15 12 9 6 15"></polyline></svg>
-                                        <svg *ngIf="ordenar.columna != 'apellido'" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-minus"><line x1="5" y1="12" x2="19" y2="12"></line></svg>
+                                        <svg *ngIf="ordenarChoferes.columna == 'apellido' && ordenarChoferes.direccion == 1" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-chevron-down"><polyline points="6 9 12 15 18 9"></polyline></svg>                                   
+                                        <svg *ngIf="ordenarChoferes.columna == 'apellido' && ordenarChoferes.direccion == -1" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-chevron-up"><polyline points="18 15 12 9 6 15"></polyline></svg>
+                                        <svg *ngIf="ordenarChoferes.columna != 'apellido'" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-minus"><line x1="5" y1="12" x2="19" y2="12"></line></svg>
                                     </span>
                                 </div>
                             </th>
                             <th class="px-5 py-2 border-b-2 border-gray-200 bg-gray-100 text-left text-sm font-semibold text-gray-900 tracking-wider">
-                                <div (click)="ordenarPorColumna('nombre')" class="cursor-pointer flex items-center focus:outline-none">
+                                <div (click)="ordenarPorColumnaChoferes('nombre')" class="cursor-pointer flex items-center focus:outline-none">
                                     <span> Apellido </span>
                                     <span class="ml-2 text-gray-600">    
-                                        <svg *ngIf="ordenar.columna == 'nombre' && ordenar.direccion == 1" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-chevron-down"><polyline points="6 9 12 15 18 9"></polyline></svg>                                   
-                                        <svg *ngIf="ordenar.columna == 'nombre' && ordenar.direccion == -1" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-chevron-up"><polyline points="18 15 12 9 6 15"></polyline></svg>
-                                        <svg *ngIf="ordenar.columna != 'nombre'" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-minus"><line x1="5" y1="12" x2="19" y2="12"></line></svg>
+                                        <svg *ngIf="ordenarChoferes.columna == 'nombre' && ordenarChoferes.direccion == 1" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-chevron-down"><polyline points="6 9 12 15 18 9"></polyline></svg>                                   
+                                        <svg *ngIf="ordenarChoferes.columna == 'nombre' && ordenarChoferes.direccion == -1" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-chevron-up"><polyline points="18 15 12 9 6 15"></polyline></svg>
+                                        <svg *ngIf="ordenarChoferes.columna != 'nombre'" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-minus"><line x1="5" y1="12" x2="19" y2="12"></line></svg>
                                     </span>
                                 </div>
                             </th>
                             <th class="px-5 py-2 border-b-2 border-gray-200 bg-gray-100 text-left text-sm font-semibold text-gray-900 tracking-wider">
-                              <div (click)="ordenarPorColumna('dni')" class="cursor-pointer flex items-center focus:outline-none">
+                              <div (click)="ordenarPorColumnaChoferes('dni')" class="cursor-pointer flex items-center focus:outline-none">
                                   <span> DNI </span>
                                   <span class="ml-2 text-gray-600">    
-                                      <svg *ngIf="ordenar.columna == 'dni' && ordenar.direccion == 1" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-chevron-down"><polyline points="6 9 12 15 18 9"></polyline></svg>                                   
-                                      <svg *ngIf="ordenar.columna == 'dni' && ordenar.direccion == -1" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-chevron-up"><polyline points="18 15 12 9 6 15"></polyline></svg>
-                                      <svg *ngIf="ordenar.columna != 'dni'" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-minus"><line x1="5" y1="12" x2="19" y2="12"></line></svg>
+                                      <svg *ngIf="ordenarChoferes.columna == 'dni' && ordenarChoferes.direccion == 1" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-chevron-down"><polyline points="6 9 12 15 18 9"></polyline></svg>                                   
+                                      <svg *ngIf="ordenarChoferes.columna == 'dni' && ordenarChoferes.direccion == -1" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-chevron-up"><polyline points="18 15 12 9 6 15"></polyline></svg>
+                                      <svg *ngIf="ordenarChoferes.columna != 'dni'" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-minus"><line x1="5" y1="12" x2="19" y2="12"></line></svg>
                                   </span>
                               </div>
                           </th>
                           <th class="px-5 border-b-2 border-gray-200 bg-gray-100 text-sm font-semibold text-gray-900 tracking-wider">
-                              <div (click)="ordenarPorColumna('fecha_alta')" class="cursor-pointer w-max flex items-center justify-center focus:outline-none">
+                              <div (click)="ordenarPorColumnaChoferes('fecha_alta')" class="cursor-pointer w-max flex items-center justify-center focus:outline-none">
                                   <span>
                                       Fecha de alta                                                
                                   </span>
                                   <span class="ml-2">
-                                      <svg *ngIf="ordenar.columna == 'fecha_alta' && ordenar.direccion == 1" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-chevron-down"><polyline points="6 9 12 15 18 9"></polyline></svg>                                   
-                                      <svg *ngIf="ordenar.columna == 'fecha_alta' && ordenar.direccion == -1" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-chevron-up"><polyline points="18 15 12 9 6 15"></polyline></svg>
-                                      <svg *ngIf="ordenar.columna != 'fecha_alta'" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-minus"><line x1="5" y1="12" x2="19" y2="12"></line></svg>
+                                      <svg *ngIf="ordenarChoferes.columna == 'fecha_alta' && ordenarChoferes.direccion == 1" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-chevron-down"><polyline points="6 9 12 15 18 9"></polyline></svg>                                   
+                                      <svg *ngIf="ordenarChoferes.columna == 'fecha_alta' && ordenarChoferes.direccion == -1" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-chevron-up"><polyline points="18 15 12 9 6 15"></polyline></svg>
+                                      <svg *ngIf="ordenarChoferes.columna != 'fecha_alta'" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-minus"><line x1="5" y1="12" x2="19" y2="12"></line></svg>
                                   </span>
                               </div>
                           </th>
                           <th class="px-5 border-b-2 border-gray-200 bg-gray-100 text-sm font-semibold text-gray-900 tracking-wider">
-                            <div (click)="ordenarPorColumna('fecha_baja')" class="cursor-pointer w-max flex items-center justify-center focus:outline-none">
+                            <div (click)="ordenarPorColumnaChoferes('fecha_baja')" class="cursor-pointer w-max flex items-center justify-center focus:outline-none">
                                 <span>
                                     Fecha de baja                                                
                                 </span>
                                 <span class="ml-2">
-                                    <svg *ngIf="ordenar.columna == 'fecha_baja' && ordenar.direccion == 1" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-chevron-down"><polyline points="6 9 12 15 18 9"></polyline></svg>                                   
-                                    <svg *ngIf="ordenar.columna == 'fecha_baja' && ordenar.direccion == -1" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-chevron-up"><polyline points="18 15 12 9 6 15"></polyline></svg>
-                                    <svg *ngIf="ordenar.columna != 'fecha_baja'" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-minus"><line x1="5" y1="12" x2="19" y2="12"></line></svg>
+                                    <svg *ngIf="ordenarChoferes.columna == 'fecha_baja' && ordenarChoferes.direccion == 1" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-chevron-down"><polyline points="6 9 12 15 18 9"></polyline></svg>                                   
+                                    <svg *ngIf="ordenarChoferes.columna == 'fecha_baja' && ordenarChoferes.direccion == -1" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-chevron-up"><polyline points="18 15 12 9 6 15"></polyline></svg>
+                                    <svg *ngIf="ordenarChoferes.columna != 'fecha_baja'" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-minus"><line x1="5" y1="12" x2="19" y2="12"></line></svg>
                                 </span>
                             </div>
                             </th>
@@ -766,7 +732,7 @@
                             </td>
                             <td class="px-5 border-b border-gray-200 text-xs">
                               <p class="text-gray-900 whitespace-no-wrap">
-                                  {{ relacion.persona.dni }}
+                                    {{ relacion.persona.dni }}
                               </p>
                             </td>
                             <td class="px-5 border-b border-gray-200 text-xs">
