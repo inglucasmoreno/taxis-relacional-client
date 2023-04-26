@@ -509,8 +509,9 @@ export class LicenciasDetallesComponent implements OnInit {
       this.flagEtapaDetalles = 'permisionario';
       this.showModalDetalles = true;
 
-    } else if (destino === 'chofer') {
+    } else if (destino === 'chofer') {      
       this.choferLicenciaSeleccionada = elemento;
+      console.log(this.choferLicenciaSeleccionada);
       this.flagEtapaDetalles = 'chofer';
       this.showModalDetalles = true;
 
