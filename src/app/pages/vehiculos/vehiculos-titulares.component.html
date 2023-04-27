@@ -18,8 +18,8 @@
       <h2 class="p-2 bg-gray-100 text-center font-semibold border border-gray-400"> Listado de titulares </h2> 
       <div *ngIf="titularesVehiculo?.length > 0" class="p-2">
         <div *ngFor="let relacion of titularesVehiculo" class="p-2 border mt-2 border-gray-400 flex items-center">
-          <img class="w-28" src="assets/img/titular.svg" alt="titular.svg">
-          <div class="ml-2">
+          <img class="w-24" src="assets/img/titular.svg" alt="titular.svg">
+          <div class="ml-3">
             <p class="mt-1"> <span class="font-semibold"> Número de titulo: </span> <span> {{ relacion.numero_titulo }} </span> </p>
             <p class="mt-1"> <span class="font-semibold"> Apellido y nombre: </span> <span> {{ relacion.persona.apellido }} {{ relacion.persona.nombre }} </span> </p>
             <p class="mt-1"> <span class="font-semibold"> DNI: </span> <span> {{ relacion.persona.dni }} </span> </p>

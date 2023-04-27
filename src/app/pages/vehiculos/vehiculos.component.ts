@@ -64,7 +64,6 @@ export class VehiculosComponent implements OnInit {
 
   // Titulares del vehiculo
   public totalPorcentaje = 0;
-  public porcentajeFaltante = 0;
   public titulares: any = [];
   public porcentaje: number = null;
   public numero_titulo: string = '';
@@ -258,25 +257,32 @@ export class VehiculosComponent implements OnInit {
       return;
     }
 
-    this.alertService.loading();
+    this.alertService.question({ msg: '¿Quieres crear el vehículo?', buttonText: 'Crear' })
+      .then(({ isConfirmed }) => {
+        if (isConfirmed) {
 
-    const dataVehiculo = {
-      patente: this.patente.replace('-', '').replace(' ', '').trim(),
-      marca: this.marca,
-      modelo: this.modelo,
-      motor: this.motor,
-      chasis: this.chasis,
-      color: this.color,
-      ano: this.ano,
-      creatorUser: this.authService.usuario.userId,
-      updatorUser: this.authService.usuario.userId,
-    }
+          this.alertService.loading();
 
-    this.vehiculosService.nuevoVehiculo(dataVehiculo).subscribe(({ vehiculo }) => {
-      this.nuevosTitulares(vehiculo.id);
-    }, ({ error }) => {
-      this.alertService.errorApi(error.message);
-    });
+          const dataVehiculo = {
+            patente: this.patente.replace('-', '').replace(' ', '').trim(),
+            marca: this.marca,
+            modelo: this.modelo,
+            motor: this.motor,
+            chasis: this.chasis,
+            color: this.color,
+            ano: this.ano,
+            creatorUser: this.authService.usuario.userId,
+            updatorUser: this.authService.usuario.userId,
+          }
+      
+          this.vehiculosService.nuevoVehiculo(dataVehiculo).subscribe(({ vehiculo }) => {
+            this.nuevosTitulares(vehiculo.id);
+          }, ({ error }) => {
+            this.alertService.errorApi(error.message);
+          });
+
+        }
+      });
 
   }
 
@@ -584,7 +590,7 @@ export class VehiculosComponent implements OnInit {
       return;
     }
 
-    let titularRepetido = this.titulares.find(titular => titular.id === this.personaSeleccionada.id);
+    let titularRepetido = this.titulares.find(titular => titular.dni === this.personaSeleccionada.dni);
 
     if (titularRepetido) {
       this.alertService.info('La persona ya esta cargada como titular');

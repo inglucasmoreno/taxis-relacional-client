@@ -1,3 +1,68 @@
+
+<!-- Modal: Alta de persona -->
+<app-modal [showModal]="showModalAltaPersona">
+    <div (keyup.enter)="nuevaPersona()">
+        <div class="flex items-center justify-between bg-primary-800 rounded-t p-2">
+            <h1 class=" text-white px-2 py-1 rounded-t text-lg"> Nueva persona </h1>
+            <svg (click)="regresarTitulares()" width="20" height="20" viewBox="0 0 24 24" fill="none"
+                stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+                class="cursor-pointer feather feather-x text-white mr-2">
+                <line x1="18" y1="6" x2="6" y2="18"></line>
+                <line x1="6" y1="6" x2="18" y2="18"></line>
+            </svg>
+        </div>
+        <div class="p-4 text-sm">
+            <p class="text-gray-500 text-xs pb-4"> * La persona no se encontro, a continuación coloque sus datos. </p>
+            <div class="w-full md:flex md:items-center">
+                <div class="md:w-1/2">
+                    <p class="font-semibold"> <span class="text-red-500"> * </span> Apellido </p>
+                    <input [(ngModel)]="nuevaPersonaData.apellido"
+                        class="py-2 mt-1 border-b-2 border-gray-300 tranform duration-500 focus:border-secondaryColor appearance-none outline-none w-full text-gray-800"
+                        placeholder="Ej. Moreno" type="text">
+                </div>
+                <div class="md:w-1/2 md:ml-4 mt-4 md:mt-0">
+                    <p class="font-semibold"> <span class="text-red-500"> * </span> Nombre </p>
+                    <input [(ngModel)]="nuevaPersonaData.nombre"
+                        class="py-2 mt-1 border-b-2 border-gray-300 tranform duration-500 focus:border-secondaryColor appearance-none outline-none w-full text-gray-800"
+                        placeholder="Ej. Lucas Omar" type="text">
+                </div>
+            </div>
+            <div class="mt-4 w-full md:flex md:items-center">
+                <div class="md:w-1/2">
+                    <p class="font-semibold"> <span class="text-red-500"> * </span> DNI </p>
+                    <input [(ngModel)]="dni" placeholder="34060398"
+                        class="py-2 mt-1 border-b-2 border-gray-300 tranform duration-500 focus:border-secondaryColor appearance-none outline-none w-full text-gray-800"
+                        type="text">
+                </div>
+                <div class="md:w-1/2 md:ml-4 mt-4 md:mt-0">
+                    <p class="font-semibold"> <span class="text-red-500"> * </span> Teléfono </p>
+                    <input [(ngModel)]="nuevaPersonaData.telefono"
+                        class="py-2 mt-1 border-b-2 border-gray-300 tranform duration-500 focus:border-secondaryColor appearance-none outline-none w-full text-gray-800"
+                        placeholder="Ej. 2664869642" type="text">
+                </div>
+            </div>
+            <div class="mt-4 w-full md:flex md:items-center">
+                <div class="md:w-1/2">
+                    <p class="font-semibold"> <span class="text-red-500"> * </span> Domicilio </p>
+                    <input [(ngModel)]="nuevaPersonaData.domicilio" placeholder="Portugal 1030"
+                        class="py-2 mt-1 border-b-2 border-gray-300 tranform duration-500 focus:border-secondaryColor appearance-none outline-none w-full text-gray-800"
+                        type="text">
+                </div>
+                <div class="md:w-1/2 md:ml-4 mt-4 md:mt-0">
+                    <p class="font-semibold"> <span class="text-red-500"> * </span> Email </p>
+                    <input [(ngModel)]="nuevaPersonaData.mail"
+                        class="py-2 mt-1 border-b-2 border-gray-300 tranform duration-500 focus:border-secondaryColor appearance-none outline-none w-full text-gray-800"
+                        placeholder="Ej. ing.lucasmoreno@gmail.com" type="text">
+                </div>
+            </div>
+            <button (click)="nuevaPersona()"
+                class="focus:outline-none bg-secondaryColor text-white shadow w-full border border-gray-300 font-semibold p-2 rounded mt-4">
+                Crear persona 
+            </button>
+        </div>
+    </div>
+</app-modal>
+
 <!-- Modal: Crear / Editar licencia -->
 <app-modal [showModal]="showModalEditarLicencia">
     <div (keyup.enter)="editarLicencia()">
@@ -185,6 +250,102 @@
 
 </app-modal>
 
+<!-- Modal -> Titulares  -->
+<app-modal [showModal]="showModalTitulares">
+    <div class="flex items-center justify-between bg-primary-800 rounded-t p-2">
+        <h1 class=" text-white px-2 py-1 rounded-t text-lg"> Titulares del vehículo </h1>
+        <svg (click)="regresarVehiculo()" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="cursor-pointer feather feather-x text-white mr-2"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
+    </div>
+
+    <div class="p-2">
+
+        <!-- Sin persona seleccionada -->
+        <div *ngIf="!personaSeleccionada">
+            <p class="font-semibold text-center"> Buscar titular </p>
+        </div>        
+        
+        <div *ngIf="!personaSeleccionada" class="flex w-full items-center justify-center text-center mt-2 text-sm">
+            <input (keyup.enter)="buscarPersona()" [(ngModel)]="dni" type="text" class="border border-gray-400 focus:outline-none rounded p-2" placeholder="DNI">
+            <button (click)="buscarPersona()" title="Buscar persona" class="ml-2 rounded focus:outline-none p-2 border border-gray-400 hover:text-secondaryColor">
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-5 h-5">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M21 21l-5.197-5.197m0 0A7.5 7.5 0 105.196 5.196a7.5 7.5 0 0010.607 10.607z" />
+                  </svg>
+            </button>
+        </div>
+        
+        <!-- Persona seleccionada -->
+
+        <div *ngIf="personaSeleccionada" class="border border-gray-400 mt-2">
+            <div class="flex items-center text-sm">
+                <div class="w-full flex items-center justify-between border-b pb-2 pt-1 border-gray-400">
+                    <div class="flex items-center">
+                        <img class="w-20 ml-1" src="assets/img/titular.svg" alt="titular.svg">
+                        <div class="ml-2">
+                            <p class="font-semibold"> {{ personaSeleccionada.apellido }} {{ personaSeleccionada.nombre }} </p>
+                            <p class="text-gray-500 text-xs"> DNI {{ personaSeleccionada.dni }} </p>
+                        </div>
+                    </div>
+                    <button (click)="eliminarPersona()" title="Eliminar persona" class="mr-4 focus:outline-none bg-red-700 text-white rounded p-2">
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-5 h-5">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M14.74 9l-.346 9m-4.788 0L9.26 9m9.968-3.21c.342.052.682.107 1.022.166m-1.022-.165L18.16 19.673a2.25 2.25 0 01-2.244 2.077H8.084a2.25 2.25 0 01-2.244-2.077L4.772 5.79m14.456 0a48.108 48.108 0 00-3.478-.397m-12 .562c.34-.059.68-.114 1.022-.165m0 0a48.11 48.11 0 013.478-.397m7.5 0v-.916c0-1.18-.91-2.164-2.09-2.201a51.964 51.964 0 00-3.32 0c-1.18.037-2.09 1.022-2.09 2.201v.916m7.5 0a48.667 48.667 0 00-7.5 0" />
+                        </svg>                      
+                    </button>
+                </div>
+            </div>
+            <div class="p-2 text-sm flex items-center">
+                <div class="w-1/3">
+                    <p class="text-sm font-semibold"> <span class="text-red-700"> * </span> Nro de titulo </p>
+                    <input (keyup.enter)="agregarTitular()" [(ngModel)]="numero_titulo" class="p-2 mt-1 focus:outline-none border border-gray-400" placeholder="Ej. 2453" type="text">
+                </div>
+                <div class="w-1/3">
+                    <p class="text-sm font-semibold"> <span class="text-red-700"> * </span> Porcentaje de titulo </p>
+                    <input (keyup.enter)="agregarTitular()" [(ngModel)]="porcentaje" class="p-2 mt-1 focus:outline-none border border-gray-400 ml-2" placeholder="Ej. 80" type="number">
+                </div>
+                <button (click)="agregarTitular()" class="bg-green-700 w-1/3 ml-4 mt-5 focus:outline-none text-white p-2"> Agregar </button>
+            </div>
+        </div>
+        
+        <div *ngIf="titulares.length > 0" class="text-sm">
+            <h1 class="p-2 font-semibold bg-gray-100 border border-gray-400 mt-4">
+                Listado de titulares
+            </h1>
+            <div *ngFor="let titular of titulares" class="flex border-b border-gray-400 items-center py-3 px-2 justify-between">
+                <div class="flex items-center">
+                    <button (click)="eliminarTitular(titular.persona)" title="Eliminar titular" class="hover:text-red-700 focus:outline-none">
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-5 h-5">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M14.74 9l-.346 9m-4.788 0L9.26 9m9.968-3.21c.342.052.682.107 1.022.166m-1.022-.165L18.16 19.673a2.25 2.25 0 01-2.244 2.077H8.084a2.25 2.25 0 01-2.244-2.077L4.772 5.79m14.456 0a48.108 48.108 0 00-3.478-.397m-12 .562c.34-.059.68-.114 1.022-.165m0 0a48.11 48.11 0 013.478-.397m7.5 0v-.916c0-1.18-.91-2.164-2.09-2.201a51.964 51.964 0 00-3.32 0c-1.18.037-2.09 1.022-2.09 2.201v.916m7.5 0a48.667 48.667 0 00-7.5 0" />
+                          </svg>                          
+                    </button>
+                    <img class="w-14 ml-2" src="assets/img/titular.svg" alt="titular.svg">
+                    <div class="ml-2">
+                        <p class="font-semibold"> {{ titular.apellido }} {{ titular.nombre }} </p>
+                        <p class="text-gray-600 text-xs"> DNI {{ titular.dni }} </p>
+                        <p class="font-semibold text-xs"> (Nro. titulo {{ titular.numero_titulo }}) </p>
+                    </div>
+                </div>
+                <P class="font-semibold"> {{ titular.porcentaje | moneda }}% </P>
+            </div>
+            <div [ngClass]="{'bg-red-100':totalPorcentaje !== 100, 'bg-green-100':totalPorcentaje === 100}" class="flex bg-gray-100 items-center justify-between p-2">
+                <p class="font-semibold"> PORCENTAJE TOTAL </p>
+                <p [ngClass]="{'text-red-800':totalPorcentaje !== 100, 'text-green-800':totalPorcentaje === 100}" class="font-semibold"> {{ totalPorcentaje | moneda }}% </p>
+            </div>
+            <div class="mt-2 flex items-center">
+                <svg *ngIf="totalPorcentaje !== 100" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-5 h-5 text-red-700">
+                    <path fill-rule="evenodd" d="M2.25 12c0-5.385 4.365-9.75 9.75-9.75s9.75 4.365 9.75 9.75-4.365 9.75-9.75 9.75S2.25 17.385 2.25 12zM12 8.25a.75.75 0 01.75.75v3.75a.75.75 0 01-1.5 0V9a.75.75 0 01.75-.75zm0 8.25a.75.75 0 100-1.5.75.75 0 000 1.5z" clip-rule="evenodd" />
+                </svg>         
+                <p *ngIf="totalPorcentaje !== 100" class="text-red-700 ml-1 text-sm"> El porcentaje total debe ser 100% </p>
+            </div>
+        </div>
+
+        <div class="flex items-center text-sm">
+            <button (click)="regresarVehiculo()" class="bg-red-700 text-white focus:outline-none shadow w-full font-semibold p-2 rounded mt-4"> Regresar </button>
+            <button (click)="nuevoVehiculo()" class="bg-secondaryColor ml-2 text-white focus:outline-none shadow w-full font-semibold p-2 rounded mt-4"> Crear vehículo </button>
+        </div>
+    
+    </div>
+
+</app-modal>
+
 <!-- Modal: Asignar vehículo -->
 <app-modal [showModal]="showModalAsignarVehiculo">
     <div class="flex items-center justify-between bg-primary-800 rounded-t p-2">
@@ -209,7 +370,7 @@
             <div class="md:flex md:items-center mt-4">
                 <div class="md:w-1/2">
                     <p class="font-semibold"> <span class="text-red-500"> * </span> Patente </p>
-                    <input [(ngModel)]="nuevoVehiculoData.patente" class="input-text-general" placeholder="Ej. BX157" type="text">
+                    <input (keyup.enter)="abrirTitulares()" [(ngModel)]="nuevoVehiculoData.patente" class="input-text-general" placeholder="Ej. BX157" type="text">
                 </div>
                 <div class="md:w-1/2 md:ml-4 mt-4 md:mt-0">
                     <p class="font-semibold"> <span class="text-red-500"> * </span> Color </p>
@@ -237,18 +398,18 @@
             </div>
             <div class="md:flex md:items-center mt-4">
                 <div class="md:w-1/2">
-                    <p class="font-semibold"> Motor </p>
-                    <input [(ngModel)]="nuevoVehiculoData.motor" class="input-text-general" placeholder="Nro de motor" type="text">
+                    <p class="font-semibold"> <span class="text-red-500"> * </span> Motor </p>
+                    <input (keyup.enter)="abrirTitulares()" [(ngModel)]="nuevoVehiculoData.motor" class="input-text-general" placeholder="Nro de motor" type="text">
                 </div>
                 <div class="md:w-1/2 md:ml-4 mt-4 md:mt-0">
-                    <p class="font-semibold"> Chasis </p>
-                    <input [(ngModel)]="nuevoVehiculoData.chasis" class="input-text-general" placeholder="Nro de chasis" type="text">
+                    <p class="font-semibold"> <span class="text-red-500"> * </span> Chasis </p>
+                    <input (keyup.enter)="abrirTitulares()" [(ngModel)]="nuevoVehiculoData.chasis" class="input-text-general" placeholder="Nro de chasis" type="text">
                 </div>
             </div>
             <div class="md:flex md:items-center mt-4">
                 <div class="md:w-1/2">
                     <p class="font-semibold"> <span class="text-red-500"> * </span> Año </p>
-                    <input [(ngModel)]="nuevoVehiculoData.ano" class="input-text-general" placeholder="Ej. 2015" type="number">
+                    <input (keyup.enter)="abrirTitulares()" [(ngModel)]="nuevoVehiculoData.ano" class="input-text-general" placeholder="Ej. 2015" type="number">
                 </div>
                 <div class="md:w-1/2 md:ml-4 mt-4 md:mt-0"></div>
               </div>
@@ -280,9 +441,9 @@
                 </div>
             </div>
         </div>
-            <div class="flex items-center pb-2">
-                <button (click)="nuevoVehiculo()" class="bg-green-700 hover:bg-green-800 focus:outline-none shadow text-white w-full p-2 rounded mt-4"> Crear vehículo </button>
-                <button (click)="flagNuevoVehiculo = false" class="bg-red-700 hover:bg-red-800 ml-2 focus:outline-none shadow text-white w-full p-2 rounded mt-4"> Regresar </button>
+            <div class="flex items-center pb-2 mt-4">
+                <button (click)="flagNuevoVehiculo = false" class="btn-cancel w-1/2"> Regresar </button>
+                <button (click)="abrirTitulares()" class="btn-confirm w-1/2 ml-2"> Continuar </button>
             </div>   
         </div>
     </div>
@@ -296,8 +457,8 @@
             </div>
         </div>
         <div class="flex items-center mt-4">
-            <button (click)="eliminarVehiculo()" class="border focus:outline-none border-red-700 hover:bg-red-800 text-white bg-red-700 p-2 rounded w-1/2"> Regresar </button>
-            <button (click)="asignarVehiculo()" class="border focus:outline-none ml-2 border-green-700 hover:bg-green-800 text-white bg-green-700 p-2 rounded w-1/2"> Aceptar </button>
+            <button (click)="eliminarVehiculo()" class="btn-cancel w-1/2"> Regresar </button>
+            <button (click)="asignarVehiculo()" class="btn-confirm w-1/2 ml-2"> Aceptar </button>
         </div>
     </div>    
 </app-modal>
@@ -370,9 +531,9 @@
             <input [(ngModel)]="nuevaPersonaData.mail"  class="input-text-general" placeholder="Ej. ing.lucasmoreno@gmail.com" type="text">
         </div>
     </div>
-    <div class="flex items-center"f>
-        <button (click)="flagNuevaPersona = false" class="bg-red-700 focus:outline-none hover:bg-red-800 shadow text-white w-full border border-gray-300 p-2 rounded mt-4"> Regresar </button>
-        <button (click)="nuevaPersona()" class="bg-green-700 focus:outline-none ml-2 hover:bg-green-800 shadow text-white w-full p-2 rounded mt-4"> Crear persona </button>
+    <div class="flex items-center mt-4">
+        <button (click)="flagNuevaPersona = false" class="btn-cancel w-1/2"> Regresar </button>
+        <button (click)="nuevaPersona()" class="btn-confirm w-1/2 ml-2"> Crear persona </button>
     </div>
   </div>
 </app-modal>

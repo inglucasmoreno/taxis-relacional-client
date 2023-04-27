@@ -15,6 +15,7 @@ import gsap from 'gsap';
 import { LicenciasChoferesService } from 'src/app/services/licencias-choferes.service';
 import { SigemService } from 'src/app/services/sigem.service';
 import { TiposServiciosService } from 'src/app/services/tipos-servicios.service';
+import { VehiculosTitularesService } from 'src/app/services/vehiculos-titulares.service';
 
 @Component({
   selector: 'app-licencias-detalles',
@@ -29,6 +30,7 @@ export class LicenciasDetallesComponent implements OnInit {
 
   // Flags
   public showContenido: string = 'Detalles'; // Detalles | Historial
+  public showModalTitulares = false;
 
   // Etapas
   public flagEtapaPersona: string = 'permisionario';
@@ -58,6 +60,7 @@ export class LicenciasDetallesComponent implements OnInit {
   public showModalDetalles: boolean = false;
   public showModalTramites: boolean = false;
   public showModalEditarLicencia: boolean = false;
+  public showModalAltaPersona: boolean = false;
 
   // Licencia
   public idLicencia: number = 0;
@@ -120,6 +123,15 @@ export class LicenciasDetallesComponent implements OnInit {
   public flagNuevaPersona: boolean = false;
   public flagNuevoVehiculo: boolean = false;
 
+  // Titulares del vehiculo
+  public totalPorcentaje = 0;
+  public titulares: any = [];
+  public porcentaje: number = null;
+  public numero_titulo: string = '';
+
+  // Personas
+  public dniBusqueda: string = '';
+
   // Filtrado
   public filtro: any = {
     estado: 'Habilitada',
@@ -157,6 +169,7 @@ export class LicenciasDetallesComponent implements OnInit {
     private modeloService: VehiculosModelosService,
     private personasService: PersonasService,
     private vehiculosService: VehiculosService,
+    private vehiculosTitularesService: VehiculosTitularesService,
     private alertService: AlertService,
   ) { }
 
@@ -280,7 +293,6 @@ export class LicenciasDetallesComponent implements OnInit {
       next: ({ persona, success }) => {
 
         if (!success) {
-          this.flagNuevaPersona = true;
           this.nuevaPersonaData = {
             apellido: '',
             nombre: '',
@@ -289,6 +301,14 @@ export class LicenciasDetallesComponent implements OnInit {
             telefono: '',
             domicilio: ''
           }
+
+          if(this.showModalTitulares){
+            this.showModalAltaPersona = true;
+            this.showModalTitulares = false;
+          }else{
+            this.flagNuevaPersona = true;
+          }
+        
         }
 
         this.personaSeleccionada = success ? persona : null;
@@ -419,8 +439,16 @@ export class LicenciasDetallesComponent implements OnInit {
 
     this.personasService.nuevaPersona(data).subscribe({
       next: ({ persona }) => {
+        
         this.personaSeleccionada = persona;
-        this.flagNuevaPersona = false;
+        
+        if(this.showModalAltaPersona){
+          this.showModalAltaPersona = false;
+          this.showModalTitulares = true;          
+        }else{
+          this.flagNuevaPersona = false;
+        }
+        
         this.alertService.close();
       }, error: ({ error }) => this.alertService.errorApi(error.message)
     })
@@ -458,6 +486,12 @@ export class LicenciasDetallesComponent implements OnInit {
       return;
     }
 
+    // Verificacion: El porcentaje total debe ser 100
+    if (this.totalPorcentaje !== 100) {
+      this.alertService.info('El porcentaje total debe ser 100%');
+      return;
+    }
+
     this.alertService.loading();
 
     const data = { ...this.nuevoVehiculoData };
@@ -468,6 +502,29 @@ export class LicenciasDetallesComponent implements OnInit {
       next: ({ vehiculo }) => {
         this.vehiculoSeleccionado = vehiculo;
         this.flagNuevoVehiculo = false;
+        this.nuevosTitulares(vehiculo.id);
+      }, error: ({ error }) => this.alertService.errorApi(error.message)
+    })
+
+  }
+
+  // Nuevos titulares
+  nuevosTitulares(vehiculo: number): void {
+
+    let dataTitulares = [];
+
+    this.titulares.map(titular => {
+      dataTitulares.push({
+        ...titular,
+        vehiculo
+      });
+    })
+
+    this.vehiculosTitularesService.nuevosTitulares(dataTitulares).subscribe({
+      next: () => {
+        this.showModalTitulares = false;
+        this.showModalAsignarVehiculo = true;
+        this.titulares = [];
         this.alertService.close();
       }, error: ({ error }) => this.alertService.errorApi(error.message)
     })
@@ -485,13 +542,20 @@ export class LicenciasDetallesComponent implements OnInit {
 
     if (destino === 'permisionario') {
       this.flagEtapaPersona = 'permisionario';
+      this.flagNuevaPersona = false;
+      this.reiniciarPersona();
       this.showModalAsignarPersona = true;
     } else if (destino === 'chofer') {
       this.flagEtapaPersona = 'chofer';
+      this.flagNuevaPersona = false;
+      this.reiniciarPersona();
       this.showModalAsignarPersona = true;
     } else if (destino === 'reloj') {
       this.showModalAsignarReloj = true;
     } else if (destino === 'vehiculo') {
+      this.flagNuevoVehiculo = false;
+      this.titulares = [];
+      this.reiniciarVehiculo();
       this.showModalAsignarVehiculo = true;
     }
 
@@ -509,7 +573,7 @@ export class LicenciasDetallesComponent implements OnInit {
       this.flagEtapaDetalles = 'permisionario';
       this.showModalDetalles = true;
 
-    } else if (destino === 'chofer') {      
+    } else if (destino === 'chofer') {
       this.choferLicenciaSeleccionada = elemento;
       console.log(this.choferLicenciaSeleccionada);
       this.flagEtapaDetalles = 'chofer';
@@ -736,6 +800,151 @@ export class LicenciasDetallesComponent implements OnInit {
   eliminarVehiculo(): void {
     this.patente = '';
     this.vehiculoSeleccionado = null;
+  }
+
+  // Agregar titular
+  agregarTitular(): void {
+
+    // Verificacion
+
+    if (this.numero_titulo.trim() === '') {
+      this.alertService.info('Debe colocar número de titulo');
+      return;
+    }
+
+    if (!this.porcentaje || this.porcentaje <= 0 || this.porcentaje > 100) {
+      this.alertService.info('Debe colocar un porcentaje válido');
+      return;
+    }
+
+    if ((this.totalPorcentaje + this.porcentaje) > 100) {
+      this.alertService.info('El porcentaje total no puede superar 100');
+      return;
+    }
+
+    let titularRepetido = this.titulares.find(titular => titular.dni === this.personaSeleccionada.dni);
+
+    if (titularRepetido) {
+      this.alertService.info('La persona ya esta cargada como titular');
+      return;
+    }
+
+    this.titulares.push({
+      nombre: this.personaSeleccionada.nombre,
+      apellido: this.personaSeleccionada.apellido,
+      dni: this.personaSeleccionada.dni,
+      persona: this.personaSeleccionada.id,
+      numero_titulo: this.numero_titulo,
+      porcentaje: this.porcentaje,
+      fecha_inscripcion_inicial: '2023-03-23',
+      creatorUser: this.authService.usuario.userId,
+      updatorUser: this.authService.usuario.userId,
+    });
+
+    this.personaSeleccionada = null;
+    this.dni = '';
+    this.numero_titulo = '';
+    this.calcularTotalesTitulo();
+
+  }
+
+  // Eliminar titular
+  eliminarTitular(idPersona: number): void {
+    this.titulares = this.titulares.filter(titular => titular.persona !== idPersona);
+    this.calcularTotalesTitulo();
+  }
+
+  // Totales titulos
+  calcularTotalesTitulo(): void {
+    let totalPorcentajeTMP = 0;
+    this.titulares.map(titular => {
+      totalPorcentajeTMP = totalPorcentajeTMP += titular.porcentaje;
+    })
+    this.totalPorcentaje = totalPorcentajeTMP;
+    this.porcentaje = 100 - this.totalPorcentaje;
+  }
+
+  // Abrir titulares
+  abrirTitulares(): void {
+
+    // Verificaciones
+
+    if (this.patente.trim() === '') {
+      this.alertService.info('Debe colocar una patente');
+      return;
+    }
+
+    if (this.nuevoVehiculoData.color.trim() === '') {
+      this.alertService.info('Debe seleccionar un color');
+      return;
+    }
+
+    if (this.nuevoVehiculoData.marca.trim() === '') {
+      this.alertService.info('Debe seleccionar una marca');
+      return;
+    }
+
+    if (this.nuevoVehiculoData.modelo.trim() === '') {
+      this.alertService.info('Debe seleccionar un modelo');
+      return;
+    }
+
+    if (this.nuevoVehiculoData.motor.trim() === '') {
+      this.alertService.info('Debe colocar un número de motor');
+      return;
+    }
+
+    if (this.nuevoVehiculoData.chasis.trim() === '') {
+      this.alertService.info('Debe colocar un número de chasis');
+      return;
+    }
+
+    if (!this.nuevoVehiculoData.ano || this.nuevoVehiculoData.ano < this.LIMIT_ANO) {
+      this.alertService.info('Debes colocar una año válido');
+      return;
+    }
+
+    this.calcularTotalesTitulo();
+    this.showModalAsignarVehiculo = false;
+    this.showModalTitulares = true;
+
+  }
+
+  // Regresar a datos de vehiculo
+  regresarVehiculo(): void {
+    this.showModalAsignarVehiculo = true;
+    this.showModalTitulares = false;
+  }
+
+  // Regresar a titulares
+  regresarTitulares(): void {
+    this.showModalAltaPersona = false;
+    this.showModalTitulares = true;
+  }
+
+  // Reiniciar vehiculo
+  reiniciarVehiculo(): void {
+    this.nuevoVehiculoData = {
+      patente: '',
+      marca: '',
+      modelo: '',
+      motor: '',
+      chasis: '',
+      color: '',
+      ano: null
+    }
+  }
+
+  // Reiniciar persona
+  reiniciarPersona(): void {
+    this.nuevaPersonaData = {
+      apellido: '',
+      nombre: '',
+      dni: '',
+      mail: '',
+      telefono: '',
+      domicilio: ''
+    }    
   }
 
   // Ordenar por columna - Permisionarios
