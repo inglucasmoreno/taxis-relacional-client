@@ -3,10 +3,12 @@ import { AlertService } from 'src/app/services/alert.service';
 import { AuthService } from 'src/app/services/auth.service';
 import { DataService } from 'src/app/services/data.service';
 import { PersonasService } from 'src/app/services/personas.service';
+import { SegurosEmpresasService } from 'src/app/services/seguros-empresas.service';
 import { SigemService } from 'src/app/services/sigem.service';
 import { VehiculosColoresService } from 'src/app/services/vehiculos-colores.service';
 import { VehiculosMarcasService } from 'src/app/services/vehiculos-marcas.service';
 import { VehiculosModelosService } from 'src/app/services/vehiculos-modelos.service';
+import { VehiculosSegurosService } from 'src/app/services/vehiculos-seguros.service';
 import { VehiculosTitularesService } from 'src/app/services/vehiculos-titulares.service';
 import { VehiculosService } from 'src/app/services/vehiculos.service';
 
@@ -27,6 +29,7 @@ export class VehiculosComponent implements OnInit {
   public showModalVehiculo = false;
   public showModalTitulares = false;
   public showModalAltaPersona = false;
+  public showModalSeguro = false;
 
   // Estado formulario 
   public estadoFormulario = 'crear';
@@ -72,6 +75,20 @@ export class VehiculosComponent implements OnInit {
   public dniBusqueda: string = '';
   public personaSeleccionada: any = null;
 
+  // Seguros
+  public empresas: any[] = [];
+
+  // Seguro de vehiculo
+  public dataSeguro = {
+    vehiculo: 0,
+    empresa: '',
+    nro_poliza: '',
+    fecha_desde: '',
+    fecha_hasta: '',
+    creatorUser: this.authService.usuario.userId,
+    updatorUser: this.authService.usuario.userId,
+  }
+
   // Paginacion
   public totalItems: number;
   public desde: number = 0;
@@ -92,9 +109,11 @@ export class VehiculosComponent implements OnInit {
 
   constructor(
     private personasService: PersonasService,
+    private segurosEmpresasService: SegurosEmpresasService,
     private vehiculosTitulares: VehiculosTitularesService,
     private sigemService: SigemService,
     private vehiculosService: VehiculosService,
+    private vehiculosSegurosService: VehiculosSegurosService,
     private coloresService: VehiculosColoresService,
     private marcasService: VehiculosMarcasService,
     private modeloService: VehiculosModelosService,
@@ -206,6 +225,7 @@ export class VehiculosComponent implements OnInit {
         this.totalItems = totalItems;
         this.showModalVehiculo = false;
         this.showModalTitulares = false;
+        this.showModalSeguro = false;
         this.alertService.close();
       }, (({ error }) => {
         this.alertService.errorApi(error.msg);
@@ -214,6 +234,8 @@ export class VehiculosComponent implements OnInit {
 
   // Nuevo vehiculo
   nuevoVehiculo(): void {
+
+    // VERIFICACION -> DATOS DE VEHICULO
 
     // Verificacion: Patente vacia
     if (this.patente.trim() === "") {
@@ -251,9 +273,37 @@ export class VehiculosComponent implements OnInit {
       return;
     }
 
+    // VERIFICACION -> TITULARES
+
     // Verificacion: El porcentaje total debe ser 100
     if (this.totalPorcentaje !== 100) {
       this.alertService.info('El porcentaje total debe ser 100%');
+      return;
+    }
+
+    // VERIFICACION -> SEGURO
+
+    // Verificacion: Empresa
+    if (this.dataSeguro.empresa.trim() === "") {
+      this.alertService.info('Debes colocar una empresa de seguros válida');
+      return;
+    }
+
+    // Verificacion: Poliza
+    if (this.dataSeguro.nro_poliza.trim() === "") {
+      this.alertService.info('Debes colocar un número de poliza');
+      return;
+    }
+
+    // Verificacion: Fecha desde
+    if (this.dataSeguro.fecha_desde.trim() === "") {
+      this.alertService.info('Debes colocar un rango de fechas válido para el seguro');
+      return;
+    }
+
+    // Verificacion: Fecha hasta
+    if (this.dataSeguro.fecha_desde.trim() === "") {
+      this.alertService.info('Debes colocar un rango de fechas válido para el seguro');
       return;
     }
 
@@ -300,10 +350,21 @@ export class VehiculosComponent implements OnInit {
 
     this.vehiculosTitulares.nuevosTitulares(dataTitulares).subscribe({
       next: () => {
-        this.listarVehiculos();
+        this.nuevoSeguro(vehiculo);
       }, error: ({ error }) => this.alertService.errorApi(error.message)
     })
 
+  }
+
+  // Nuevo seguro
+  nuevoSeguro(vehiculo: number): void {
+    this.dataSeguro.vehiculo = vehiculo;
+    this.vehiculosSegurosService.nuevoSeguro(this.dataSeguro).subscribe({
+      next: () => {
+        this.reiniciarFormularioSeguro();
+        this.listarVehiculos();
+      }, error: ({ error }) => this.alertService.errorApi(error.message)
+    })
   }
 
   // Actualizar vehiculo
@@ -453,6 +514,27 @@ export class VehiculosComponent implements OnInit {
     this.showModalTitulares = true;
   }
 
+  // Abrir seguro de vehiculo
+  abrirSeguro(): void {
+
+    // Verificacion: El porcentaje total debe ser 100
+    if (this.totalPorcentaje !== 100) {
+      this.alertService.info('El porcentaje total debe ser 100%');
+      return;
+    }
+
+    this.alertService.loading();
+    this.segurosEmpresasService.listarEmpresas().subscribe({
+      next: ({ empresas }) => {
+        this.empresas = empresas.filter( empresa => empresa.activo );
+        this.showModalSeguro = true;
+        this.showModalTitulares = false;
+        this.alertService.close();
+      }, error: ({ error }) => this.alertService.errorApi(error.message)
+    })
+
+  }
+
   // Buscar persona
   buscarPersona(): void {
 
@@ -567,6 +649,7 @@ export class VehiculosComponent implements OnInit {
   // Regresar a titulares
   regresarTitulares(): void {
     this.showModalAltaPersona = false;
+    this.showModalSeguro = false;
     this.showModalTitulares = true;
   }
 
@@ -667,6 +750,15 @@ export class VehiculosComponent implements OnInit {
     this.mail = '';
     this.sigem = false;
     this.genero = '';
+  }
+
+  // Reiniciar formulario seguro
+  reiniciarFormularioSeguro(): void {
+    this.dataSeguro.vehiculo = 0;
+    this.dataSeguro.empresa = '';
+    this.dataSeguro.nro_poliza = '';
+    this.dataSeguro.fecha_desde = '';
+    this.dataSeguro.fecha_hasta = '';
   }
 
   // Filtrar Activo/Inactivo

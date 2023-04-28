@@ -1,4 +1,45 @@
 
+<!-- Modal: Seguro de vehiculo -->
+<app-modal [showModal]="showModalSeguro">
+    <div (keyup.enter)="nuevoVehiculo()">
+        <div class="flex items-center justify-between bg-primary-800 rounded-t p-2">
+            <h1 class=" text-white px-2 py-1 rounded-t text-lg"> Seguro de vehículo </h1>
+            <svg (click)="regresarTitulares()" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="cursor-pointer feather feather-x text-white mr-2"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
+        </div>
+        <div class="p-4 text-sm">
+            
+            <div class="flex items-center">
+                <div class="w-1/2">
+                    <p class="font-semibold"> <span class="text-red-500"> * </span> Empresa </p>
+                    <select [(ngModel)]="dataSeguro.empresa" class="select-general mt-1">
+                        <option value=""> Seleccionar empresa </option>
+                        <option *ngFor="let empresa of empresas" [value]="empresa.id"> {{ empresa.descripcion }} </option>
+                    </select>
+                </div>
+                <div class="w-1/2 ml-4">
+                    <p class="font-semibold"> <span class="text-red-500"> * </span> Nro de poliza </p>
+                    <input [(ngModel)]="dataSeguro.nro_poliza" class="input-text-general mt-1" placeholder="Colocar número de poliza" type="text">
+                </div>
+            </div> 
+  
+            <div class="flex items-center mt-4">
+                <div class="w-1/2">
+                    <p class="font-semibold"> <span class="text-red-500"> * </span> Fecha desde </p>
+                    <input [(ngModel)]="dataSeguro.fecha_desde" class="input-text-general mt-1" placeholder="Ej. Fiat" type="date">
+                </div>
+                <div class="w-1/2 ml-4">
+                    <p class="font-semibold"> <span class="text-red-500"> * </span> Fecha hasta </p>
+                    <input [(ngModel)]="dataSeguro.fecha_hasta" class="input-text-general mt-1" placeholder="Ej. Fiat" type="date">
+                    
+                </div>
+            </div>  
+          <div class="mt-3">
+              <button (click)="nuevoVehiculo()" class="btn-confirm"> Crear vehiculo </button>
+          </div>
+        </div>
+    </div>
+  </app-modal>
+
 <!-- Modal: Alta de persona -->
 <app-modal [showModal]="showModalAltaPersona">
     <div (keyup.enter)="nuevaPersona()">
@@ -152,7 +193,7 @@
 
         <div class="flex items-center mt-2 text-sm">
             <button (click)="regresarVehiculo()" class="bg-red-700 text-white focus:outline-none shadow w-full font-semibold p-2 rounded mt-4"> Regresar </button>
-            <button (click)="nuevoVehiculo()" class="bg-secondaryColor ml-2 text-white focus:outline-none shadow w-full font-semibold p-2 rounded mt-4"> Crear vehículo </button>
+            <button (click)="abrirSeguro()" class="bg-secondaryColor ml-2 text-white focus:outline-none shadow w-full font-semibold p-2 rounded mt-4"> Continuar </button>
         </div>
     
     </div>
@@ -163,7 +204,7 @@
 <app-modal [showModal]="showModalVehiculo">
   <div (keyup.enter)="estadoFormulario === 'crear' ? abrirTitulares() : actualizarVehiculo()">
       <div class="flex items-center justify-between bg-primary-800 rounded-t p-2">
-          <h1 class=" text-white px-2 py-1 rounded-t text-lg"> {{ estadoFormulario == 'crear' ? 'Creando vehículo' : 'Editando vehículo' }} </h1>
+          <h1 class=" text-white px-2 py-1 rounded-t text-lg"> {{ estadoFormulario == 'crear' ? 'Datos de vehículo' : 'Editando vehículo' }} </h1>
           <svg (click)="showModalVehiculo = false" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="cursor-pointer feather feather-x text-white mr-2"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
       </div>
       <div class="p-4 text-sm">
@@ -274,18 +315,6 @@
               <div class="md:flex md:items-center md:justify-between px-4 py-2">
                   <div class="my-2 flex sm:flex-row flex-col">
                       <div class="flex flex-row mb-1 sm:mb-0">
-                          <!-- <div class="relative">
-                              <select #txtActivo (change)="filtrarActivos(txtActivo.value)" class="h-full text-sm rounded-r border-t border-l rounded-l sm:rounded-r-none sm:border-r-0 border-r border-b block appearance-none w-full bg-white border-gray-400 text-gray-700 py-2 px-4 pr-8 leading-tight focus:outline-none focus:border-l focus:border-r focus:bg-white focus:border-gray-500">
-                                  <option value='true'> Activos </option>
-                                  <option value='false'> Inactivos </option>
-                                  <option value=''> Todos </option>
-                              </select>
-                              <div class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-gray-700">
-                                  <svg class="fill-current h-4 w-4" viewBox="0 0 20 20">
-                                      <path d="M9.293 12.95l.707.707L15.657 8l-1.414-1.414L10 10.828 5.757 6.586 4.343 8z" />
-                                  </svg>
-                              </div>
-                          </div> -->
                       </div>
                       <div class="block relative">
                           <span class="h-full absolute inset-y-0 left-0 flex items-center pl-2">
@@ -378,18 +407,6 @@
                                           </span>
                                       </div>
                                   </th>
-                                  <!-- <th class="px-5 border-b-2 border-gray-200 bg-gray-100 text-center text-sm font-semibold text-gray-900 tracking-wider">
-                                      <div (click)="ordenarPorColumna('activo')" class="cursor-pointer flex items-center focus:outline-none">
-                                          <span>
-                                              Estado                                               
-                                          </span>
-                                          <span class="ml-2">
-                                              <svg *ngIf="ordenar.columna == 'activo' && ordenar.direccion == 1" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-chevron-down"><polyline points="6 9 12 15 18 9"></polyline></svg>                                   
-                                              <svg *ngIf="ordenar.columna == 'activo' && ordenar.direccion == -1" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-chevron-up"><polyline points="18 15 12 9 6 15"></polyline></svg>
-                                              <svg *ngIf="ordenar.columna != 'activo'" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-minus"><line x1="5" y1="12" x2="19" y2="12"></line></svg>
-                                          </span>
-                                      </div>
-                                  </th> -->
                                   <th class="px-5 border-b-2 border-gray-200 bg-gray-100 text-center text-sm font-semibold text-gray-900 tracking-wider">
                                       Acción
                                   </th>

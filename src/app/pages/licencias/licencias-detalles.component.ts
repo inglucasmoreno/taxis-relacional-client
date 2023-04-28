@@ -16,6 +16,8 @@ import { LicenciasChoferesService } from 'src/app/services/licencias-choferes.se
 import { SigemService } from 'src/app/services/sigem.service';
 import { TiposServiciosService } from 'src/app/services/tipos-servicios.service';
 import { VehiculosTitularesService } from 'src/app/services/vehiculos-titulares.service';
+import { SegurosEmpresasService } from 'src/app/services/seguros-empresas.service';
+import { VehiculosSegurosService } from 'src/app/services/vehiculos-seguros.service';
 
 @Component({
   selector: 'app-licencias-detalles',
@@ -31,6 +33,7 @@ export class LicenciasDetallesComponent implements OnInit {
   // Flags
   public showContenido: string = 'Detalles'; // Detalles | Historial
   public showModalTitulares = false;
+  public showModalSeguro = false;
 
   // Etapas
   public flagEtapaPersona: string = 'permisionario';
@@ -74,6 +77,9 @@ export class LicenciasDetallesComponent implements OnInit {
   public vehiculo: any;
   public choferes: any[] = [];
 
+  // Seguros
+  public empresas: any[] = [];
+
   // Vehiculo
   public nuevoVehiculoData: any = {
     patente: '',
@@ -94,6 +100,17 @@ export class LicenciasDetallesComponent implements OnInit {
     mail: '',
     telefono: '',
     domicilio: ''
+  }
+
+  // Seguro de vehiculo
+  public dataSeguro = {
+    vehiculo: 0,
+    empresa: '',
+    nro_poliza: '',
+    fecha_desde: '',
+    fecha_hasta: '',
+    creatorUser: this.authService.usuario.userId,
+    updatorUser: this.authService.usuario.userId,
   }
 
   // Chofer
@@ -162,6 +179,7 @@ export class LicenciasDetallesComponent implements OnInit {
     private licenciasPermisionariosService: LicenciasPermisionariosService,
     private licenciasChoferesService: LicenciasChoferesService,
     private licenciasVehiculosService: LicenciasVehiculosService,
+    private segurosEmpresasService: SegurosEmpresasService,
     public authService: AuthService,
     private sigemService: SigemService,
     private coloresService: VehiculosColoresService,
@@ -170,6 +188,7 @@ export class LicenciasDetallesComponent implements OnInit {
     private personasService: PersonasService,
     private vehiculosService: VehiculosService,
     private vehiculosTitularesService: VehiculosTitularesService,
+    private vehiculosSegurosService: VehiculosSegurosService,
     private alertService: AlertService,
   ) { }
 
@@ -302,13 +321,13 @@ export class LicenciasDetallesComponent implements OnInit {
             domicilio: ''
           }
 
-          if(this.showModalTitulares){
+          if (this.showModalTitulares) {
             this.showModalAltaPersona = true;
             this.showModalTitulares = false;
-          }else{
+          } else {
             this.flagNuevaPersona = true;
           }
-        
+
         }
 
         this.personaSeleccionada = success ? persona : null;
@@ -439,16 +458,16 @@ export class LicenciasDetallesComponent implements OnInit {
 
     this.personasService.nuevaPersona(data).subscribe({
       next: ({ persona }) => {
-        
+
         this.personaSeleccionada = persona;
-        
-        if(this.showModalAltaPersona){
+
+        if (this.showModalAltaPersona) {
           this.showModalAltaPersona = false;
-          this.showModalTitulares = true;          
-        }else{
+          this.showModalTitulares = true;
+        } else {
           this.flagNuevaPersona = false;
         }
-        
+
         this.alertService.close();
       }, error: ({ error }) => this.alertService.errorApi(error.message)
     })
@@ -457,6 +476,8 @@ export class LicenciasDetallesComponent implements OnInit {
 
   // Nueva vehiculo
   nuevoVehiculo(): void {
+
+    // VERIFICACION -> DATOS DE VEHICULO
 
     // Verificaciones
 
@@ -486,9 +507,37 @@ export class LicenciasDetallesComponent implements OnInit {
       return;
     }
 
+    // VERIFICACION -> TITULARES
+
     // Verificacion: El porcentaje total debe ser 100
     if (this.totalPorcentaje !== 100) {
       this.alertService.info('El porcentaje total debe ser 100%');
+      return;
+    }
+
+    // VERIFICACION -> SEGURO
+
+    // Verificacion: Empresa
+    if (this.dataSeguro.empresa.trim() === "") {
+      this.alertService.info('Debes colocar una empresa de seguros válida');
+      return;
+    }
+
+    // Verificacion: Poliza
+    if (this.dataSeguro.nro_poliza.trim() === "") {
+      this.alertService.info('Debes colocar un número de poliza');
+      return;
+    }
+
+    // Verificacion: Fecha desde
+    if (this.dataSeguro.fecha_desde.trim() === "") {
+      this.alertService.info('Debes colocar un rango de fechas válido para el seguro');
+      return;
+    }
+
+    // Verificacion: Fecha hasta
+    if (this.dataSeguro.fecha_desde.trim() === "") {
+      this.alertService.info('Debes colocar un rango de fechas válido para el seguro');
       return;
     }
 
@@ -522,13 +571,25 @@ export class LicenciasDetallesComponent implements OnInit {
 
     this.vehiculosTitularesService.nuevosTitulares(dataTitulares).subscribe({
       next: () => {
-        this.showModalTitulares = false;
-        this.showModalAsignarVehiculo = true;
-        this.titulares = [];
-        this.alertService.close();
+        this.nuevoSeguro(vehiculo);
       }, error: ({ error }) => this.alertService.errorApi(error.message)
     })
 
+  }
+
+  // Nuevo seguro
+  nuevoSeguro(vehiculo: number): void {
+    this.dataSeguro.vehiculo = vehiculo;
+    this.vehiculosSegurosService.nuevoSeguro(this.dataSeguro).subscribe({
+      next: () => {
+        this.showModalTitulares = false;
+        this.showModalAsignarVehiculo = true;
+        this.showModalSeguro = false;
+        this.titulares = [];
+        this.reiniciarFormularioSeguro();
+        this.alertService.close();
+      }, error: ({ error }) => this.alertService.errorApi(error.message)
+    })
   }
 
   abrirModalNuevo(destino: string) {
@@ -910,6 +971,28 @@ export class LicenciasDetallesComponent implements OnInit {
 
   }
 
+
+  // Abrir seguro de vehiculo
+  abrirSeguro(): void {
+
+    // Verificacion: El porcentaje total debe ser 100
+    if (this.totalPorcentaje !== 100) {
+      this.alertService.info('El porcentaje total debe ser 100%');
+      return;
+    }
+
+    this.alertService.loading();
+    this.segurosEmpresasService.listarEmpresas().subscribe({
+      next: ({ empresas }) => {
+        this.empresas = empresas.filter(empresa => empresa.activo);
+        this.showModalSeguro = true;
+        this.showModalTitulares = false;
+        this.alertService.close();
+      }, error: ({ error }) => this.alertService.errorApi(error.message)
+    })
+
+  }
+
   // Regresar a datos de vehiculo
   regresarVehiculo(): void {
     this.showModalAsignarVehiculo = true;
@@ -919,6 +1002,7 @@ export class LicenciasDetallesComponent implements OnInit {
   // Regresar a titulares
   regresarTitulares(): void {
     this.showModalAltaPersona = false;
+    this.showModalSeguro = false;
     this.showModalTitulares = true;
   }
 
@@ -944,7 +1028,16 @@ export class LicenciasDetallesComponent implements OnInit {
       mail: '',
       telefono: '',
       domicilio: ''
-    }    
+    }
+  }
+
+  // Reiniciar formulario seguro
+  reiniciarFormularioSeguro(): void {
+    this.dataSeguro.vehiculo = 0;
+    this.dataSeguro.empresa = '';
+    this.dataSeguro.nro_poliza = '';
+    this.dataSeguro.fecha_desde = '';
+    this.dataSeguro.fecha_hasta = '';
   }
 
   // Ordenar por columna - Permisionarios
